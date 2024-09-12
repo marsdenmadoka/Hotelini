@@ -1,7 +1,7 @@
 package com.madoka.hotelini.common.presentation.theme
 
-import android.app.Activity
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -9,28 +9,45 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = PrimaryColor,
+    onPrimary = PrimaryTextColor,
+    secondary = SecondaryLightColor,
+    onSecondary = SecondaryTextColor,
+    tertiary = PrimaryLightColor,
+    onTertiary = PrimaryTextColor,
+    background = BackgroundDarkColor,
+    onBackground = Color.White,
+    surface = SurfaceDark,
+    onSurface = Color.White,
+    surfaceVariant = SurfaceDark,
+    onSurfaceVariant = Color.White,
+    secondaryContainer = PrimaryColor,
+    onSecondaryContainer = Color.White,
+    error = ErrorColor,
+    onError = OnErrorColor,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = PrimaryColor,
+    onPrimary = PrimaryTextColor,
+    secondary = SecondaryColor,
+    onSecondary = SecondaryTextColor,
+    tertiary = PrimaryLightColor,
+    onTertiary = PrimaryTextColor,
+    background = BackgroundLightColor,
+    onBackground = Color.Black,
+    surface = SurfaceLight,
+    onSurface = Color.Black,
+    surfaceVariant = SurfaceLight,
+    onSurfaceVariant = Color.Black,
+    secondaryContainer = PrimaryColor,
+    onSecondaryContainer = Color.White,
+    error = ErrorColor,
+    onError = OnErrorColor,
 )
 
 @Composable
@@ -52,7 +69,30 @@ fun HoteliniTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        //typography = Typography,
         content = content
     )
 }
+
+
+
+
+// To be used to set the preferred theme inside settings
+enum class Theme(
+    val themeValue: Int,
+) {
+    MATERIAL_YOU(
+        themeValue = 12,
+    ),
+    FOLLOW_SYSTEM(
+        themeValue = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+    ),
+    LIGHT_THEME(
+        themeValue = AppCompatDelegate.MODE_NIGHT_NO,
+    ),
+    DARK_THEME(
+        themeValue = AppCompatDelegate.MODE_NIGHT_YES,
+    ),
+}
+
+
