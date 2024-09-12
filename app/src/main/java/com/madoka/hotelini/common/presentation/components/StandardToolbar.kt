@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.tooling.preview.Preview
+import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +51,7 @@ fun StandardToolbar(
 @Preview
 @Composable
 fun StandardToolbarPreview() {
-    MuvizTheme {
+    HoteliniTheme {
         StandardToolbar(
             title = {
                 Text(
@@ -57,5 +59,5 @@ fun StandardToolbarPreview() {
                 )
             }
         )
-
+    }
 }
