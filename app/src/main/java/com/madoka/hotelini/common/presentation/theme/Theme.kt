@@ -1,6 +1,7 @@
 package com.madoka.hotelini.common.presentation.theme
 
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,29 +10,12 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryColor,
-    onPrimary = PrimaryTextColor,
-    secondary = SecondaryLightColor,
-    onSecondary = SecondaryTextColor,
-    tertiary = PrimaryLightColor,
-    onTertiary = PrimaryTextColor,
-    background = BackgroundDarkColor,
-    onBackground = Color.White,
-    surface = SurfaceDark,
-    onSurface = Color.White,
-    surfaceVariant = SurfaceDark,
-    onSurfaceVariant = Color.White,
-    secondaryContainer = PrimaryColor,
-    onSecondaryContainer = Color.White,
-    error = ErrorColor,
-    onError = OnErrorColor,
-)
-
-private val LightColorScheme = lightColorScheme(
+private val LightColors = lightColorScheme(
     primary = PrimaryColor,
     onPrimary = PrimaryTextColor,
     secondary = SecondaryColor,
@@ -50,34 +34,72 @@ private val LightColorScheme = lightColorScheme(
     onError = OnErrorColor,
 )
 
+private val DarkColors = darkColorScheme(
+    primary = PrimaryColor,
+    onPrimary = PrimaryTextColor,
+    secondary = SecondaryLightColor,
+    onSecondary = SecondaryTextColor,
+    tertiary = PrimaryLightColor,
+    onTertiary = PrimaryTextColor,
+    background = BackgroundDarkColor,
+    onBackground = Color.White,
+    surface = SurfaceDark,
+    onSurface = Color.White,
+    surfaceVariant = SurfaceDark,
+    onSurfaceVariant = Color.White,
+    secondaryContainer = PrimaryColor,
+    onSecondaryContainer = Color.White,
+    error = ErrorColor,
+    onError = OnErrorColor,
+)
+
 @Composable
 fun HoteliniTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    theme: Int = Theme.DARK_THEME.themeValue,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val autoColors = if (isSystemInDarkTheme()) DarkColors else LightColors
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val dynamicColors = if (supportsDynamicTheming()) {
+        val context = LocalContext.current
+        if (isSystemInDarkTheme()) {
+            dynamicDarkColorScheme(context)
+        } else {
+            dynamicLightColorScheme(context)
+        }
+    } else {
+        autoColors
+    }
+
+    val colors = when (theme) {
+        Theme.LIGHT_THEME.themeValue -> LightColors
+        Theme.DARK_THEME.themeValue -> DarkColors
+        Theme.MATERIAL_YOU.themeValue -> dynamicColors
+        else -> autoColors
+    }
+
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = colors.background
+        )
+        systemUiController.setNavigationBarColor(
+            color = colors.background
+        )
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        //typography = Typography,
-        content = content
+        colorScheme = colors,
+        typography = Typography,
+        shapes = Shapes,
+        content = content,
     )
 }
 
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+private fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
-
-
-// To be used to set the preferred theme inside settings
 enum class Theme(
     val themeValue: Int,
 ) {
