@@ -21,6 +21,7 @@ import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 fun StandardToolbar(
     modifier: Modifier = Modifier,
     showBackArrow: Boolean = false,
+    showSearchBar:Boolean=false,
     onBackArrowClicked: () -> Unit = {},
     navActions: @Composable RowScope.() -> Unit = {},
     title: @Composable () -> Unit = {}
