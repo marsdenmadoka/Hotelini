@@ -46,8 +46,7 @@ fun StandardScaffold(
             if (showBottomBar) {
                 NavigationBar(
                     modifier = Modifier
-                        //.height(56.dp) // Reduce the height here (Default is 80.dp)
-                        .padding(top = 0.dp), // Adjust padding if needed
+                        .height(56.dp),
                     containerColor = MaterialTheme.colorScheme.background,
                     contentColor = MaterialTheme.colorScheme.onBackground
                 ) {
