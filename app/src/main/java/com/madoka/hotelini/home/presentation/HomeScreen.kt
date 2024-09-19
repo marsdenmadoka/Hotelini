@@ -210,7 +210,6 @@ fun HotelCarousel() {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        // .padding(top = 16.dp, bottom = 16.dp),
         itemWidth = LocalConfiguration.current.screenWidthDp.dp,
         itemSpacing = 8.dp,
         // contentPadding = PaddingValues(start = 16.dp),

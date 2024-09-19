@@ -64,8 +64,7 @@ fun StandardScaffold(
                             label = {
                                 Text(
                                     text = item.title,
-                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), // Adjust text size
-                                    //style = MaterialTheme.typography.bodySmall,
+                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
                                 )
                             },
                             alwaysShowLabel = true,
