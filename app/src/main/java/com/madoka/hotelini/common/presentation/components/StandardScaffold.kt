@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults.windowInsets
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -39,10 +41,13 @@ fun StandardScaffold(
     content: @Composable (paddingValues: PaddingValues) -> Unit,
 ) {
     Scaffold(
-        bottomBar = {
 
+        bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
+                    modifier = Modifier
+                        //.height(56.dp) // Reduce the height here (Default is 80.dp)
+                        .padding(top = 0.dp), // Adjust padding if needed
                     containerColor = MaterialTheme.colorScheme.background,
                     contentColor = MaterialTheme.colorScheme.onBackground
                 ) {
@@ -52,7 +57,7 @@ fun StandardScaffold(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    modifier = Modifier.size(24.dp),
+                                    modifier = Modifier.size(20.dp),
                                     painter = painterResource(id = item.icon),
                                     contentDescription = item.title,
                                 )
@@ -60,7 +65,8 @@ fun StandardScaffold(
                             label = {
                                 Text(
                                     text = item.title,
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp), // Adjust text size
+                                    //style = MaterialTheme.typography.bodySmall,
                                 )
                             },
                             alwaysShowLabel = true,
