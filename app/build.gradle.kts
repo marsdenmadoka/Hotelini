@@ -133,8 +133,12 @@ dependencies {
     implementation(libs.datastore.preferences)
 
     //constraint layouts
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.compose.ui:ui:1.6.8")
+    implementation(libs.androidx.constraintlayout.compose)
 
+    //rating bar
+    implementation ("io.github.a914-gowtham:compose-ratingbar:1.2.3")
+
+    //flowLayout
+    implementation (libs.accompanist.flowlayout)
 
 }

@@ -12,6 +12,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 
@@ -21,7 +24,6 @@ import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 fun StandardToolbar(
     modifier: Modifier = Modifier,
     showBackArrow: Boolean = false,
-    showSearchBar:Boolean=false,
     onBackArrowClicked: () -> Unit = {},
     navActions: @Composable RowScope.() -> Unit = {},
     title: @Composable () -> Unit = {}
@@ -44,8 +46,10 @@ fun StandardToolbar(
         },
         actions = navActions,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
+            containerColor = Color.Transparent,
+            contentColorFor(backgroundColor = Color.Transparent)
+        ),
+        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     )
 }
 

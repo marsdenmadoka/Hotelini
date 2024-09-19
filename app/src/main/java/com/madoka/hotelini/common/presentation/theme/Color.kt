@@ -19,7 +19,10 @@ val BackgroundDarkColor = Color(0xFF161616)
 
 val ErrorColor = Color(0xFFFF8989)
 val OnErrorColor = Color(0xFF000000)
+val flix_color_translucent_black = Color(0xE6000000)
 
+val DarkSurface = Color(0xFF000000)
+val Golden  = Color(0xFFFFCA28)
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)

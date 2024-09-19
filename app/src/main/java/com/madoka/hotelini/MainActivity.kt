@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.madoka.hotelini.common.presentation.components.StandardScaffold
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             HoteliniTheme {
                 val navController = rememberNavController()
@@ -49,6 +51,7 @@ class MainActivity : ComponentActivity() {
                     SharedTransitionLayout {
                         DestinationsNavHost(
                             modifier= Modifier
+                                .padding(3.dp)
                                 .padding(innerPadding),
                             navGraph = NavGraphs.root,
                             navController = navController,
