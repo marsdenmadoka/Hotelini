@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun RoomInfoSection() {
+fun RoomInfoSection( modifier: Modifier,) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
