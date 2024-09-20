@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,7 +34,8 @@ fun HotelInfoSection(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize()
     ) {
 
         CircleButton(
@@ -43,11 +45,6 @@ fun HotelInfoSection(
             Text(
                 text = "view Location"
             )
-//            Icon(
-//                painter = painterResource(id = R.drawable.ic_chevron_left),
-//                tint = MaterialTheme.colorScheme.onPrimary,
-//                contentDescription = null
-//            )
         }
 
 
