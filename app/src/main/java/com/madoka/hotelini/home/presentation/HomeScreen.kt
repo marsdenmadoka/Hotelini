@@ -128,12 +128,17 @@ fun HomeScreenContent() {
     ) { innerPadding ->
         PullToRefreshBox(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+                .fillMaxSize(),
+
             isRefreshing = false,
             onRefresh = { }
         )
         {
+            Column(
+
+            ){
+
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize(),

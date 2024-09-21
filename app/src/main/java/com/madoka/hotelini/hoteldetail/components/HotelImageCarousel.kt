@@ -36,7 +36,7 @@ fun HotelImageCarousel(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Bottom,
     ) {
         val imageItems: Int = 7
-        val visibleItemCount: Int = 3
+        val visibleItemCount: Int = 4
 
         val displayedItems = if (imageItems > visibleItemCount) {
             visibleItemCount - 1 // Show all but the last one

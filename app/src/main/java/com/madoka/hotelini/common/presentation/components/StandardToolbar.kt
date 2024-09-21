@@ -49,7 +49,6 @@ fun StandardToolbar(
             containerColor = Color.Transparent,
             contentColorFor(backgroundColor = Color.Transparent)
         ),
-        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     )
 }
 
