@@ -53,13 +53,13 @@ fun HotelDetailScreenContent() {
             )
         }
 
-    ) { InnerPadding ->
+    ) { innerPadding ->
 
         LazyColumn {
             item {
-                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                    val (hotelImageBanner, hotelImageCarousel, hotelInfoSection) = createRefs()
-
+                ConstraintLayout(modifier = Modifier.fillMaxSize()
+                    .padding(innerPadding)) {
+                    val (hotelImageBanner, hotelImageCarousel, hotelInfoSection) = createRefs(
                     HotelImageBanner(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -126,13 +126,11 @@ fun HotelInfo(modifier: Modifier = Modifier) {
         item {
             HotelInfoSection(modifier = Modifier)
         }
-
-        item {
-            AmenitiesSection()
-        }
-
         item {
             RoomInfoSection(modifier = Modifier)
+        }
+        item {
+            AmenitiesSection()
         }
 
         item {

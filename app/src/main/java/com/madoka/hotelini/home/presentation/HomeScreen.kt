@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -200,7 +201,12 @@ fun HotelCarousel() {
         )
     }
 
+
     var currentItemIndex by remember { mutableStateOf(0) }
+    var userScrolled by remember { mutableStateOf(false) }
+    val carouselState = rememberLazyListState()
+
+
     LaunchedEffect(key1 = currentItemIndex) {
         while (true) {
             delay(10_000L)

@@ -15,17 +15,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
+
 
 
 @Composable
-fun RoomInfoSection( modifier: Modifier,) {
+fun RoomInfoSection( modifier: Modifier ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             RoomInfoChip("2 guest")
@@ -34,7 +38,10 @@ fun RoomInfoSection( modifier: Modifier,) {
             Spacer(modifier = Modifier.width(4.dp))
             RoomInfoChip("1 Bedroom")
         }
-        Text(text = "$150.00", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(text = "$150.00",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
@@ -52,5 +59,13 @@ fun RoomInfoChip(text: String) {
             fontSize = 12.sp,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
+    }
+}
+
+@Preview
+@Composable
+fun RoomInfoSectionPrev(){
+    HoteliniTheme {
+        RoomInfoSection(modifier = Modifier)
     }
 }

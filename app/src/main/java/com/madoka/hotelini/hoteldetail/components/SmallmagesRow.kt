@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.madoka.hotelini.R
 
 @Composable
-fun HotelImageCarousel(modifier: Modifier = Modifier) {
+fun SmallImagesRow(modifier: Modifier = Modifier) {
     Column(
         modifier
             .background(
