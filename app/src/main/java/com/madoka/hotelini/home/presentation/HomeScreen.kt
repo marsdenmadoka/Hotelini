@@ -84,6 +84,8 @@ import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.common.presentation.theme.flix_color_translucent_black
+import com.madoka.hotelini.home.presentation.components.HotelCarousel
+import com.madoka.hotelini.home.presentation.components.NearbyHotel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -135,23 +137,13 @@ fun HomeScreenContent() {
             onRefresh = { }
         )
         {
-            Column(
 
-            ){
-
-            }
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-
-            )
+            LazyColumn(modifier = Modifier.fillMaxSize())
             {
                 item {
                     HotelCarousel()
 
                 }
-
-
                 item {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -164,7 +156,7 @@ fun HomeScreenContent() {
                     }
                 }
 
-                item{
+                item {
                     NearbyHotel()
                 }
 //                gridItems(
@@ -182,234 +174,8 @@ fun HomeScreenContent() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HotelCarousel() {
-    data class CarouselItem(
-        val id: Int,
-        @DrawableRes val imageResId: Int,
-        val contentDescription: String
-    )
-
-    val items = remember {
-        listOf(
-            CarouselItem(0, R.drawable.ic_load_error, "cupcake"),
-            CarouselItem(1, R.drawable.ic_load_placeholder, "donut"),
-            CarouselItem(2, R.drawable.video_call, "eclair"),
-            CarouselItem(3, R.drawable.hotelini, "froyo"),
-            CarouselItem(4, R.drawable.ic_1, "gingerbread"),
-        )
-    }
 
 
-    var currentItemIndex by remember { mutableStateOf(0) }
-    var userScrolled by remember { mutableStateOf(false) }
-    val carouselState = rememberLazyListState()
-
-
-    LaunchedEffect(key1 = currentItemIndex) {
-        while (true) {
-            delay(10_000L)
-            currentItemIndex = (currentItemIndex + 1) % items.size
-        }
-    }
-    val animatedIndex by animateDpAsState(targetValue = currentItemIndex.toFloat().dp, label = "")
-
-
-    HorizontalUncontainedCarousel(
-        state = rememberCarouselState { items.size },
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        itemWidth = LocalConfiguration.current.screenWidthDp.dp,
-        itemSpacing = 8.dp,
-        // contentPadding = PaddingValues(start = 16.dp),
-    ) { i ->
-        val item = items[animatedIndex.value.roundToInt()]
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(205.dp)
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .maskClip(MaterialTheme.shapes.extraLarge)
-                    .animateContentSize(),
-                painter = painterResource(id = item.imageResId),
-                contentDescription = item.contentDescription,
-                contentScale = ContentScale.Crop
-            )
-
-            Text(
-                text = item.contentDescription,
-                color = Color.White,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 14.dp)
-                    .align(Alignment.Center)
-            )
-        }
-
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Preview
-@Composable
-fun NearbyHotel() {
-
-    FlowRow(
-        Modifier
-            .fillMaxSize(),
-//            .fillMaxWidth(1f)
-//            .wrapContentHeight(align = Alignment.Top),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-         verticalArrangement = Arrangement.spacedBy(16.dp),
-        maxItemsInEachRow = 2
-    ) {
-
-
-//    }
-//    LazyVerticalGrid(
-//        columns = GridCells.Fixed(2),
-//        modifier = Modifier.fillMaxSize(),
-//        horizontalArrangement = Arrangement.spacedBy(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp)
-//    )
-//    {
-        repeat(8){
-            NearbyHotelItem(onClickItem = {})
-        }
-
-
-
-
-        }
-    }
-
-
-@Composable
-fun NearbyHotelItem(
-    onClickItem: () -> Unit
-) {
-
-    val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
-    val dominantColor = MaterialTheme.colorScheme.surface
-    val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
-    val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
-
-    Card(
-        modifier = Modifier
-            //.size(itemSize)
-            //.width(250.dp)
-            //.height(250.dp)
-            //.weight(1f, true)
-           // .size(180.dp,200.dp)
-            .width(180.dp)
-            .height(200.dp)
-//            .fillMaxWidth()
-//            .aspectRatio(1f) // Keep grid items square
-            .clickable {
-                onClickItem()
-
-            },
-
-        elevation = CardDefaults.cardElevation(8.dp),
-        shape = RoundedCornerShape(4.dp)
-    ) {
-
-        Box(modifier = Modifier
-            .clickable { onClickItem() }
-        ) {
-            //region Movie Cover Imag
-
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data("")
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(R.drawable.ic_load_placeholder),
-                error = painterResource(id = R.drawable.ic_load_error),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(shape = MaterialTheme.shapes.medium)
-                    .background(color = Color.Gray)
-                    .align(Alignment.Center)
-
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(210.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color.Transparent,
-                                dominantColor
-                            )
-                        )
-                    )
-            )
-            //endregion
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
-                    .align(Alignment.BottomCenter),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = "Unknown movie",
-                    fontSize = 18.sp,
-                    maxLines = 2,
-                    style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Start,
-                    color = dominantTextColor
-                )
-                RatingBar(
-                    modifier = Modifier,
-                    value = 3.5.toFloat(),
-                    config = RatingBarConfig()
-                        .activeColor(Golden)
-                        .inactiveColor(DarkSurface)
-                        .stepSize(StepSize.HALF)
-                        .isIndicator(true)
-                        .stepSize(StepSize.HALF)
-                        .numStars(5)
-                        .isIndicator(true)
-                        .size(16.dp)
-                        .style(RatingBarStyle.HighLighted),
-                    onValueChange = {},
-                    onRatingChanged = {}
-                )
-
-                Text(
-                    modifier = Modifier,
-                    text = "14 kiloMetres",
-                    fontSize = 14.sp,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Start,
-                    color = dominantSubTextColor
-                )
-
-            }
-
-        }
-
-
-    }
-}
 
 
 @Preview
