@@ -1,6 +1,3 @@
-
-
-
 package com.madoka.hotelini.home.presentation.components
 
 import androidx.compose.foundation.background
@@ -30,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -52,75 +50,44 @@ import com.madoka.hotelini.common.presentation.theme.Golden
 @Preview
 @Composable
 fun NearbyHotel() {
-
     FlowRow(
         Modifier
             .fillMaxSize(),
-//            .fillMaxWidth(1f)
-//            .wrapContentHeight(align = Alignment.Top),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         maxItemsInEachRow = 2
     ) {
-
-
-//    }
-//    LazyVerticalGrid(
-//        columns = GridCells.Fixed(2),
-//        modifier = Modifier.fillMaxSize(),
-//        horizontalArrangement = Arrangement.spacedBy(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp)
-//    )
-//    {
         repeat(8) {
             NearbyHotelItem(onClickItem = {})
         }
-
-
     }
 }
-
 
 @Composable
 fun NearbyHotelItem(
     onClickItem: () -> Unit
 ) {
-
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
     val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
 
+    val widthDem = LocalConfiguration.current.screenWidthDp.dp / 2
+
     Card(
         modifier = Modifier
-            //.size(itemSize)
-            //.width(250.dp)
-            //.height(250.dp)
-            //.weight(1f, true)
-            // .size(180.dp,200.dp)
+            //.width(widthDem)
             .width(180.dp)
             .height(200.dp)
-//            .fillMaxWidth()
-//            .aspectRatio(1f) // Keep grid items square
+            .padding(horizontal = 3.dp)
             .clickable {
                 onClickItem()
-
             },
-
-        elevation = CardDefaults.cardElevation(8.dp),
-        shape = RoundedCornerShape(4.dp)
+        elevation = CardDefaults.cardElevation(8.dp), shape = RoundedCornerShape(4.dp)
     ) {
-
-        Box(modifier = Modifier
-            .clickable { onClickItem() }
-        ) {
-            //region Movie Cover Imag
-
+        Box(modifier = Modifier.clickable { onClickItem() }) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data("")
-                    .crossfade(true)
-                    .build(),
+                model = ImageRequest.Builder(LocalContext.current).data("").crossfade(true).build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
                 error = painterResource(id = R.drawable.ic_load_error),
                 contentDescription = null,
@@ -130,7 +97,6 @@ fun NearbyHotelItem(
                     .clip(shape = MaterialTheme.shapes.medium)
                     .background(color = Color.Gray)
                     .align(Alignment.Center)
-
             )
             Box(
                 modifier = Modifier
@@ -140,14 +106,11 @@ fun NearbyHotelItem(
                     .background(
                         Brush.verticalGradient(
                             listOf(
-                                Color.Transparent,
-                                dominantColor
+                                Color.Transparent, dominantColor
                             )
                         )
                     )
             )
-            //endregion
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -166,22 +129,14 @@ fun NearbyHotelItem(
                     textAlign = TextAlign.Start,
                     color = dominantTextColor
                 )
-                RatingBar(
-                    modifier = Modifier,
+                RatingBar(modifier = Modifier,
                     value = 3.5.toFloat(),
-                    config = RatingBarConfig()
-                        .activeColor(Golden)
-                        .inactiveColor(DarkSurface)
-                        .stepSize(StepSize.HALF)
-                        .isIndicator(true)
-                        .stepSize(StepSize.HALF)
-                        .numStars(5)
-                        .isIndicator(true)
-                        .size(16.dp)
+                    config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
+                        .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
+                        .numStars(5).isIndicator(true).size(16.dp)
                         .style(RatingBarStyle.HighLighted),
                     onValueChange = {},
-                    onRatingChanged = {}
-                )
+                    onRatingChanged = {})
 
                 Text(
                     modifier = Modifier,
@@ -193,11 +148,7 @@ fun NearbyHotelItem(
                     textAlign = TextAlign.Start,
                     color = dominantSubTextColor
                 )
-
             }
-
         }
-
-
     }
 }

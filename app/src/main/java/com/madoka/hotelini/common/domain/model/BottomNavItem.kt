@@ -1,4 +1,4 @@
-package com.madoka.hotelini.common.model
+package com.madoka.hotelini.common.domain.model
 
 import com.madoka.hotelini.R
 import com.ramcosta.composedestinations.generated.destinations.HomeScreenDestination

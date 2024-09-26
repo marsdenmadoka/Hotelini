@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -94,12 +96,12 @@ fun HotelCarousel() {
 //
 //    }
 
-    LaunchedEffect(carouselState){
-   if(carouselState != currentItemIndex)
-        currentItemIndex = (currentItemIndex + 1) % items.size
-        //carouselState.animateScrollToItem(currentItemIndex)
-        carouselState.scrollBy(currentItemIndex.toFloat())
-    }
+//    LaunchedEffect(carouselState){
+//   if(carouselState != currentItemIndex)
+//        currentItemIndex = (currentItemIndex + 1) % items.size
+//        //carouselState.animateScrollToItem(currentItemIndex)
+//        carouselState.scrollBy(currentItemIndex.toFloat())
+//    }
 
     val animatedIndex by animateDpAsState(targetValue = currentItemIndex.toFloat().dp, label = "")
 
@@ -111,19 +113,42 @@ fun HotelCarousel() {
             .wrapContentHeight(),
         itemWidth = LocalConfiguration.current.screenWidthDp.dp,
         itemSpacing = 8.dp,
-        // contentPadding = PaddingValues(start = 16.dp),
     ) { i ->
         val item = items[animatedIndex.value.roundToInt()]
+
+
+
+        val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
+        val dominantColor = MaterialTheme.colorScheme.surface
+        val dominantTextColor by remember { mutableStateOf(dominantColor) }
+        val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
+
+//
+
+
         Box(
             Modifier
                 .fillMaxWidth()
                 .height(205.dp)
         ) {
+
+
+
+
             Image(
                 modifier = Modifier
                     .fillMaxSize()
                     .maskClip(MaterialTheme.shapes.extraLarge)
-                    .animateContentSize(),
+                    .animateContentSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                MaterialTheme.colorScheme.surface, Color.Yellow
+                                //,MaterialTheme.colorScheme.surface
+                                // Color.Transparent,MaterialTheme.colorScheme.background
+                            )
+                        )
+                    ),
                 painter = painterResource(id = item.imageResId),
                 contentDescription = item.contentDescription,
                 contentScale = ContentScale.Crop
