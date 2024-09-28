@@ -69,11 +69,8 @@ fun HomeScreenContent() {
                 .fillMaxSize(),
             isRefreshing = false,
             onRefresh = { }
-        )
-        {
-
-            LazyColumn(modifier = Modifier.fillMaxSize()
-                .padding(innerPadding))
+        ) {
+            LazyColumn(modifier = Modifier.fillMaxSize())
             {
                 item {
                     HotelCarousel()
