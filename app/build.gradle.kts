@@ -27,13 +27,32 @@ android {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        debug {
+            versionNameSuffix = " - debug-1"
+            applicationIdSuffix = ".debug"
+            buildConfigField("int", "PATCH_VERSION_CODE", "1")
+
+            val apiKey: String =
+                gradleLocalProperties(rootDir, providers).getProperty("API_KEY") ?: ""
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        }
+
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
+
+            // PATCH_VERSION_CODE is always -1 for release builds.
+            buildConfigField("int", "PATCH_VERSION_CODE", "-1")
+
+            val apiKey: String = gradleLocalProperties(rootDir, providers).getProperty("API_KEY") ?: ""
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -136,9 +155,10 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
 
     //rating bar
-    implementation ("io.github.a914-gowtham:compose-ratingbar:1.2.3")
+    implementation("io.github.a914-gowtham:compose-ratingbar:1.2.3")
 
     //flowLayout
-    implementation (libs.accompanist.flowlayout)
+    implementation(libs.accompanist.flowlayout)
 
 }
+
