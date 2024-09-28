@@ -1,6 +1,6 @@
 package com.madoka.hotelini.home.data.network.dto
 
-data class Restaurant(
+data class RestaurantDetail(
     val averageRating: Double,
     val awardInfo: AwardInfo,
     val currentOpenStatusCategory: String,
