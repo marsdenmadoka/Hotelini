@@ -1,6 +1,6 @@
 package com.madoka.hotelini.home.data.network.dto
 
-data class RestrauntResponse(
+data class RestaurantResponse(
     val data: Data,
     val message: String,
     val status: Boolean,
