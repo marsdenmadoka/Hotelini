@@ -15,6 +15,12 @@ val quicksand = FontFamily(
     Font(R.font.quicksand_bold, FontWeight.Bold)
 )
 
+val poppinsFamily = FontFamily(
+    Font(R.font.poppins_bold, FontWeight.Bold),
+    Font(R.font.poppins_regular, FontWeight.Normal),
+    Font(R.font.poppins_light, FontWeight.Light),
+    Font(R.font.poppins_medium, FontWeight.Medium)
+)
 
 val Typography = Typography().run {
     copy(

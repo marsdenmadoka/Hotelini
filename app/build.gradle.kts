@@ -7,6 +7,12 @@ plugins {
     alias(libs.plugins.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
+
+    // Add the Google services Gradle plugin
+    id ("com.google.gms.google-services")
+    //Secrets gradle plugin
+    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
 }
 
 android {
@@ -154,11 +160,30 @@ dependencies {
     //constraint layouts
     implementation(libs.androidx.constraintlayout.compose)
 
+    //flowLayout
+    implementation(libs.accompanist.flowlayout)
+
     //rating bar
     implementation("io.github.a914-gowtham:compose-ratingbar:1.2.3")
 
-    //flowLayout
-    implementation(libs.accompanist.flowlayout)
+
+    // Add the dependency for the Google Play services library and specify its version
+    implementation ("com.google.android.gms:play-services-auth:20.4.1")
+
+    // Google Play services dependency for the Maps SDK for Android
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+
+    // provides Android runtime permissions support for Jetpack Compose
+    implementation ("com.google.accompanist:accompanist-permissions:0.36.0")
+
+    // Compose map library
+    implementation ("com.google.maps.android:maps-compose:2.11.0")
+
+    // Location
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    // Places SDK for android
+    implementation ("com.google.android.libraries.places:places:3.0.0")
 
 }
 
