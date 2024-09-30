@@ -1,5 +1,6 @@
 package com.madoka.hotelini.home.presentation
 
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,12 +17,16 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.madoka.hotelini.R
+import com.madoka.hotelini.common.domain.model.RestaurantItem
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
+import com.madoka.hotelini.home.domain.model.Restaurant
 import com.madoka.hotelini.home.presentation.components.HotelCarousel
 import com.madoka.hotelini.home.presentation.components.NearbyHotel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -41,7 +46,13 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenContent() {
+fun HomeScreenContent(
+    state: HomeUiState,
+    onEvent: (HomeUiEvents) -> Unit,
+) {
+    val context = LocalContext.current
+    val restaurants = state.restaurants.collectAsLazyPagingItems()
+
 
     Scaffold(
         topBar = {
@@ -68,7 +79,9 @@ fun HomeScreenContent() {
             modifier = Modifier
                 .fillMaxSize(),
             isRefreshing = false,
-            onRefresh = { }
+            onRefresh = {
+                onEvent(HomeUiEvents.OnPullToRefresh)
+            }
         ) {
             LazyColumn(modifier = Modifier.fillMaxSize())
             {
@@ -107,14 +120,22 @@ fun HomeScreenContent() {
 }
 
 
+fun Restaurant .toRestaurantItem(
 
+) = RestaurantItem(
+    averageRating = averageRating,
+    heroImgUrl,
+    name,
+    userReviewCount
+
+)
 
 
 @Preview
 @Composable
 fun HomeScreenContentPreview() {
     HoteliniTheme {
-        HomeScreenContent()
+       // HomeScreenContent()
     }
 }
 
