@@ -34,8 +34,8 @@ android {
 
     buildTypes {
         debug {
-            versionNameSuffix = " - debug-1"
-            applicationIdSuffix = ".debug"
+//            versionNameSuffix = " - debug-1"
+//            applicationIdSuffix = ".debug"
             buildConfigField("int", "PATCH_VERSION_CODE", "1")
 
             val apiKey: String =

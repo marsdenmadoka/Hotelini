@@ -1,12 +1,12 @@
 package com.madoka.hotelini.home.presentation
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +42,6 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.libraries.places.api.Places
 import com.madoka.hotelini.BuildConfig
-import com.madoka.hotelini.Manifest
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.Location.HandleRequest
 import com.madoka.hotelini.common.Location.PermissionDeniedContent
@@ -136,15 +136,20 @@ fun HomeScreenContent(
                 Toast.makeText(context, "Error Fetching Location", Toast.LENGTH_LONG).show()
             }
         }
-        if(showMap && !lo){
 
-            //showHomescreenContent
+        if (showMap) {
+            //showHome screenContent
+            HomeScreenScaffold()
+        }else{
 
-            HomeScreenScaffold(state = )
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
+            }
+
+
         }
 
     }
-
 
 
 }
@@ -153,11 +158,11 @@ fun HomeScreenContent(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreenScaffold(
-    state: HomeUiState,
-    onEvent: (HomeUiEvents) -> Unit,
+//    state: HomeUiState,
+//    onEvent: (HomeUiEvents) -> Unit,
 ) {
 
-    val restaurants = state.restaurants.collectAsLazyPagingItems()
+    // val restaurants = state.restaurants.collectAsLazyPagingItems()
 
 
     Scaffold(
@@ -186,7 +191,7 @@ fun HomeScreenScaffold(
                 .fillMaxSize(),
             isRefreshing = false,
             onRefresh = {
-                onEvent(HomeUiEvents.OnPullToRefresh)
+                // onEvent(HomeUiEvents.OnPullToRefresh)
             }
         ) {
             LazyColumn(modifier = Modifier.fillMaxSize())
@@ -225,10 +230,6 @@ fun HomeScreenScaffold(
     }
 
 }
-
-
-
-
 
 
 fun Restaurant.toRestaurantItem(

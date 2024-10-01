@@ -54,7 +54,7 @@ fun Content(showButton: Boolean = true, onClick: () -> Unit) {
         if (enableLocation.value) {
             CustomDialog(
                 title = "Turn On Location Service",
-                desc = "To accurately find the Hotels near you"+
+                desc = "To accurately find the Hotels near you "+
                   "Hotelini needs to access your location",
                 enableLocation,
                 onClick
