@@ -64,50 +64,21 @@ fun HotelCarousel() {
         )
     }
 
-  val totalItems= items.size
+    val totalItems = items.size
     var currentItemIndex by remember { mutableIntStateOf(0) }
     var userScrolled by remember { mutableStateOf(false) }
     val carouselState = rememberCarouselState(initialItem = 0) { totalItems }
 
-    LaunchedEffect(key1 = currentItemIndex, key2= userScrolled) {
-       // if(!userScrolled){
-            delay(10_000L)
-            currentItemIndex = (currentItemIndex + 1) % items.size
-            //carouselState.animateScrollToItem(currentItemIndex)
-            carouselState.animateScrollBy(currentItemIndex.toFloat())
-
-       // }
-        //userScrolled =false
-
-
-//        while (true) {
-//            delay(10_000L)
-//            currentItemIndex = (currentItemIndex + 1) % items.size
-//        }
+    LaunchedEffect(key1 = currentItemIndex, key2 = userScrolled) {
+        delay(10_000L)
+        currentItemIndex = (currentItemIndex + 1) % items.size
+        carouselState.animateScrollBy(currentItemIndex.toFloat())
     }
-//
-//    LaunchedEffect(remember { derivedStateOf { carouselState.
-//    firstVisibleItemIndex } }) {
-//        //if the user manual scrolls reset timer
-//        if (carouselState.firstVisibleItemIndex != currentItemIndex){
-//            currentItemIndex = carouselState.firstVisibleItemIndex
-//            userScrolled = true
-//        }
-//
-//    }
-
-//    LaunchedEffect(carouselState){
-//   if(carouselState != currentItemIndex)
-//        currentItemIndex = (currentItemIndex + 1) % items.size
-//        //carouselState.animateScrollToItem(currentItemIndex)
-//        carouselState.scrollBy(currentItemIndex.toFloat())
-//    }
 
     val animatedIndex by animateDpAsState(targetValue = currentItemIndex.toFloat().dp, label = "")
 
-
     HorizontalUncontainedCarousel(
-        state =  carouselState,// rememberCarouselState { items.size },
+        state = carouselState,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
@@ -116,25 +87,15 @@ fun HotelCarousel() {
     ) { i ->
         val item = items[animatedIndex.value.roundToInt()]
 
-
-
         val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
         val dominantColor = MaterialTheme.colorScheme.surface
         val dominantTextColor by remember { mutableStateOf(dominantColor) }
         val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
-
-//
-
-
         Box(
             Modifier
                 .fillMaxWidth()
                 .height(205.dp)
         ) {
-
-
-
-
             Image(
                 modifier = Modifier
                     .fillMaxSize()
@@ -153,7 +114,6 @@ fun HotelCarousel() {
                 contentDescription = item.contentDescription,
                 contentScale = ContentScale.Crop
             )
-
             Text(
                 text = item.contentDescription,
                 color = Color.White,
@@ -167,6 +127,7 @@ fun HotelCarousel() {
 
     }
 }
+
 @Preview
 @Composable
 fun HomeScreenCarouselPreview() {

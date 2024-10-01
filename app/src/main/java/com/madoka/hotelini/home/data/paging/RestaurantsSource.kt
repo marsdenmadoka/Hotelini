@@ -9,7 +9,11 @@ import okio.IOException
 import timber.log.Timber
 
 
-class RestaurantsSource(private val api: HoteliniApi) :
+class RestaurantsSource(
+    private val api: HoteliniApi,
+//    private val latitude: Double,
+//    private val longitude: Double
+) :
     PagingSource<Int, Restaurant>() {
     override fun getRefreshKey(state: PagingState<Int, Restaurant>): Int? {
         return state.anchorPosition
@@ -18,7 +22,13 @@ class RestaurantsSource(private val api: HoteliniApi) :
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Restaurant> {
         return try {
             val nextPage = params.key ?: 1
-            val restaurantList = api.getHotelsInNairobi(nextPage)
+            val restaurantList =
+                api.getHotelsInNairobi(
+                    page = nextPage,
+//                    latitude = latitude,
+//                    longitude = longitude
+                )
+
             Timber.d("restaurant list: ${restaurantList.data}")
             LoadResult.Page(
                 data = restaurantList.data,

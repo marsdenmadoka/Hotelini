@@ -44,12 +44,21 @@ import com.gowtham.ratingbar.StepSize
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
+import com.madoka.hotelini.home.data.network.dto.Data
+import com.madoka.hotelini.home.domain.model.Restaurant
+import com.madoka.hotelini.home.presentation.HomeUiState
 
 
 @OptIn(ExperimentalLayoutApi::class)
-@Preview
 @Composable
-fun NearbyHotel() {
+fun NearbyHotel(
+//    state: HomeUiState,
+//    onClickItem: () -> Unit,
+    ImgUrl: String
+) {
+
+    //  val resItems = state.restaurants
+
     FlowRow(
         Modifier
             .fillMaxSize(),
@@ -57,22 +66,31 @@ fun NearbyHotel() {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         maxItemsInEachRow = 2
     ) {
-        repeat(8) {
-            NearbyHotelItem(onClickItem = {})
-        }
+
+        NearbyHotelItem(onClickItem = onClickItem, ImgUrl = ImgUrl)
+
+
+//        repeat(8) {
+
+        // }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NearbyHotelItem(
-    onClickItem: () -> Unit
+    onClickItem: () -> Unit,
+    ImgUrl: String
+
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
     val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
-
     val widthDem = LocalConfiguration.current.screenWidthDp.dp / 2
+
+
+
 
     Card(
         modifier = Modifier
@@ -87,7 +105,8 @@ fun NearbyHotelItem(
     ) {
         Box(modifier = Modifier.clickable { onClickItem() }) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data("").crossfade(true).build(),
+                model = ImageRequest.Builder(LocalContext.current).data(ImgUrl).crossfade(true)
+                    .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
                 error = painterResource(id = R.drawable.ic_load_error),
                 contentDescription = null,

@@ -13,11 +13,15 @@ import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(private val api:HoteliniApi){
 
-fun getRestaurant(): Flow<PagingData<Restaurant>>{
+fun getRestaurant(
+    //latitude: Double, longitude: Double
+): Flow<PagingData<Restaurant>>{
     return Pager(
         config = PagingConfig(enablePlaceholders = false,pageSize = PAGING_SIZE),
         pagingSourceFactory = {
-            RestaurantsSource(api)
+            RestaurantsSource(api,
+//                latitude,longitude
+            )
         }
     ).flow
 }

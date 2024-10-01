@@ -21,15 +21,19 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        getRestaurants()
+        getNearestRestaurants()
     }
 
 
-    fun getRestaurants() {
+    fun getNearestRestaurants(
+       // latitude: Double, longitude: Double
+    ) {
         _homeUiState.update {
             it.copy(
                 restaurants = restaurantRepository
-                    .getRestaurant()
+                    .getRestaurant(
+                        //latitude,longitude
+                    )
 //                    .map { pagingData ->
 //                        pagingData.filter {
 //                            it.averageRating
@@ -42,7 +46,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun refreshAllData() {
-        getRestaurants()
+        getNearestRestaurants()
     }
 
 

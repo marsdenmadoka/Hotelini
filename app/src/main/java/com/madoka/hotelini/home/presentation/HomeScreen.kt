@@ -73,6 +73,7 @@ fun HomeScreenContent(
 
 ) {
     val context = LocalContext.current
+
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
     val placesClient = Places.createClient(context)
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -96,7 +97,6 @@ fun HomeScreenContent(
         scope.launch {
         }
     }
-
 
     //making sure the location is on
     HandleRequest(
@@ -140,7 +140,7 @@ fun HomeScreenContent(
         if (showMap) {
             //showHome screenContent
             HomeScreenScaffold()
-        }else{
+        } else {
 
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
@@ -158,11 +158,11 @@ fun HomeScreenContent(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreenScaffold(
-//    state: HomeUiState,
-//    onEvent: (HomeUiEvents) -> Unit,
+    state: HomeUiState,
+    onEvent: (HomeUiEvents) -> Unit,
 ) {
 
-    // val restaurants = state.restaurants.collectAsLazyPagingItems()
+    val restaurants = state.restaurants.collectAsLazyPagingItems()
 
 
     Scaffold(
@@ -213,8 +213,13 @@ fun HomeScreenScaffold(
                 }
 
                 item {
+                 // items(restaurants.itemCount) {}
+
                     NearbyHotel()
+                    // NearbyHotel(state=restaurants, ImgUrl = )
                 }
+
+                // }
 //                gridItems(
 //                    data = ,
 //                    columnCount = 2,

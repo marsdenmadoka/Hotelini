@@ -12,6 +12,8 @@ interface HoteliniApi {
 suspend fun getHotelsInNairobi(
     @Query("page") page: Int = STARTING_PAGE_INDEX,
     @Query("api_key") apiKey: String = API_KEY,
+//    @Query("latitude") latitude: Double,
+//    @Query("longitude") longitude: Double
 ): Data
 
 
