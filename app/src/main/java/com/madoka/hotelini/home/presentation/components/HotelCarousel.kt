@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
-import com.madoka.hotelini.home.presentation.HomeScreenContent
+//import com.madoka.hotelini.home.presentation.HomeScreenContent
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 

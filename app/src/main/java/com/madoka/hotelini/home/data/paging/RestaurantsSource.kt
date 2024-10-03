@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import coil.network.HttpException
 import com.madoka.hotelini.common.data.network.HoteliniApi
-import com.madoka.hotelini.home.data.network.dto.RestaurantDetail
+import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
 
 import okio.IOException
 import timber.log.Timber
@@ -45,3 +45,4 @@ class RestaurantsSource(
     }
 
 }
+

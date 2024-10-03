@@ -1,10 +1,10 @@
 package com.madoka.hotelini.home.domain.model
 
 import com.google.gson.annotations.SerializedName
-import com.madoka.hotelini.home.data.network.dto.AwardInfo
-import com.madoka.hotelini.home.data.network.dto.Offers
-import com.madoka.hotelini.home.data.network.dto.ReviewSnippets
-import com.madoka.hotelini.home.data.network.dto.Thumbnail
+import com.madoka.hotelini.home.data.network.Restaurantdto.AwardInfo
+import com.madoka.hotelini.home.data.network.Restaurantdto.Offers
+import com.madoka.hotelini.home.data.network.Restaurantdto.ReviewSnippets
+import com.madoka.hotelini.home.data.network.Restaurantdto.Thumbnail
 
 data class Restaurant1 (
     @SerializedName("averageRating")

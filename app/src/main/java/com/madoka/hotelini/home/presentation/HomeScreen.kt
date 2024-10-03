@@ -52,7 +52,7 @@ import com.madoka.hotelini.common.Location.PermissionDeniedContent
 import com.madoka.hotelini.common.domain.model.RestaurantItem
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
-import com.madoka.hotelini.home.data.network.dto.RestaurantDetail
+import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
 import com.madoka.hotelini.home.presentation.components.HotelCarousel
 import com.madoka.hotelini.home.presentation.components.NearbyHotelItem
 import com.ramcosta.composedestinations.annotation.Destination
@@ -61,22 +61,24 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Destination<RootGraph>(start = true)
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val homeUiState by viewModel.homeUiState.collectAsState()
-    HomeScreenContent(state = homeUiState)
-}
+    val state by viewModel.homeUiState.collectAsState()
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
-@Composable
-fun HomeScreenContent(
-    state: HomeUiState,
-) {
+    //HomeScreenContent(state = homeUiState)
+//}
+//
+//
+//@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+//@Composable
+//fun HomeScreenContent(
+//    state: HomeUiState,
+//) {
 
     val context = LocalContext.current
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
@@ -134,7 +136,10 @@ fun HomeScreenContent(
                         latitude = location.latitude
                         longitude = location.longitude
                         showMap = true
+                       // viewModel.getNearestHotels(latitude, longitude)
                     }
+
+                    Toast.makeText(context, "$latitude /n $longitude", Toast.LENGTH_LONG).show()
                 }
 
             } catch (e: Exception) {
@@ -175,6 +180,7 @@ fun HomeScreenScaffold(
 //     val restaurant = restaurantsState.collectAsLazyPagingItems()
 
     val restaurants = state.restaurants.collectAsLazyPagingItems()
+    //val hotels = state.nearestHotels.collectAsLazyPagingItems()
     //.collectAsState(initial = )
 
 
@@ -242,6 +248,17 @@ fun HomeScreenScaffold(
                         maxItemsInEachRow = 2
                     ) {
 
+
+//                        hotels.itemSnapshotList.items.forEach { hotel ->
+//                            hotel.let {
+//                                NearbyHotelItem(
+//                                    onClickItem = {},
+//                                    hotelDetails = hotel
+//                                    //restaurant = hotel
+//                                )
+//                            }
+//
+//                        }
                         restaurants.itemSnapshotList.items.forEach { hotel ->
                             hotel.let {
                                 NearbyHotelItem(

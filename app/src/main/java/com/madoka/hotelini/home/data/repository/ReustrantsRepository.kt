@@ -5,10 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.madoka.hotelini.common.data.network.HoteliniApi
 import com.madoka.hotelini.common.util.Constants.PAGING_SIZE
-import com.madoka.hotelini.home.data.network.dto.RestaurantDetail
+import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
 import com.madoka.hotelini.home.data.paging.RestaurantsSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(private val api:HoteliniApi){

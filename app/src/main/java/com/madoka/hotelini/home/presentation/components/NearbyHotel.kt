@@ -6,18 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,10 +31,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gowtham.ratingbar.RatingBar
@@ -48,10 +42,8 @@ import com.gowtham.ratingbar.StepSize
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
-import com.madoka.hotelini.home.data.network.dto.Data
-import com.madoka.hotelini.home.data.network.dto.RestaurantDetail
-import com.madoka.hotelini.home.presentation.HomeUiState
-import kotlinx.coroutines.flow.forEach
+import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
+import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
 
 
 //@OptIn(ExperimentalLayoutApi::class)
@@ -91,7 +83,8 @@ import kotlinx.coroutines.flow.forEach
 @Composable
 fun NearbyHotelItem(
     onClickItem: () -> Unit,
-    restaurant: RestaurantDetail
+     restaurant: RestaurantDetail
+   // hotelDetails: HotelDetails
 
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
@@ -99,7 +92,6 @@ fun NearbyHotelItem(
     val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val widthDem = LocalConfiguration.current.screenWidthDp.dp / 2
-
 
     Card(
         modifier = Modifier
@@ -114,9 +106,11 @@ fun NearbyHotelItem(
     ) {
         Box(modifier = Modifier.clickable { onClickItem() }) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(restaurant.heroImgUrl).crossfade(true)
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("").crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
+                error = painterResource(id = R.drawable.ic_load_error),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -148,7 +142,7 @@ fun NearbyHotelItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = restaurant.name,
+                    text = restaurant.name,//hotelDetails.title,//
                     fontSize = 18.sp,
                     maxLines = 2,
                     style = MaterialTheme.typography.bodySmall,
@@ -157,7 +151,7 @@ fun NearbyHotelItem(
                     color = dominantTextColor
                 )
                 RatingBar(modifier = Modifier,
-                    value =   restaurant.averageRating.toFloat() ,
+                    value =  restaurant.averageRating.toFloat(), //hotelDetails.bubbleRating.rating.toFloat(),// ,
                     config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
                         .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
                         .numStars(5).isIndicator(true).size(16.dp)
@@ -167,7 +161,7 @@ fun NearbyHotelItem(
 
                 Text(
                     modifier = Modifier,
-                    text =   "14 kiloMetres",//"${restaurant.distanceTo}",
+                    text = "14 kiloMetres",//"${restaurant.distanceTo}",
                     fontSize = 14.sp,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodySmall,

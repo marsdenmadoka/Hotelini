@@ -1,8 +1,8 @@
 package com.madoka.hotelini.home.data.network.hoteldto
 
-data class DataX(
+data class HotelDetails(
     val accentedLabel: Boolean,
-    val badge: Badge,
+    val badge:Badge,
     val bubbleRating: BubbleRating,
     val cardPhotos: List<CardPhoto>,
     val id: String,

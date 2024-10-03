@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import com.madoka.hotelini.home.data.repository.HotelRepository
 import com.madoka.hotelini.home.data.repository.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val restaurantRepository: RestaurantRepository
+    private val restaurantRepository: RestaurantRepository,
+    private val hotelRepository: HotelRepository
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
@@ -28,29 +30,41 @@ class HomeViewModel @Inject constructor(
 
 
     fun getNearestRestaurants(
-       // latitude: Double, longitude: Double
+        // latitude: Double, longitude: Double
     ) {
         _homeUiState.value = HomeUiState(
             restaurants = restaurantRepository.getRestaurant()
                 .cachedIn(viewModelScope)
         )
+    }
 
-       /* _homeUiState.update {
-            it.copy(
-                restaurants = restaurantRepository
-                    .getRestaurant(
-                        //latitude,longitude
-                    )
-                    .map { pagingData ->
-                        pagingData.filter {
-                            it.averageRating
-                        }
-                    }
-                    .cachedIn(viewModelScope)
-            )
-        } */
+    fun getNearestHotels(
+        latitude: Double, longitude: Double
+    ){
+
+        _homeUiState.value = HomeUiState(
+            nearestHotels = hotelRepository.getNearestHotels(latitude,longitude)
+                .cachedIn(viewModelScope)
+        )
 
     }
+
+
+    /* _homeUiState.update {
+         it.copy(
+             restaurants = restaurantRepository
+                 .getRestaurant(
+                     //latitude,longitude
+                 )
+                 .map { pagingData ->
+                     pagingData.filter {
+                         it.averageRating
+                     }
+                 }
+                 .cachedIn(viewModelScope)
+         )
+     } */
+
 
 //    fun refreshAllData() {
 //        getNearestRestaurants(homeUiState.value)
