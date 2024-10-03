@@ -6,7 +6,7 @@ import com.madoka.hotelini.home.data.network.dto.Offers
 import com.madoka.hotelini.home.data.network.dto.ReviewSnippets
 import com.madoka.hotelini.home.data.network.dto.Thumbnail
 
-data class Restaurant (
+data class Restaurant1 (
     @SerializedName("averageRating")
     val averageRating: Double,
     val awardInfo: AwardInfo,

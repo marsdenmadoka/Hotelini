@@ -5,8 +5,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.madoka.hotelini.common.data.network.HoteliniApi
 import com.madoka.hotelini.common.util.Constants.PAGING_SIZE
+import com.madoka.hotelini.home.data.network.dto.RestaurantDetail
 import com.madoka.hotelini.home.data.paging.RestaurantsSource
-import com.madoka.hotelini.home.domain.model.Restaurant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -15,11 +15,11 @@ class RestaurantRepository @Inject constructor(private val api:HoteliniApi){
 
 fun getRestaurant(
     //latitude: Double, longitude: Double
-): Flow<PagingData<Restaurant>>{
+): Flow<PagingData<RestaurantDetail>>{
     return Pager(
         config = PagingConfig(enablePlaceholders = false,pageSize = PAGING_SIZE),
         pagingSourceFactory = {
-            RestaurantsSource(api,
+            RestaurantsSource(api
 //                latitude,longitude
             )
         }

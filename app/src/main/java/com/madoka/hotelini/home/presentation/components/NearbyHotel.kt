@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gowtham.ratingbar.RatingBar
@@ -45,42 +49,49 @@ import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.home.data.network.dto.Data
-import com.madoka.hotelini.home.domain.model.Restaurant
+import com.madoka.hotelini.home.data.network.dto.RestaurantDetail
 import com.madoka.hotelini.home.presentation.HomeUiState
+import kotlinx.coroutines.flow.forEach
 
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun NearbyHotel(
+//@OptIn(ExperimentalLayoutApi::class)
+//@Composable
+//fun NearbyHotel(
 //    state: HomeUiState,
 //    onClickItem: () -> Unit,
-    ImgUrl: String
-) {
-
-    //  val resItems = state.restaurants
-
-    FlowRow(
-        Modifier
-            .fillMaxSize(),
-        horizontalArrangement = Arrangement.Center,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        maxItemsInEachRow = 2
-    ) {
-
-        NearbyHotelItem(onClickItem = onClickItem, ImgUrl = ImgUrl)
-
-
-//        repeat(8) {
-
-        // }
-    }
-}
+//    ImgUrl: String
+//) {
+//
+//      val resItems = state.restaurants
+//
+//    FlowRow(
+//        Modifier
+//            .fillMaxSize(),
+//        horizontalArrangement = Arrangement.Center,
+//        verticalArrangement = Arrangement.spacedBy(16.dp),
+//        maxItemsInEachRow = 2
+//    ) {
+//
+//        resItems.collectAsLazyPagingItems()
+//
+//items(items = resItems, key = {}){
+//
+//}
+//
+//        NearbyHotelItem(onClickItem = onClickItem, ImgUrl = resItems.)
+//
+//
+////        repeat(8) {
+//
+//        // }
+//    }
+//}z
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NearbyHotelItem(
     onClickItem: () -> Unit,
-    ImgUrl: String
+    restaurant: RestaurantDetail
 
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
@@ -88,8 +99,6 @@ fun NearbyHotelItem(
     val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val widthDem = LocalConfiguration.current.screenWidthDp.dp / 2
-
-
 
 
     Card(
@@ -105,10 +114,9 @@ fun NearbyHotelItem(
     ) {
         Box(modifier = Modifier.clickable { onClickItem() }) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(ImgUrl).crossfade(true)
+                model = ImageRequest.Builder(LocalContext.current).data(restaurant.heroImgUrl).crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
-                error = painterResource(id = R.drawable.ic_load_error),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -140,7 +148,7 @@ fun NearbyHotelItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = "Unknown movie",
+                    text = restaurant.name,
                     fontSize = 18.sp,
                     maxLines = 2,
                     style = MaterialTheme.typography.bodySmall,
@@ -149,7 +157,7 @@ fun NearbyHotelItem(
                     color = dominantTextColor
                 )
                 RatingBar(modifier = Modifier,
-                    value = 3.5.toFloat(),
+                    value =   restaurant.averageRating.toFloat() ,
                     config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
                         .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
                         .numStars(5).isIndicator(true).size(16.dp)
@@ -159,7 +167,7 @@ fun NearbyHotelItem(
 
                 Text(
                     modifier = Modifier,
-                    text = "14 kiloMetres",
+                    text =   "14 kiloMetres",//"${restaurant.distanceTo}",
                     fontSize = 14.sp,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodySmall,

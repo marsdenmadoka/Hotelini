@@ -8,6 +8,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -48,9 +52,9 @@ import com.madoka.hotelini.common.Location.PermissionDeniedContent
 import com.madoka.hotelini.common.domain.model.RestaurantItem
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
-import com.madoka.hotelini.home.domain.model.Restaurant
+import com.madoka.hotelini.home.data.network.dto.RestaurantDetail
 import com.madoka.hotelini.home.presentation.components.HotelCarousel
-import com.madoka.hotelini.home.presentation.components.NearbyHotel
+import com.madoka.hotelini.home.presentation.components.NearbyHotelItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -61,19 +65,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
-
-    HomeScreenContent()
+    val homeUiState by viewModel.homeUiState.collectAsState()
+    HomeScreenContent(state = homeUiState)
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreenContent(
-
+    state: HomeUiState,
 ) {
-    val context = LocalContext.current
 
+    val context = LocalContext.current
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
     val placesClient = Places.createClient(context)
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -139,7 +144,7 @@ fun HomeScreenContent(
 
         if (showMap) {
             //showHome screenContent
-            HomeScreenScaffold()
+            HomeScreenScaffold(state = state)
         } else {
 
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -155,14 +160,29 @@ fun HomeScreenContent(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class,
+    ExperimentalLayoutApi::class
+)
 @Composable
 fun HomeScreenScaffold(
     state: HomeUiState,
-    onEvent: (HomeUiEvents) -> Unit,
+    //onEvent: (HomeUiEvents) -> Unit,
 ) {
+//
+//    val restaurantsState = state.restaurants
+//
+//     val restaurant = restaurantsState.collectAsLazyPagingItems()
 
     val restaurants = state.restaurants.collectAsLazyPagingItems()
+    //.collectAsState(initial = )
+
+
+    // Collect the uiState from the ViewModel
+    //val uiState by viewModel.uiState.collectAsState()
+
+    // Collect trending movies as LazyPagingItems
+    // val trendingMovies = uiState.trendingMovies.collectAsLazyPagingItems()
 
 
     Scaffold(
@@ -213,13 +233,28 @@ fun HomeScreenScaffold(
                 }
 
                 item {
-                 // items(restaurants.itemCount) {}
 
-                    NearbyHotel()
-                    // NearbyHotel(state=restaurants, ImgUrl = )
-                }
+                    FlowRow(
+                        Modifier
+                            .fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        maxItemsInEachRow = 2
+                    ) {
 
-                // }
+                        restaurants.itemSnapshotList.items.forEach { hotel ->
+                            hotel.let {
+                                NearbyHotelItem(
+                                    onClickItem = {},
+                                    restaurant = hotel
+                                )
+                            }
+
+                        }
+                    }
+
+
+                    // }
 //                gridItems(
 //                    data = ,
 //                    columnCount = 2,
@@ -229,15 +264,15 @@ fun HomeScreenScaffold(
 //
 //                }
 
+                }
+
             }
-
         }
-    }
 
+    }
 }
 
-
-fun Restaurant.toRestaurantItem(
+fun RestaurantDetail.toRestaurantItem(
 
 ) = RestaurantItem(
     averageRating = averageRating,
