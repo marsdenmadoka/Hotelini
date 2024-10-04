@@ -136,7 +136,7 @@ fun HomeScreen(
                         latitude = location.latitude
                         longitude = location.longitude
                         showMap = true
-                       // viewModel.getNearestHotels(latitude, longitude)
+                        // viewModel.getNearestHotels(latitude, longitude)
                     }
 
                     Toast.makeText(context, "$latitude /n $longitude", Toast.LENGTH_LONG).show()
@@ -269,17 +269,6 @@ fun HomeScreenScaffold(
 
                         }
                     }
-
-
-                    // }
-//                gridItems(
-//                    data = ,
-//                    columnCount = 2,
-//                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-//                    modifier = Modifier.padding(horizontal = 16.dp
-//                ){ itemdata ->
-//
-//                }
 
                 }
 

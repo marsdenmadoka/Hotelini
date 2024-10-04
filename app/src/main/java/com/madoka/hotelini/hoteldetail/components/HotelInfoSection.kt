@@ -143,13 +143,19 @@ fun ViewLocationButton(
 @Preview
 @Composable
 fun HotelDescriptionSection() {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Description", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+    Column(modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "Description", fontWeight = FontWeight.Bold, fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.surface
+        )
+        Spacer(modifier = Modifier.size(10.dp))
         Text(
             text = "This beautiful hotel offers a luxurious stay with modern amenities such as free WiFi, pool, and parking.",
             fontSize = 14.sp,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.surface
         )
+        Spacer(modifier = Modifier.size(20.dp))
     }
 }
 

@@ -1,6 +1,7 @@
 package com.madoka.hotelini.hoteldetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,10 +45,11 @@ fun HotelDetailScreenContent() {
 
     ) { innerPadding ->
 
-        LazyColumn {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
             item {
                 ConstraintLayout(modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)) {
+                   // .padding(innerPadding)
+                ) {
                     val (hotelImageBanner, hotelImageCarousel, hotelInfoSection) = createRefs()
                     HotelImageBanner(
                         modifier = Modifier
@@ -77,7 +79,6 @@ fun HotelDetailScreenContent() {
 
                     HotelInfo(
                         modifier = Modifier
-                            .height(650.dp)
                             .fillMaxSize()
                             .background(
                                 color = Color.White,
@@ -102,7 +103,7 @@ fun HotelDetailScreenContent() {
 @Composable
 fun HotelInfo(modifier: Modifier = Modifier) {
 
-    LazyColumn(
+    Column(
         modifier
             .fillMaxSize()
             .background(
@@ -112,19 +113,18 @@ fun HotelInfo(modifier: Modifier = Modifier) {
 
 
         ) {
-        item {
+       // item {
             HotelInfoSection(modifier = Modifier)
-        }
-        item {
+       // }
+        //item {
             RoomInfoSection(modifier = Modifier)
-        }
-        item {
+        //}
+        //item {
             AmenitiesSection()
-        }
-
-        item {
+       // }
+        //item {
             HotelDescriptionSection()
-        }
+        //}
     }
 }
 

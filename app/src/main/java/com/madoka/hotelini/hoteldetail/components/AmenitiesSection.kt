@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,13 +22,21 @@ import com.madoka.hotelini.R
 
 @Composable
 fun AmenitiesSection() {
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Text(text = "What this place offers", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(
+            text = "What this place offers",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.surface
+        )
 
         LazyRow(
             modifier = Modifier
                 .padding(top = 8.dp)
-                .fillMaxWidth()
         ) {
             item {
                 AmenitiesIcon("Wifi", R.drawable.ic_star)
@@ -54,17 +63,14 @@ fun AmenitiesSection() {
 fun AmenitiesIcon(label: String, iconId: Int) {
     Column(
         modifier = Modifier
-            .padding(end = 16.dp)
             .size(64.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             painter = painterResource(id = iconId),
             contentDescription = label,
             modifier = Modifier.size(32.dp),
-            tint = Color.Unspecified
+            tint = MaterialTheme.colorScheme.surface
         )
-        Text(text = label, fontSize = 12.sp)
+        Text(text = label, fontSize = 12.sp, color = MaterialTheme.colorScheme.surface)
     }
 }
