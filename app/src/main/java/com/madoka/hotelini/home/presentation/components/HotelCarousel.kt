@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -114,15 +115,21 @@ fun HotelCarousel() {
                 contentDescription = item.contentDescription,
                 contentScale = ContentScale.Crop
             )
-            Text(
-                text = item.contentDescription,
-                color = Color.White,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 14.dp)
-                    .align(Alignment.Center)
-            )
+
+            Column(modifier = Modifier.align(Alignment.Center)) {
+                Text(
+                    text = item.contentDescription,
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(top = 14.dp)
+
+                )
+
+
+            }
+
         }
 
     }

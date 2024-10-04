@@ -70,15 +70,15 @@ fun HomeScreen(
 ) {
     val state by viewModel.homeUiState.collectAsState()
 
-    //HomeScreenContent(state = homeUiState)
-//}
-//
-//
-//@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
-//@Composable
-//fun HomeScreenContent(
-//    state: HomeUiState,
-//) {
+    HomeScreenContent(state = state)
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@Composable
+fun HomeScreenContent(
+    state: HomeUiState,
+) {
 
     val context = LocalContext.current
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
@@ -155,7 +155,6 @@ fun HomeScreen(
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
             }
-
 
         }
 
