@@ -149,26 +149,7 @@ fun HotelCarousel() {
                 }
 
 
-                Text(
-                    text = "Get All The Hotels Near You!!",
-                    color = Color.White,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(top = 14.dp)
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color.Red.copy(alpha = 0.3f),
-                                    Color.Blue.copy(alpha = 0.3f),
-                                    Color.Green.copy(alpha = 0.3f)
-                                ),
-                                startX = 0.0f, endX = 500.0f
-                            ),
-                            shape = RoundedCornerShape(20.dp),
-                        )
-                        .padding(16.dp)
-                )
+                AnimatedGradientText(text = "Get All The Hotels Near You!!")
 
 
             }
@@ -209,7 +190,7 @@ fun AutoAnimatedText(name: String) {
 
 
 @Composable
-fun AnimatedGradientText(){
+fun AnimatedGradientText(text:String){
     val infiniteTransition = rememberInfiniteTransition(label = "")
 
     val animatedStartX by infiniteTransition.animateFloat(
@@ -232,7 +213,7 @@ fun AnimatedGradientText(){
 
 
     Text(
-        text = "Get All The Hotels Near You!!",
+        text = text,
         color = Color.White,
         fontSize = 22.sp,
         fontWeight = FontWeight.Bold,
@@ -241,9 +222,9 @@ fun AnimatedGradientText(){
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
-                        Color.Red.copy(alpha = 0.3f),
-                        Color.Blue.copy(alpha = 0.3f),
-                        Color.Green.copy(alpha = 0.3f)
+                        Color.Red.copy(alpha = 0.6f),
+                        Color.Blue.copy(alpha = 0.6f),
+                        Color.Green.copy(alpha = 0.6f)
                     ),
                    // startX = 0.0f, endX = 500.0f
                     startX = animatedStartX,
