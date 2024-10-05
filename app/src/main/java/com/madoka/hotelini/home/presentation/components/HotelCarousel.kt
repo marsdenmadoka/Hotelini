@@ -3,8 +3,13 @@ package com.madoka.hotelini.home.presentation.components
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +25,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -125,7 +132,10 @@ fun HotelCarousel() {
                 contentScale = ContentScale.Crop
             )
 
-            Column(modifier = Modifier.align(Alignment.Center)) {
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
@@ -140,11 +150,24 @@ fun HotelCarousel() {
 
 
                 Text(
-                    text = item.contentDescription,
+                    text = "Get All The Hotels Near You!!",
                     color = Color.White,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 14.dp)
+                    modifier = Modifier
+                        .padding(top = 14.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Red.copy(alpha = 0.3f),
+                                    Color.Blue.copy(alpha = 0.3f),
+                                    Color.Green.copy(alpha = 0.3f)
+                                ),
+                                startX = 0.0f, endX = 500.0f
+                            ),
+                            shape = RoundedCornerShape(20.dp),
+                        )
+                        .padding(16.dp)
                 )
 
 
@@ -164,11 +187,9 @@ fun AutoAnimatedText(name: String) {
         targetValue = if (bigText) Golden else Purple40,
         animationSpec = tween(durationMillis = 1000)
     )
-
     val fontSize by animateFloatAsState(
         targetValue = if (bigText) 50f else 24f, animationSpec = tween(durationMillis = 1000)
     )
-
     LaunchedEffect(Unit) {
         while (true) {
             bigText = !bigText
@@ -184,18 +205,59 @@ fun AutoAnimatedText(name: String) {
             color = color, fontWeight = FontWeight.SemiBold, fontSize = fontSize.sp
         ),
     )
+}
 
 
-    /*
-Text(
-text = "hotelini Rank",
-fontFamily = poppinsFamily,
-style = MaterialTheme.typography.headlineMedium.copy(
-    color = Golden, fontWeight = FontWeight.SemiBold
-),
- ) */
+@Composable
+fun AnimatedGradientText(){
+    val infiniteTransition = rememberInfiniteTransition(label = "")
+
+    val animatedStartX by infiniteTransition.animateFloat(
+        initialValue = 0.0f,
+        targetValue = 500.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = ""
+    )
+
+    val animatedEndX by infiniteTransition.animateFloat(
+        initialValue = 500.0f,
+        targetValue = 1000.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = ""
+    )
+
+
+    Text(
+        text = "Get All The Hotels Near You!!",
+        color = Color.White,
+        fontSize = 22.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .padding(top = 14.dp)
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        Color.Red.copy(alpha = 0.3f),
+                        Color.Blue.copy(alpha = 0.3f),
+                        Color.Green.copy(alpha = 0.3f)
+                    ),
+                   // startX = 0.0f, endX = 500.0f
+                    startX = animatedStartX,
+                    endX = animatedEndX
+                ),
+                shape = RoundedCornerShape(20.dp),
+            )
+            .padding(16.dp)
+    )
+
+
 
 }
+
 
 
 @Preview
