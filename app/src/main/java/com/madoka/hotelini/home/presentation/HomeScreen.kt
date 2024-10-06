@@ -226,7 +226,8 @@ fun HomeScreenScaffold(
                         )
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .background(Color.Transparent)
             )
         }
@@ -239,16 +240,10 @@ fun HomeScreenScaffold(
                 // onEvent(HomeUiEvents.OnPullToRefresh)
             }
         ) {
-
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            )
-            {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 // Adjust the height and opacity of the carousel based on scrollOffset
                 val carouselAlpha = max(1f, 1 - (scrollOffset / collapseRange))
                 val carouselHeight = max(0.dp, 200.dp - (scrollOffset / 5).dp)
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -257,7 +252,6 @@ fun HomeScreenScaffold(
                 ) {
                     HotelCarousel()
                 }
-
                 LazyColumn(
                     state = lazyRowScrollState,
                     modifier = Modifier.onGloballyPositioned {
@@ -301,14 +295,10 @@ fun HomeScreenScaffold(
 
                                           }*/
                         }
-
                     }
                 }
-
-
             }
         }
-
     }
 }
 
