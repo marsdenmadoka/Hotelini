@@ -136,21 +136,8 @@ fun HotelCarousel() {
                 modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painterResource(id = R.drawable.hotelini),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(width = 50.dp, height = 50.dp)
-                            .padding(horizontal = 8.dp)
-                    )
-                    AutoAnimatedText(name = "hotelini Rank")
-                }
-
-
+               // AutoAnimatedText(name = "hotelini Rank")
                 AnimatedGradientText(text = "Get All The Hotels Near You!!")
-
 
             }
 
@@ -159,17 +146,18 @@ fun HotelCarousel() {
     }
 }
 
-
 @Composable
-fun AutoAnimatedText(name: String) {
+fun AnimatedGradientText(text: String) {
     var bigText by remember { mutableStateOf(false) }
-
     val color by animateColorAsState(
-        targetValue = if (bigText) Golden else Purple40,
-        animationSpec = tween(durationMillis = 1000)
+        targetValue = if (bigText) Golden else MaterialTheme.colorScheme.onSurface,
+        animationSpec = tween(durationMillis = 1000),
+        label = ""
     )
     val fontSize by animateFloatAsState(
-        targetValue = if (bigText) 50f else 24f, animationSpec = tween(durationMillis = 1000)
+        targetValue = if (bigText) 20f else 18f,
+        animationSpec = tween(durationMillis = 1000),
+        label = ""
     )
     LaunchedEffect(Unit) {
         while (true) {
@@ -178,19 +166,6 @@ fun AutoAnimatedText(name: String) {
         }
     }
 
-
-    Text(
-        text = name,
-        fontFamily = poppinsFamily,
-        style = MaterialTheme.typography.headlineMedium.copy(
-            color = color, fontWeight = FontWeight.SemiBold, fontSize = fontSize.sp
-        ),
-    )
-}
-
-
-@Composable
-fun AnimatedGradientText(text:String){
     val infiniteTransition = rememberInfiniteTransition(label = "")
 
     val animatedStartX by infiniteTransition.animateFloat(
@@ -206,16 +181,19 @@ fun AnimatedGradientText(text:String){
         initialValue = 500.0f,
         targetValue = 1000.0f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
+            animation = tween(
+                durationMillis = 3000,
+                easing = LinearEasing
+            ),
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
 
-
     Text(
         text = text,
-        color = Color.White,
-        fontSize = 22.sp,
+        color = color,
+        fontFamily = poppinsFamily,
+        fontSize = fontSize.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .padding(top = 14.dp)
@@ -226,7 +204,6 @@ fun AnimatedGradientText(text:String){
                         Color.Blue.copy(alpha = 0.6f),
                         Color.Green.copy(alpha = 0.6f)
                     ),
-                   // startX = 0.0f, endX = 500.0f
                     startX = animatedStartX,
                     endX = animatedEndX
                 ),
@@ -234,11 +211,7 @@ fun AnimatedGradientText(text:String){
             )
             .padding(16.dp)
     )
-
-
-
 }
-
 
 
 @Preview

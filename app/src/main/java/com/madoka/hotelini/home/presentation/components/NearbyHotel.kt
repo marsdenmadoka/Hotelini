@@ -83,7 +83,7 @@ import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
 @Composable
 fun NearbyHotelItem(
     onClickItem: () -> Unit,
-     restaurant: RestaurantDetail
+    // restaurant: RestaurantDetail
    // hotelDetails: HotelDetails
 
 ) {
@@ -142,7 +142,7 @@ fun NearbyHotelItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = restaurant.name,//hotelDetails.title,//
+                    text ="title",// restaurant.name,//hotelDetails.title,//
                     fontSize = 18.sp,
                     maxLines = 2,
                     style = MaterialTheme.typography.bodySmall,
@@ -151,7 +151,7 @@ fun NearbyHotelItem(
                     color = dominantTextColor
                 )
                 RatingBar(modifier = Modifier,
-                    value =  restaurant.averageRating.toFloat(), //hotelDetails.bubbleRating.rating.toFloat(),// ,
+                    value = 4.5F,//restaurant.averageRating.toFloat(), //hotelDetails.bubbleRating.rating.toFloat(),// ,
                     config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
                         .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
                         .numStars(5).isIndicator(true).size(16.dp)

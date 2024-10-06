@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +13,11 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,11 +33,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -59,6 +68,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -66,18 +76,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
-    viewModel: HomeViewModel = hiltViewModel()
+    //  viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val state by viewModel.homeUiState.collectAsState()
+    //val state by viewModel.homeUiState.collectAsState()
 
-    HomeScreenContent(state = state)
+//    HomeScreenContent(state = state)
+    HomeScreenContent()
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreenContent(
-    state: HomeUiState,
+    // state: HomeUiState,
 ) {
 
     val context = LocalContext.current
@@ -147,16 +158,18 @@ fun HomeScreenContent(
             }
         }
 
-        if (showMap) {
-            //showHome screenContent
-            HomeScreenScaffold(state = state)
-        } else {
-
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
-            }
-
-        }
+        HomeScreenScaffold()
+//        if (showMap) {
+//            //showHome screenContent
+//            //HomeScreenScaffold(state = state)
+//            HomeScreenScaffold()
+//        } else {
+//
+//            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//                androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
+//            }
+//
+//        }
 
     }
 
@@ -170,7 +183,7 @@ fun HomeScreenContent(
 )
 @Composable
 fun HomeScreenScaffold(
-    state: HomeUiState,
+    // state: HomeUiState,
     //onEvent: (HomeUiEvents) -> Unit,
 ) {
 //
@@ -178,7 +191,7 @@ fun HomeScreenScaffold(
 //
 //     val restaurant = restaurantsState.collectAsLazyPagingItems()
 
-    val restaurants = state.restaurants.collectAsLazyPagingItems()
+    // val restaurants = state.restaurants.collectAsLazyPagingItems()
     //val hotels = state.nearestHotels.collectAsLazyPagingItems()
     //.collectAsState(initial = )
 
@@ -189,6 +202,12 @@ fun HomeScreenScaffold(
     // Collect trending movies as LazyPagingItems
     // val trendingMovies = uiState.trendingMovies.collectAsLazyPagingItems()
 
+
+    val lazyRowScrollState = rememberLazyListState()
+    var scrollOffset by remember { mutableStateOf(0f) }
+
+    val carouselHeightPx = with(LocalDensity.current) { 200.dp.toPx() }
+    val collapseRange = carouselHeightPx * 0.6f
 
     Scaffold(
         topBar = {
@@ -208,6 +227,7 @@ fun HomeScreenScaffold(
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
+                    .background(Color.Transparent)
             )
         }
     ) { innerPadding ->
@@ -219,34 +239,47 @@ fun HomeScreenScaffold(
                 // onEvent(HomeUiEvents.OnPullToRefresh)
             }
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize())
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            )
             {
-                item {
+                // Adjust the height and opacity of the carousel based on scrollOffset
+                val carouselAlpha = max(1f, 1 - (scrollOffset / collapseRange))
+                val carouselHeight = max(0.dp, 200.dp - (scrollOffset / 5).dp)
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(carouselHeight)
+                        .alpha(carouselAlpha)
+                ) {
                     HotelCarousel()
-
                 }
-                item {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = "GET TO FIND YOUR NEAREST HOTELS",
-                            style = MaterialTheme.typography.titleMedium,
-                        )
+
+                LazyColumn(
+                    state = lazyRowScrollState,
+                    modifier = Modifier.onGloballyPositioned {
+                        // Capture the scroll offset of the LazyRow to collapse the carousel
+                        scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
-                }
+                ) {
 
-                item {
+                    item {
+                        FlowRow(
+                            Modifier
+                                .fillMaxSize(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            maxItemsInEachRow = 2
+                        ) {
 
-                    FlowRow(
-                        Modifier
-                            .fillMaxSize(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        maxItemsInEachRow = 2
-                    ) {
+                            repeat(20) {
+                                NearbyHotelItem {
 
+                                }
+                            }
 
 //                        hotels.itemSnapshotList.items.forEach { hotel ->
 //                            hotel.let {
@@ -258,18 +291,20 @@ fun HomeScreenScaffold(
 //                            }
 //
 //                        }
-                        restaurants.itemSnapshotList.items.forEach { hotel ->
-                            hotel.let {
-                                NearbyHotelItem(
-                                    onClickItem = {},
-                                    restaurant = hotel
-                                )
-                            }
+                            /*              restaurants.itemSnapshotList.items.forEach { hotel ->
+                                              hotel.let {
+                                                  NearbyHotelItem(
+                                                      onClickItem = {},
+                                                      restaurant = hotel
+                                                  )
+                                              }
 
+                                          }*/
                         }
-                    }
 
+                    }
                 }
+
 
             }
         }
