@@ -9,6 +9,17 @@ data class HotelDetailsResponses(
 
 
 
+/*val client = OkHttpClient()
+
+val request = Request.Builder()
+	.url("https://tripadvisor16.p.rapidapi.com/api/v1/hotels/getHotelDetails?id=23462501&checkIn=2024-10-08&checkOut=2024-10-09&currency=USD")
+	.get()
+	.addHeader("x-rapidapi-key", "38d12867b2mshcd1cbd3df56a9ccp14ca7ajsn2c5bbd01c0e6")
+	.addHeader("x-rapidapi-host", "tripadvisor16.p.rapidapi.com")
+	.build()
+
+val response = client.newCall(request).execute() write this as a retrofit function*/
+
 
 /*
 {
