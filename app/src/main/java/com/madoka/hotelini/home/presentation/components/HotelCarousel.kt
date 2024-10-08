@@ -103,11 +103,6 @@ fun HotelCarousel() {
         itemSpacing = 8.dp,
     ) { i ->
         val item = items[animatedIndex.value.roundToInt()]
-
-        val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
-        val dominantColor = MaterialTheme.colorScheme.surface
-        val dominantTextColor by remember { mutableStateOf(dominantColor) }
-        val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
         Box(
             Modifier
                 .fillMaxWidth()
@@ -121,9 +116,8 @@ fun HotelCarousel() {
                     .background(
                         Brush.verticalGradient(
                             listOf(
-                                MaterialTheme.colorScheme.surface, Color.Yellow
-                                //,MaterialTheme.colorScheme.surface
-                                // Color.Transparent,MaterialTheme.colorScheme.background
+                                MaterialTheme.colorScheme.background,
+                                MaterialTheme.colorScheme.surface
                             )
                         )
                     ),
@@ -136,7 +130,6 @@ fun HotelCarousel() {
                 modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-               // AutoAnimatedText(name = "hotelini Rank")
                 AnimatedGradientText(text = "Get All The Hotels Near You!!")
 
             }

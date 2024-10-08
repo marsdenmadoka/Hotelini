@@ -40,5 +40,11 @@ interface HoteliniApi {
 
     ): HotelResponse
 
+    @GET()//get the hotel details
+    suspend fun getHotelDetails(
+
+    ): HotelResponse
+
+
 
 }
