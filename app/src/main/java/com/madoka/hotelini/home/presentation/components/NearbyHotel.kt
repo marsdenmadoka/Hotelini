@@ -84,7 +84,7 @@ import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
 fun NearbyHotelItem(
     onClickItem: () -> Unit,
     // restaurant: RestaurantDetail
-   // hotelDetails: HotelDetails
+    hotelDetails: HotelDetails
 
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
@@ -107,7 +107,7 @@ fun NearbyHotelItem(
         Box(modifier = Modifier.clickable { onClickItem() }) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("").crossfade(true)
+                    .data("").crossfade(true) //hotelDetails
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
                 error = painterResource(id = R.drawable.ic_load_error),

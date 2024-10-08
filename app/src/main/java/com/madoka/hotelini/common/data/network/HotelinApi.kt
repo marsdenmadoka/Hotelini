@@ -40,11 +40,17 @@ interface HoteliniApi {
 
     ): HotelResponse
 
-    @GET()//get the hotel details
-    suspend fun getHotelDetails(
 
-    ): HotelResponse
 
+        @GET("api/v1/hotels/getHotelDetails")
+        fun getHotelDetails(
+            @Query("id") hotelId: String,
+            @Query("checkIn") checkInDate: String,
+            @Query("checkOut") checkOutDate: String,
+            @Query("currency") currency: String,
+            @Header("x-rapidapi-key") apiKey: String,
+            @Header("x-rapidapi-host") apiHost: String
+        ): Call<HotelDetailsResponse>
 
 
 }
