@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -75,20 +76,25 @@ import kotlin.math.max
 @Destination<RootGraph>(start = true)
 @Composable
 fun HomeScreen(
+    animatedVisibilityScope: AnimatedVisibilityScope,
     navigator: DestinationsNavigator,
-    //  viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
-    //val state by viewModel.homeUiState.collectAsState()
+    val homeUiState by viewModel.homeUiState.collectAsState()
+    val context = LocalContext.current
 
-//    HomeScreenContent(state = state)
-    HomeScreenContent()
+    HomeScreenContent(
+        state =  homeUiState
+    )
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreenContent(
-    // state: HomeUiState,
+    state: HomeUiState,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onEvent: (HomeUiEvents) -> Unit,
 ) {
 
     val context = LocalContext.current
