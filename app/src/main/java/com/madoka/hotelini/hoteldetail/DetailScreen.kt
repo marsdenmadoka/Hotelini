@@ -1,5 +1,6 @@
 package com.madoka.hotelini.hoteldetail
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.madoka.hotelini.common.domain.model.HotelInfo
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.hoteldetail.components.AmenitiesSection
 import com.madoka.hotelini.hoteldetail.components.DetailsActions
@@ -24,10 +26,16 @@ import com.madoka.hotelini.hoteldetail.components.HotelImageBanner
 import com.madoka.hotelini.hoteldetail.components.HotelInfoSection
 import com.madoka.hotelini.hoteldetail.components.RoomInfoSection
 import com.madoka.hotelini.hoteldetail.components.SmallImagesRow
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Destination<RootGraph>
 @Composable
-fun HotelDetailsScreen() {
+fun HotelDetailsScreen(
+    hotel:HotelInfo
+) {
     HotelDetailScreenContent()
 }
 
@@ -44,11 +52,9 @@ fun HotelDetailScreenContent() {
         }
 
     ) { innerPadding ->
-
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             item {
                 ConstraintLayout(modifier = Modifier.fillMaxSize()
-                   // .padding(innerPadding)
                 ) {
                     val (hotelImageBanner, hotelImageCarousel, hotelInfoSection) = createRefs()
                     HotelImageBanner(
@@ -60,10 +66,7 @@ fun HotelDetailScreenContent() {
                                 start.linkTo(parent.start)
                                 end.linkTo(parent.end)
                                 width = Dimension.fillToConstraints
-
                             },
-
-                        // filmImage ="https://image.tmdb.org/t/p/w500/6MKr3KgOLmzOP6MSuZERO41Lpkt.jpg",
                     )
 
                     SmallImagesRow(

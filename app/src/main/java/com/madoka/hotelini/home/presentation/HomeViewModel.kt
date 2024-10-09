@@ -18,16 +18,17 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val restaurantRepository: RestaurantRepository,
     private val hotelRepository: HotelRepository,
-    latitude: Double, longitude: Double
+
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
+
     // val homeUiState = _homeUiState.asStateFlow()
 
 
     init {
         getNearestRestaurants()
-        getNearestHotels(latitude = latitude, longitude = longitude)
+      //  getNearestHotels(latitude = latitude, longitude = longitude)
     }
 
 

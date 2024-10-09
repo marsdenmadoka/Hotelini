@@ -6,8 +6,10 @@ import com.madoka.hotelini.common.util.Constants.STARTING_PAGE_INDEX
 import com.madoka.hotelini.common.util.currentDate
 import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantResponse
 import com.madoka.hotelini.home.data.network.hoteldto.HotelResponse
+import com.madoka.hotelini.hoteldetail.hoteldetailsdto.HotelDetailsResponses
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -36,21 +38,18 @@ interface HoteliniApi {
         @Query("checkIn") checkIn: String = currentDate,
         @Query("checkOut") checkOut: String =  currentDate,
         @Query("pageNumber") pageNumber: Int = STARTING_PAGE_INDEX,
-
-
     ): HotelResponse
 
+    @GET("api/v1/hotels/getHotelDetails/{hotelId}")
+    fun getHotelDetails(
+        @Path("id") hotelId: String,
+        @Query("checkIn") checkInDate: String = currentDate,
+        @Query("checkOut") checkOutDate: String = currentDate,
+        @Query("currency") currency: String,
+        @Header("x-rapidapi-key") apiKey: String = API_KEY,
+        @Header("x-rapidapi-host") apiHost: String = API_HOST
+    ): HotelDetailsResponses
 
-
-        @GET("api/v1/hotels/getHotelDetails")
-        fun getHotelDetails(
-            @Query("id") hotelId: String,
-            @Query("checkIn") checkInDate: String,
-            @Query("checkOut") checkOutDate: String,
-            @Query("currency") currency: String,
-            @Header("x-rapidapi-key") apiKey: String,
-            @Header("x-rapidapi-host") apiHost: String
-        ): Call<HotelDetailsResponse>
 
 
 }

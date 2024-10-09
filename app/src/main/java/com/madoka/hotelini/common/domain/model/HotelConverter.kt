@@ -22,7 +22,6 @@ data class HotelInfo(  //this is what we pass to the Details Screen
 ) : Parcelable
 
 fun Hotel.toHotelInfo(
-
 ) = HotelInfo(
     id = id,
 //    bubbleRating = bubbleRating,

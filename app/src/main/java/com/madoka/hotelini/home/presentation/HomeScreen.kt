@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +60,9 @@ import com.madoka.hotelini.BuildConfig
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.Location.HandleRequest
 import com.madoka.hotelini.common.Location.PermissionDeniedContent
+import com.madoka.hotelini.common.domain.model.HotelInfo
 import com.madoka.hotelini.common.domain.model.RestaurantItem
+import com.madoka.hotelini.common.domain.model.toHotelInfo
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
@@ -67,6 +70,7 @@ import com.madoka.hotelini.home.presentation.components.HotelCarousel
 import com.madoka.hotelini.home.presentation.components.NearbyHotelItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.HotelDetailsScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 import kotlin.math.max
@@ -84,7 +88,25 @@ fun HomeScreen(
     val context = LocalContext.current
 
     HomeScreenContent(
-        state =  homeUiState
+        state =  homeUiState,
+        animatedVisibilityScope = animatedVisibilityScope,
+        onEvent = { homeUiEvents ->
+            when(homeUiEvents){
+                HomeUiEvents.NavigateBack ->{
+                    navigator.navigateUp()
+                }
+                is HomeUiEvents.NavigateToHotelDetails ->{
+                 navigator.navigate(
+                     HotelDetailsScreenDestination(
+                         hotel = homeUiEvents.hotel
+                     )
+                 )
+                }
+                HomeUiEvents.OnPullToRefresh -> {
+                   // viewModel.refreshAllData(latitude = )
+                }
+            }
+        }
     )
 }
 
@@ -97,7 +119,8 @@ fun HomeScreenContent(
     onEvent: (HomeUiEvents) -> Unit,
 ) {
 
-    val context = LocalContext.current
+      val context = LocalContext.current
+
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
     val placesClient = Places.createClient(context)
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -164,7 +187,7 @@ fun HomeScreenContent(
             }
         }
 
-        HomeScreenScaffold()
+        HomeScreenScaffold(state = state, onEvent = )
 //        if (showMap) {
 //            //showHome screenContent
 //            //HomeScreenScaffold(state = state)
@@ -189,8 +212,9 @@ fun HomeScreenContent(
 )
 @Composable
 fun HomeScreenScaffold(
-    // state: HomeUiState,
-    //onEvent: (HomeUiEvents) -> Unit,
+     state: HomeUiState,
+    onEvent: (HomeUiEvents) -> Unit,
+     animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
 //
 //    val restaurantsState = state.restaurants
@@ -198,7 +222,7 @@ fun HomeScreenScaffold(
 //     val restaurant = restaurantsState.collectAsLazyPagingItems()
 
     // val restaurants = state.restaurants.collectAsLazyPagingItems()
-    //val hotels = state.nearestHotels.collectAsLazyPagingItems()
+    val hotels = state.nearestHotels.collectAsLazyPagingItems()
     //.collectAsState(initial = )
 
 
@@ -276,21 +300,35 @@ fun HomeScreenScaffold(
                         ) {
 
                             repeat(20) {
-                                NearbyHotelItem {
-
-                                }
+                                NearbyHotelItem()
                             }
 
-//                        hotels.itemSnapshotList.items.forEach { hotel ->
-//                            hotel.let {
-//                                NearbyHotelItem(
-//                                    onClickItem = {},
-//                                    hotelDetails = hotel
-//                                    //restaurant = hotel
-//                                )
-//                            }
-//
-//                        }
+                        hotels.itemSnapshotList.items.forEach { hotel ->
+                            hotel.let {
+                                NearbyHotelItem(modifier = Modifier
+                                    .clickable {
+                                        onEvent(
+                                            HomeUiEvents.NavigateToHotelDetails(
+                                                hotel = it.toHotelInfo()
+                                            )
+                                        )
+                                    }
+                                )
+                            }
+
+                        }
+
+                          /*  hotels.itemSnapshotList.items.forEach { hotel ->
+                                hotel.let {
+                                    NearbyHotelItem(
+                                        onClickItem = {},
+                                        hotelDetails = hotel
+                                        //restaurant = hotel
+                                    )
+                                }
+
+                            } */
+
                             /*              restaurants.itemSnapshotList.items.forEach { hotel ->
                                               hotel.let {
                                                   NearbyHotelItem(

@@ -82,9 +82,10 @@ import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NearbyHotelItem(
-    onClickItem: () -> Unit,
+    modifier: Modifier = Modifier,
+   // onClickItem: () -> Unit,
     // restaurant: RestaurantDetail
-    hotelDetails: HotelDetails
+    //hotelDetails: Hotel
 
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
@@ -98,13 +99,10 @@ fun NearbyHotelItem(
             //.width(widthDem)
             .width(180.dp)
             .height(200.dp)
-            .padding(horizontal = 3.dp)
-            .clickable {
-                onClickItem()
-            },
+            .padding(horizontal = 3.dp),
         elevation = CardDefaults.cardElevation(8.dp), shape = RoundedCornerShape(4.dp)
     ) {
-        Box(modifier = Modifier.clickable { onClickItem() }) {
+        Box {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data("").crossfade(true) //hotelDetails
