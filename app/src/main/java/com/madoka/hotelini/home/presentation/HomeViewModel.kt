@@ -17,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val restaurantRepository: RestaurantRepository,
-    private val hotelRepository: HotelRepository
+    private val hotelRepository: HotelRepository,
+    latitude: Double, longitude: Double
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
@@ -26,11 +27,11 @@ class HomeViewModel @Inject constructor(
 
     init {
         getNearestRestaurants()
+        getNearestHotels(latitude = latitude, longitude = longitude)
     }
 
 
-    fun getNearestRestaurants(
-        // latitude: Double, longitude: Double
+    private fun getNearestRestaurants(
     ) {
         _homeUiState.value = HomeUiState(
             restaurants = restaurantRepository.getRestaurant()
@@ -38,17 +39,22 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun getNearestHotels(
+    private fun getNearestHotels(
         latitude: Double, longitude: Double
-    ){
-
-        _homeUiState.value = HomeUiState(
-            nearestHotels = hotelRepository.getNearestHotels(latitude,longitude)
-                .cachedIn(viewModelScope)
-        )
+    ) {
+        _homeUiState.update {
+            it.copy(
+                nearestHotels = hotelRepository.getNearestHotels(latitude, longitude)
+                    .cachedIn(viewModelScope)
+            )
+        }
 
     }
 
+
+    fun refreshAllData(latitude: Double, longitude: Double) {
+        getNearestHotels(latitude, longitude)
+    }
 
     /* _homeUiState.update {
          it.copy(
@@ -65,10 +71,6 @@ class HomeViewModel @Inject constructor(
          )
      } */
 
-
-//    fun refreshAllData() {
-//        getNearestRestaurants(homeUiState.value)
-//    }
 
 
 }

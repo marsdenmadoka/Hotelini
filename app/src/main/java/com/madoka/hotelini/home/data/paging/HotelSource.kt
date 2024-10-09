@@ -4,8 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import coil.network.HttpException
 import com.madoka.hotelini.common.data.network.HoteliniApi
-import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
-import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
+import com.madoka.hotelini.home.domain.model.Hotel
 import timber.log.Timber
 import java.io.IOException
 
@@ -14,12 +13,12 @@ class HotelSource(
     private val latitude: Double,
     private val longitude: Double
 ) :
-    PagingSource<Int,HotelDetails>() {
-    override fun getRefreshKey(state: PagingState<Int, HotelDetails>): Int? {
+    PagingSource<Int,Hotel>() {
+    override fun getRefreshKey(state: PagingState<Int, Hotel>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int,HotelDetails> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int,Hotel> {
         return try {
             val nextPage = params.key ?: 1
             val hotelsList =

@@ -1,8 +1,11 @@
-package com.madoka.hotelini.home.data.network.hoteldto
+package com.madoka.hotelini.home.domain.model
 
 import com.google.gson.annotations.SerializedName
+import com.madoka.hotelini.home.data.network.hoteldto.Badge
+import com.madoka.hotelini.home.data.network.hoteldto.BubbleRating
+import com.madoka.hotelini.home.data.network.hoteldto.CardPhoto
 
-data class HotelDetails(
+data class Hotel(
     @SerializedName("accentedLabel")
     val accentedLabel: Boolean,
     @SerializedName("Badge")
@@ -32,3 +35,6 @@ data class HotelDetails(
     @SerializedName("title")
     val title: String
 )
+
+
+
