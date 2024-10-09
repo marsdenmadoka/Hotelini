@@ -1,4 +1,4 @@
-package com.madoka.hotelini.hoteldetail
+package com.madoka.hotelini.hoteldetail.presentation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
@@ -136,6 +136,6 @@ fun HotelInfo(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewHotelDetailScreen2() {
     HoteliniTheme {
-        HotelDetailsScreen()
+        //HotelDetailsScreen()
     }
 }

@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
+import retrofit2.HttpException
+import java.io.IOException
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -43,11 +47,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -65,6 +72,7 @@ import com.madoka.hotelini.common.domain.model.RestaurantItem
 import com.madoka.hotelini.common.domain.model.toHotelInfo
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
+import com.madoka.hotelini.common.util.Resource
 import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
 import com.madoka.hotelini.home.presentation.components.HotelCarousel
 import com.madoka.hotelini.home.presentation.components.NearbyHotelItem
@@ -88,22 +96,24 @@ fun HomeScreen(
     val context = LocalContext.current
 
     HomeScreenContent(
-        state =  homeUiState,
+        state = homeUiState,
         animatedVisibilityScope = animatedVisibilityScope,
         onEvent = { homeUiEvents ->
-            when(homeUiEvents){
-                HomeUiEvents.NavigateBack ->{
+            when (homeUiEvents) {
+                HomeUiEvents.NavigateBack -> {
                     navigator.navigateUp()
                 }
-                is HomeUiEvents.NavigateToHotelDetails ->{
-                 navigator.navigate(
-                     HotelDetailsScreenDestination(
-                         hotel = homeUiEvents.hotel
-                     )
-                 )
+
+                is HomeUiEvents.NavigateToHotelDetails -> {
+                    navigator.navigate(
+                        HotelDetailsScreenDestination(
+                            hotel = homeUiEvents.hotel
+                        )
+                    )
                 }
+
                 HomeUiEvents.OnPullToRefresh -> {
-                   // viewModel.refreshAllData(latitude = )
+                    // viewModel.refreshAllData(latitude = )
                 }
             }
         }
@@ -119,7 +129,7 @@ fun HomeScreenContent(
     onEvent: (HomeUiEvents) -> Unit,
 ) {
 
-      val context = LocalContext.current
+    val context = LocalContext.current
 
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
     val placesClient = Places.createClient(context)
@@ -187,7 +197,7 @@ fun HomeScreenContent(
             }
         }
 
-        HomeScreenScaffold(state = state, onEvent = )
+        HomeScreenScaffold(state = state, onEvent = onEvent)
 //        if (showMap) {
 //            //showHome screenContent
 //            //HomeScreenScaffold(state = state)
@@ -212,25 +222,13 @@ fun HomeScreenContent(
 )
 @Composable
 fun HomeScreenScaffold(
-     state: HomeUiState,
+    state: HomeUiState,
     onEvent: (HomeUiEvents) -> Unit,
-     animatedVisibilityScope: AnimatedVisibilityScope,
+    //animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
-//
-//    val restaurantsState = state.restaurants
-//
-//     val restaurant = restaurantsState.collectAsLazyPagingItems()
 
-    // val restaurants = state.restaurants.collectAsLazyPagingItems()
+    val context = LocalContext.current
     val hotels = state.nearestHotels.collectAsLazyPagingItems()
-    //.collectAsState(initial = )
-
-
-    // Collect the uiState from the ViewModel
-    //val uiState by viewModel.uiState.collectAsState()
-
-    // Collect trending movies as LazyPagingItems
-    // val trendingMovies = uiState.trendingMovies.collectAsLazyPagingItems()
 
 
     val lazyRowScrollState = rememberLazyListState()
@@ -262,12 +260,13 @@ fun HomeScreenScaffold(
             )
         }
     ) { innerPadding ->
+        //add resource class
         PullToRefreshBox(
             modifier = Modifier
                 .fillMaxSize(),
             isRefreshing = false,
             onRefresh = {
-                // onEvent(HomeUiEvents.OnPullToRefresh)
+                onEvent(HomeUiEvents.OnPullToRefresh)
             }
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -289,8 +288,25 @@ fun HomeScreenScaffold(
                         scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
                 ) {
-
                     item {
+                        PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
+                            content = {
+                                NearbyHotelItem(
+                                    modifier = Modifier
+                                        .clickable {
+                                            onEvent(
+                                                HomeUiEvents.NavigateToHotelDetails(
+                                                    hotel = it.toHotelInfo()
+                                                )
+                                            )
+                                        },
+                                    imageUrl = it.cardPhotos.first().toString()
+                                )
+                            }
+                        )
+                    }
+
+                   /* item {
                         FlowRow(
                             Modifier
                                 .fillMaxSize(),
@@ -299,35 +315,36 @@ fun HomeScreenScaffold(
                             maxItemsInEachRow = 2
                         ) {
 
-                            repeat(20) {
-                                NearbyHotelItem()
-                            }
+                            /* repeat(20) {
+                                 NearbyHotelItem()
+                           } */
 
-                        hotels.itemSnapshotList.items.forEach { hotel ->
-                            hotel.let {
-                                NearbyHotelItem(modifier = Modifier
-                                    .clickable {
-                                        onEvent(
-                                            HomeUiEvents.NavigateToHotelDetails(
-                                                hotel = it.toHotelInfo()
-                                            )
-                                        )
-                                    }
-                                )
-                            }
-
-                        }
-
-                          /*  hotels.itemSnapshotList.items.forEach { hotel ->
+                            hotels.itemSnapshotList.items.forEach { hotel ->
                                 hotel.let {
                                     NearbyHotelItem(
-                                        onClickItem = {},
-                                        hotelDetails = hotel
-                                        //restaurant = hotel
+                                        modifier = Modifier
+                                            .clickable {
+                                                onEvent(
+                                                    HomeUiEvents.NavigateToHotelDetails(
+                                                        hotel = it.toHotelInfo()
+                                                    )
+                                                )
+                                            }
                                     )
                                 }
 
-                            } */
+                            }
+
+                            /*  hotels.itemSnapshotList.items.forEach { hotel ->
+                                  hotel.let {
+                                      NearbyHotelItem(
+                                          onClickItem = {},
+                                          hotelDetails = hotel
+                                          //restaurant = hotel
+                                      )
+                                  }
+
+                              } */
 
                             /*              restaurants.itemSnapshotList.items.forEach { hotel ->
                                               hotel.let {
@@ -339,11 +356,135 @@ fun HomeScreenScaffold(
 
                                           }*/
                         }
-                    }
+                    } */
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun <T : Any> PagedFlowRow(
+    modifier: Modifier = Modifier,
+    items: LazyPagingItems<T>,
+    content: @Composable (T) -> Unit,
+) {
+
+    FlowRow(
+        Modifier
+            .fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        maxItemsInEachRow = 2
+    ) {
+        items.itemSnapshotList.forEach {
+            val item = items[T]
+            if (item != null) {
+                content(item)
+            }
+        }
+
+
+        items.loadState.let { loadState ->
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterVertically),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp,
+                        )
+                    }
+                }
+
+
+                loadState.refresh is LoadState.NotLoading && items.itemCount < 1 -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterVertically),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = "No data available",
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+
+                loadState.refresh is LoadState.Error -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterVertically),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = when ((loadState.refresh as LoadState.Error).error) {
+                                is HttpException -> {
+                                    "Oops, something went wrong!"
+                                }
+
+                                is IOException -> {
+                                    "Couldn't reach server, check your internet connection!"
+                                }
+
+                                else -> {
+                                    "Unknown error occurred"
+                                }
+                            },
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                }
+
+
+                loadState.append is LoadState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(16.dp)
+                                .align(Alignment.Center),
+                            strokeWidth = 2.dp,
+                        )
+                    }
+
+                }
+
+                loadState.append is LoadState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "An error occurred",
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+
+                }
+            }
+
+        }
+
+    }
+
 }
 
 fun RestaurantDetail.toRestaurantItem(

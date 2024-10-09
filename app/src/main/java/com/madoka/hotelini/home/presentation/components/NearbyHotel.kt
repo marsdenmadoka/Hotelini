@@ -86,7 +86,7 @@ fun NearbyHotelItem(
    // onClickItem: () -> Unit,
     // restaurant: RestaurantDetail
     //hotelDetails: Hotel
-
+    imageUrl: String,
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
@@ -105,7 +105,7 @@ fun NearbyHotelItem(
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("").crossfade(true) //hotelDetails
+                    .data(imageUrl).crossfade(true) //hotelDetails
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
                 error = painterResource(id = R.drawable.ic_load_error),
