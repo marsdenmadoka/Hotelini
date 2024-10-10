@@ -307,7 +307,7 @@ fun HomeScreenScaffold(
                                             )
                                         },
                                     hotelDetails = it,//hotelDetails.cardPhotos.first().sizes.urlTemplate
-                                    imageUrl = it.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""//it.cardPhotos.first().sizes.urlTemplate
+                                   //  "imageUrl = it.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""//it.cardPhotos.first().sizes.urlTemplate
                                 )
                             }
                         )
