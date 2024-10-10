@@ -94,8 +94,14 @@ fun HomeScreen(
 ) {
     val homeUiState by viewModel.homeUiState.collectAsState()
 
+    var latitude by remember {
+        mutableStateOf(0.0)
+    }
+    var longitude by remember {
+        mutableStateOf(0.0)
+    }
+
     HomeScreenContent(
-        //viewModel = viewModel,
         state = homeUiState,
         animatedVisibilityScope = animatedVisibilityScope,
         onEvent = { homeUiEvents ->
@@ -113,9 +119,13 @@ fun HomeScreen(
                 }
 
                 HomeUiEvents.OnPullToRefresh -> {
-                    // viewModel.refreshAllData(latitude = )
+                    viewModel.refreshAllData(latitude,longitude)
                 }
             }
+        },
+        onLocationUpdated = { lat, long ->
+            latitude = lat
+            longitude = long
         }
     )
 }
@@ -125,9 +135,10 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
-    viewModel: HomeViewModel= hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
     animatedVisibilityScope: AnimatedVisibilityScope,
     onEvent: (HomeUiEvents) -> Unit,
+    onLocationUpdated: (Double, Double) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -140,12 +151,6 @@ fun HomeScreenContent(
     val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
-    var latitude by remember {
-        mutableStateOf(0.0)
-    }
-    var longitude by remember {
-        mutableStateOf(0.0)
-    }
     var showMap by remember {
         mutableStateOf(false)
     }
@@ -153,6 +158,8 @@ fun HomeScreenContent(
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = Any()) {
         scope.launch {
+
+
         }
     }
 
@@ -177,29 +184,35 @@ fun HomeScreenContent(
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            try {
-                val locationResult = fusedLocationClient.getCurrentLocation(
-                    Priority.PRIORITY_HIGH_ACCURACY,
-                    CancellationTokenSource().token
-                )
-                locationResult.addOnSuccessListener { location: Location? ->
-                    if (location != null) {
-                        latitude = location.latitude
-                        longitude = location.longitude
-                        showMap = true
-                        viewModel.getNearestHotels(latitude, longitude)
-                    }
-                    Toast.makeText(context, "$latitude /n $longitude", Toast.LENGTH_LONG).show()
-                }
+            LaunchedEffect(Unit) {
+                try {
+                    val locationResult = fusedLocationClient.getCurrentLocation(
+                        Priority.PRIORITY_HIGH_ACCURACY,
+                        CancellationTokenSource().token
+                    )
+                    locationResult.addOnSuccessListener { location: Location? ->
+                        if (location != null) {
+                           val lat = location.latitude
+                            val long = location.longitude
+                            showMap = true
+                            //viewModel.getNearestHotels(latitude, longitude)
+                            onLocationUpdated(lat, long)
+                            showMap = true
+                            viewModel.getNearestHotels(lat, long)
 
-            } catch (e: Exception) {
-                Toast.makeText(context, "Error Fetching Location", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "$lat /n $long", Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Error Fetching Location", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
 
         if (showMap) {
-            HomeScreenScaffold(state = state , onEvent = onEvent)
+            HomeScreenScaffold(state = state, onEvent = onEvent)
         } else {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
@@ -257,7 +270,6 @@ fun HomeScreenScaffold(
             )
         }
     ) { innerPadding ->
-        //add resource class
         PullToRefreshBox(
             modifier = Modifier
                 .fillMaxSize(),
@@ -297,8 +309,8 @@ fun HomeScreenScaffold(
                                                 )
                                             )
                                         },
-                                    hotelDetails = it
-                                    //imageUrl = it.cardPhotos.first().toString()
+                                    hotelDetails = it,//hotelDetails.cardPhotos.first().sizes.urlTemplate
+                                    imageUrl = it.cardPhotos.first().sizes.urlTemplate
                                 )
                             }
                         )
@@ -325,9 +337,9 @@ fun HomeScreenScaffold(
 //
 //                    }
 
-                            /* repeat(20) {
-                                 NearbyHotelItem()
-                           } */
+                    /* repeat(20) {
+                         NearbyHotelItem()
+                   } */
 
 //                            hotels.itemSnapshotList.items.forEach { hotel ->
 //                                hotel.let {
@@ -345,31 +357,31 @@ fun HomeScreenScaffold(
 //
 //                            }
 
-                            /*  hotels.itemSnapshotList.items.forEach { hotel ->
-                                  hotel.let {
-                                      NearbyHotelItem(
-                                          onClickItem = {},
-                                          hotelDetails = hotel
-                                          //restaurant = hotel
-                                      )
-                                  }
+                    /*  hotels.itemSnapshotList.items.forEach { hotel ->
+                          hotel.let {
+                              NearbyHotelItem(
+                                  onClickItem = {},
+                                  hotelDetails = hotel
+                                  //restaurant = hotel
+                              )
+                          }
 
-                              } */
+                      } */
 
-                            /*              restaurants.itemSnapshotList.items.forEach { hotel ->
-                                              hotel.let {
-                                                  NearbyHotelItem(
-                                                      onClickItem = {},
-                                                      restaurant = hotel
-                                                  )
-                                              }
+                    /*              restaurants.itemSnapshotList.items.forEach { hotel ->
+                                      hotel.let {
+                                          NearbyHotelItem(
+                                              onClickItem = {},
+                                              restaurant = hotel
+                                          )
+                                      }
 
-                                          }*/
-                        }
-                    }
+                                  }*/
                 }
             }
         }
+    }
+}
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -497,7 +509,6 @@ fun <T : Any> PagedFlowRow(
 }
 
 
-
 @Preview
 @Composable
 fun HomeScreenContentPreview() {
@@ -505,3 +516,16 @@ fun HomeScreenContentPreview() {
         // HomeScreenContent()
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

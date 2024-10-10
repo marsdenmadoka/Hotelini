@@ -86,8 +86,8 @@ fun NearbyHotelItem(
     modifier: Modifier = Modifier,
    // onClickItem: () -> Unit,
     // restaurant: RestaurantDetail
-  hotelDetails: Hotel
-    //imageUrl: String,
+  hotelDetails: Hotel,
+    imageUrl: String,
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
@@ -106,7 +106,7 @@ fun NearbyHotelItem(
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("").crossfade(true) //hotelDetails
+                    .data(imageUrl).crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
                 error = painterResource(id = R.drawable.ic_load_error),
@@ -141,7 +141,7 @@ fun NearbyHotelItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = hotelDetails.title,// restaurant.name,//hotelDetails.title,//
+                    text = hotelDetails.title.substringAfter(". ").trim(),
                     fontSize = 18.sp,
                     maxLines = 2,
                     style = MaterialTheme.typography.bodySmall,
@@ -150,7 +150,7 @@ fun NearbyHotelItem(
                     color = dominantTextColor
                 )
                 RatingBar(modifier = Modifier,
-                    value = 4.5F,//restaurant.averageRating.toFloat(), //hotelDetails.bubbleRating.rating.toFloat(),// ,
+                    value = hotelDetails.bubbleRating.rating.toFloat(),
                     config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
                         .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
                         .numStars(5).isIndicator(true).size(16.dp)

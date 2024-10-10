@@ -15,19 +15,6 @@ import retrofit2.http.Query
 
 interface HoteliniApi {
 
-    @GET("restaurant/searchRestaurants?locationId=304554")
-    suspend fun getHotelsInNairobi(
-
-        // @Query("page") page: Int = STARTING_PAGE_INDEX,
-        //@Query("api_key") apiKey: String = API_KEY
-//    @Query("latitude") latitude: Double,
-//    @Query("longitude") longitude: Double
-        @Header("x-rapidapi-key") apiKey: String = API_KEY,
-        @Header("x-rapidapi-host") apiHost: String = API_HOST,
-//    @Query("locationId") locationId: String,
-        @Query("page") page: Int = STARTING_PAGE_INDEX
-    ): RestaurantResponse
-
 
     @GET("hotels/searchHotelsByLocation")
     suspend fun getNearestHotels(
@@ -36,7 +23,7 @@ interface HoteliniApi {
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double,
         @Query("checkIn") checkIn: String = currentDate,
-        @Query("checkOut") checkOut: String =  currentDate,
+        @Query("checkOut") checkOut: String = currentDate,
         @Query("pageNumber") pageNumber: Int = STARTING_PAGE_INDEX,
     ): HotelResponse
 
@@ -49,7 +36,6 @@ interface HoteliniApi {
         @Header("x-rapidapi-key") apiKey: String = API_KEY,
         @Header("x-rapidapi-host") apiHost: String = API_HOST
     ): HotelDetailsResponses
-
 
 
 }

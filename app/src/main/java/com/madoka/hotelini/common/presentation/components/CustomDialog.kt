@@ -126,15 +126,3 @@ fun CustomDialog(
     }
 }
 
-@Preview
-@Composable
-fun CustomDialogPreview() {
-    /*HoteliniTheme {
-        CustomDialog(
-            enableLocation = MutableState<Triple>,
-            title = "Message",
-            desc = "Your Message",
-            onClick = {}
-        )
-    }*/
-}
