@@ -496,15 +496,6 @@ fun <T : Any> PagedFlowRow(
 
 }
 
-fun RestaurantDetail.toRestaurantItem(
-
-) = RestaurantItem(
-    averageRating = averageRating,
-    heroImgUrl,
-    name,
-    userReviewCount
-
-)
 
 
 @Preview
@@ -514,42 +505,3 @@ fun HomeScreenContentPreview() {
         // HomeScreenContent()
     }
 }
-
-//@Preview
-//@Composable
-//fun HomeScreenContentPreview1() {
-//
-//    Box(
-//        Modifier
-//            .fillMaxWidth()
-//            .height(205.dp)
-//    ) {
-//        Image(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .animateContentSize(),
-//            painter = painterResource(id = R.drawable.ic_load_error),
-//            contentDescription = "item loader",
-//            contentScale = ContentScale.Crop
-//        )
-//
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxHeight()
-//                .padding(horizontal = 12.dp, vertical = 8.dp),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//
-//            Text(
-//                text = "Hello",
-//                color = Color.White,
-//                fontSize = 22.sp,
-//                fontWeight = FontWeight.Bold,
-//                modifier = Modifier.padding(top = 14.dp)
-//            )
-//        }
-//
-//    }
-//}

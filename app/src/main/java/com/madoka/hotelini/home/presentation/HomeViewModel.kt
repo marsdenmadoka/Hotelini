@@ -16,40 +16,29 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-   // private val restaurantRepository: RestaurantRepository,
     private val hotelRepository: HotelRepository,
 
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
 
-    // val homeUiState = _homeUiState.asStateFlow()
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
 
     init {
-      //  getNearestRestaurants()
-      //  getNearestHotels(latitude = latitude, longitude = longitude)
+        getNearestHotels(latitude = latitude, longitude = longitude)
     }
 
+    fun getNearestHotels(latitude: Double, longitude: Double) {
 
-//    private fun getNearestRestaurants(
-//    ) {
-//        _homeUiState.value = HomeUiState(
-//            restaurants = restaurantRepository.getRestaurant()
-//                .cachedIn(viewModelScope)
-//        )
-//    }
+        this.latitude = latitude
+        this.longitude = longitude
 
-    fun getNearestHotels(
-        latitude: Double, longitude: Double
-    ) {
-        _homeUiState.update { //change this to value to avoid updates
-            it.copy(
-                nearestHotels = hotelRepository.getNearestHotels(latitude, longitude)
-                    .cachedIn(viewModelScope)
-            )
-        }
-
+        _homeUiState.value = HomeUiState(
+            nearestHotels = hotelRepository.getNearestHotels(latitude,longitude)
+                .cachedIn(viewModelScope)
+        )
     }
 
 
@@ -57,21 +46,21 @@ class HomeViewModel @Inject constructor(
         getNearestHotels(latitude, longitude)
     }
 
-    /* _homeUiState.update {
-         it.copy(
-             restaurants = restaurantRepository
-                 .getRestaurant(
-                     //latitude,longitude
-                 )
-                 .map { pagingData ->
-                     pagingData.filter {
-                         it.averageRating
-                     }
-                 }
-                 .cachedIn(viewModelScope)
-         )
-     } */
-
-
 
 }
+
+
+/* _homeUiState.update {
+     it.copy(
+         restaurants = restaurantRepository
+             .getRestaurant(
+                 //latitude,longitude
+             )
+             .map { pagingData ->
+                 pagingData.filter {
+                     it.averageRating
+                 }
+             }
+             .cachedIn(viewModelScope)
+     )
+ } */
