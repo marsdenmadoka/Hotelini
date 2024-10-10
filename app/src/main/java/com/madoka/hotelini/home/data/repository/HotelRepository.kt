@@ -5,10 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.madoka.hotelini.common.data.network.HoteliniApi
 import com.madoka.hotelini.common.util.Constants
-import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
-import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
 import com.madoka.hotelini.home.data.paging.HotelSource
-import com.madoka.hotelini.home.data.paging.RestaurantsSource
 import com.madoka.hotelini.home.domain.model.Hotel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package com.madoka.hotelini.hoteldetail.hoteldetailsdto
 
-data class Data(
+data class Data( //map to dto
     val about: About,
     val amenitiesScreen: List<AmenitiesScreen>,
     val attractionsNearby: AttractionsNearby,

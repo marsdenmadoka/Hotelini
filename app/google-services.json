@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "887026262848",
-    "project_id": "hotelini-d7f15",
-    "storage_bucket": "hotelini-d7f15.appspot.com"
+    "project_number": "924017343448",
+    "project_id": "hotelini-20146",
+    "storage_bucket": "hotelini-20146.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:887026262848:android:0249efbad407fa8e8950a5",
+        "mobilesdk_app_id": "1:924017343448:android:365320e00c605058e410ad",
         "android_client_info": {
           "package_name": "com.madoka.hotelini"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBZ_R-UcvR58ac9P6W0m1c4Uvdc9Qai4u4"
+          "current_key": "AIzaSyDRL92musvEJruEOtzPMpFwIoXiwXnPFjE"
         }
       ],
       "services": {

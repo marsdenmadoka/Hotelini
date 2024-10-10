@@ -93,9 +93,9 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val homeUiState by viewModel.homeUiState.collectAsState()
-    val context = LocalContext.current
 
     HomeScreenContent(
+        //viewModel = viewModel,
         state = homeUiState,
         animatedVisibilityScope = animatedVisibilityScope,
         onEvent = { homeUiEvents ->
@@ -125,6 +125,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    viewModel: HomeViewModel= hiltViewModel(),
     animatedVisibilityScope: AnimatedVisibilityScope,
     onEvent: (HomeUiEvents) -> Unit,
 ) {
@@ -186,9 +187,8 @@ fun HomeScreenContent(
                         latitude = location.latitude
                         longitude = location.longitude
                         showMap = true
-                        // viewModel.getNearestHotels(latitude, longitude)
+                        viewModel.getNearestHotels(latitude, longitude)
                     }
-
                     Toast.makeText(context, "$latitude /n $longitude", Toast.LENGTH_LONG).show()
                 }
 
@@ -197,18 +197,15 @@ fun HomeScreenContent(
             }
         }
 
-        HomeScreenScaffold(state = state, onEvent = onEvent)
-//        if (showMap) {
-//            //showHome screenContent
-//            //HomeScreenScaffold(state = state)
-//            HomeScreenScaffold()
-//        } else {
-//
-//            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
-//            }
-//
-//        }
+
+        if (showMap) {
+            HomeScreenScaffold(state = state , onEvent = onEvent)
+        } else {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
+            }
+
+        }
 
     }
 
@@ -300,40 +297,53 @@ fun HomeScreenScaffold(
                                                 )
                                             )
                                         },
-                                    imageUrl = it.cardPhotos.first().toString()
+                                    hotelDetails = it
+                                    //imageUrl = it.cardPhotos.first().toString()
                                 )
                             }
                         )
                     }
 
-                   /* item {
-                        FlowRow(
-                            Modifier
-                                .fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            maxItemsInEachRow = 2
-                        ) {
+//                    item {
+//                        FlowRow(
+//                            Modifier
+//                                .fillMaxSize(),
+//                            horizontalArrangement = Arrangement.Center,
+//                            verticalArrangement = Arrangement.spacedBy(16.dp),
+//                            maxItemsInEachRow = 2
+//                        ) {
+//                             hotels.itemSnapshotList.items.forEach { hotel ->
+//                                 NearbyHotelItem(
+//                                     //onClickItem = {},
+//                                     hotelDetails = hotel
+//                                     //restaurant = hotel
+//                                 )
+//
+//                               }
+//
+//                        }
+//
+//                    }
 
                             /* repeat(20) {
                                  NearbyHotelItem()
                            } */
 
-                            hotels.itemSnapshotList.items.forEach { hotel ->
-                                hotel.let {
-                                    NearbyHotelItem(
-                                        modifier = Modifier
-                                            .clickable {
-                                                onEvent(
-                                                    HomeUiEvents.NavigateToHotelDetails(
-                                                        hotel = it.toHotelInfo()
-                                                    )
-                                                )
-                                            }
-                                    )
-                                }
-
-                            }
+//                            hotels.itemSnapshotList.items.forEach { hotel ->
+//                                hotel.let {
+//                                    NearbyHotelItem(
+//                                        modifier = Modifier
+//                                            .clickable {
+//                                                onEvent(
+//                                                    HomeUiEvents.NavigateToHotelDetails(
+//                                                        hotel = it.toHotelInfo()
+//                                                    )
+//                                                )
+//                                            }
+//                                    )
+//                                }
+//
+//                            }
 
                             /*  hotels.itemSnapshotList.items.forEach { hotel ->
                                   hotel.let {
@@ -356,12 +366,11 @@ fun HomeScreenScaffold(
 
                                           }*/
                         }
-                    } */
+                    }
                 }
             }
         }
-    }
-}
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -378,8 +387,8 @@ fun <T : Any> PagedFlowRow(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         maxItemsInEachRow = 2
     ) {
-        items.itemSnapshotList.forEach {
-            val item = items[T]
+
+        items.itemSnapshotList.items.forEach { item ->
             if (item != null) {
                 content(item)
             }

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.filter
 import com.madoka.hotelini.home.data.repository.HotelRepository
-import com.madoka.hotelini.home.data.repository.RestaurantRepository
+//import com.madoka.hotelini.home.data.repository.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val restaurantRepository: RestaurantRepository,
+   // private val restaurantRepository: RestaurantRepository,
     private val hotelRepository: HotelRepository,
 
 ) : ViewModel() {
@@ -27,23 +27,23 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        getNearestRestaurants()
+      //  getNearestRestaurants()
       //  getNearestHotels(latitude = latitude, longitude = longitude)
     }
 
 
-    private fun getNearestRestaurants(
-    ) {
-        _homeUiState.value = HomeUiState(
-            restaurants = restaurantRepository.getRestaurant()
-                .cachedIn(viewModelScope)
-        )
-    }
+//    private fun getNearestRestaurants(
+//    ) {
+//        _homeUiState.value = HomeUiState(
+//            restaurants = restaurantRepository.getRestaurant()
+//                .cachedIn(viewModelScope)
+//        )
+//    }
 
-    private fun getNearestHotels(
+    fun getNearestHotels(
         latitude: Double, longitude: Double
     ) {
-        _homeUiState.update {
+        _homeUiState.update { //change this to value to avoid updates
             it.copy(
                 nearestHotels = hotelRepository.getNearestHotels(latitude, longitude)
                     .cachedIn(viewModelScope)

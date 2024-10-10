@@ -44,6 +44,7 @@ import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
 import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
+import com.madoka.hotelini.home.domain.model.Hotel
 
 
 //@OptIn(ExperimentalLayoutApi::class)
@@ -85,8 +86,8 @@ fun NearbyHotelItem(
     modifier: Modifier = Modifier,
    // onClickItem: () -> Unit,
     // restaurant: RestaurantDetail
-    //hotelDetails: Hotel
-    imageUrl: String,
+  hotelDetails: Hotel
+    //imageUrl: String,
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
@@ -105,7 +106,7 @@ fun NearbyHotelItem(
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl).crossfade(true) //hotelDetails
+                    .data("").crossfade(true) //hotelDetails
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
                 error = painterResource(id = R.drawable.ic_load_error),
@@ -140,7 +141,7 @@ fun NearbyHotelItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text ="title",// restaurant.name,//hotelDetails.title,//
+                    text = hotelDetails.title,// restaurant.name,//hotelDetails.title,//
                     fontSize = 18.sp,
                     maxLines = 2,
                     style = MaterialTheme.typography.bodySmall,
