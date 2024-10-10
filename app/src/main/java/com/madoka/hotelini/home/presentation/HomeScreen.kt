@@ -226,7 +226,7 @@ fun HomeScreenContent(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class,ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenScaffold(
     state: HomeUiState,
@@ -306,8 +306,8 @@ fun HomeScreenScaffold(
                                                 )
                                             )
                                         },
-                                    hotelDetails = it,//hotelDetails.cardPhotos.first().sizes.urlTemplate
-                                   //  "imageUrl = it.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""//it.cardPhotos.first().sizes.urlTemplate
+                                    hotelDetails = it,
+                                    distanceToHotel =
                                 )
                             }
                         )
