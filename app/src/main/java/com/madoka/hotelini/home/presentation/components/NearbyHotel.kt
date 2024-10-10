@@ -84,16 +84,17 @@ import com.madoka.hotelini.home.domain.model.Hotel
 @Composable
 fun NearbyHotelItem(
     modifier: Modifier = Modifier,
-   // onClickItem: () -> Unit,
-    // restaurant: RestaurantDetail
-  hotelDetails: Hotel,
-    imageUrl: String,
+   hotelDetails: Hotel,
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
     val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val widthDem = LocalConfiguration.current.screenWidthDp.dp / 2
+
+    val selectedImageUrl = hotelDetails.cardPhotos
+        .filter { it.sizes.urlTemplate.isNotBlank() }
+        .randomOrNull()?.sizes?.urlTemplate ?: ""
 
     Card(
         modifier = Modifier
@@ -106,7 +107,8 @@ fun NearbyHotelItem(
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl).crossfade(true)
+                    .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
+                    .crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),
                 error = painterResource(id = R.drawable.ic_load_error),
@@ -160,7 +162,7 @@ fun NearbyHotelItem(
 
                 Text(
                     modifier = Modifier,
-                    text = "14 kiloMetres",//"${restaurant.distanceTo}",
+                    text = "14 kiloMetres",
                     fontSize = 14.sp,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodySmall,

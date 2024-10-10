@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.madoka.hotelini.home.data.repository.HotelRepository
 //import com.madoka.hotelini.home.data.repository.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val hotelRepository: HotelRepository,
-
+    //private val placesClient: PlacesClient
 ) : ViewModel() {
+
+
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
 

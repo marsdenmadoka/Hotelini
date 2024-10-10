@@ -10,8 +10,6 @@ data class HotelResponse(
 
 
 /*
-
-
 {
     "status": true,
     "message": "Success",

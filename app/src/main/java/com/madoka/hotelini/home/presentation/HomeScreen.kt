@@ -226,10 +226,7 @@ fun HomeScreenContent(
 }
 
 
-@OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class,
-    ExperimentalLayoutApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class,ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreenScaffold(
     state: HomeUiState,
@@ -310,7 +307,7 @@ fun HomeScreenScaffold(
                                             )
                                         },
                                     hotelDetails = it,//hotelDetails.cardPhotos.first().sizes.urlTemplate
-                                    imageUrl = it.cardPhotos.first().sizes.urlTemplate
+                                    imageUrl = it.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""//it.cardPhotos.first().sizes.urlTemplate
                                 )
                             }
                         )
@@ -412,7 +409,7 @@ fun <T : Any> PagedFlowRow(
                 loadState.refresh is LoadState.Loading -> {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxSize()
                             .align(Alignment.CenterVertically),
                         horizontalArrangement = Arrangement.Center,
                     ) {
@@ -426,7 +423,7 @@ fun <T : Any> PagedFlowRow(
                 loadState.refresh is LoadState.NotLoading && items.itemCount < 1 -> {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxSize()
                             .align(Alignment.CenterVertically),
                         horizontalArrangement = Arrangement.Center,
                     ) {
@@ -443,7 +440,7 @@ fun <T : Any> PagedFlowRow(
                 loadState.refresh is LoadState.Error -> {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxSize()
                             .align(Alignment.CenterVertically),
                         horizontalArrangement = Arrangement.Center,
                     ) {
@@ -473,7 +470,7 @@ fun <T : Any> PagedFlowRow(
 
                 loadState.append is LoadState.Loading -> {
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(
@@ -488,7 +485,7 @@ fun <T : Any> PagedFlowRow(
 
                 loadState.append is LoadState.Error -> {
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
