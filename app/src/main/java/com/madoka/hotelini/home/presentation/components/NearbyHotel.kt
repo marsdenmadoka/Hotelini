@@ -84,7 +84,7 @@ import com.madoka.hotelini.home.domain.model.Hotel
 @Composable
 fun NearbyHotelItem(
     modifier: Modifier = Modifier,
-   hotelDetails: Hotel,
+    hotelDetails: Hotel,
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
@@ -151,14 +151,25 @@ fun NearbyHotelItem(
                     textAlign = TextAlign.Start,
                     color = dominantTextColor
                 )
-                RatingBar(modifier = Modifier,
-                    value = hotelDetails.bubbleRating.rating.toFloat(),
-                    config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
-                        .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
-                        .numStars(5).isIndicator(true).size(16.dp)
-                        .style(RatingBarStyle.HighLighted),
-                    onValueChange = {},
-                    onRatingChanged = {})
+
+                if (hotelDetails.bubbleRating?.rating != null) {
+                    RatingBar(modifier = Modifier,
+                        value = hotelDetails.bubbleRating.rating.toFloat(),
+                        config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
+                            .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
+                            .numStars(5).isIndicator(true).size(16.dp)
+                            .style(RatingBarStyle.HighLighted),
+                        onValueChange = {},
+                        onRatingChanged = {})
+                } else {
+                    Text(
+                        modifier = Modifier,
+                        text = "Not rated",
+                        fontSize = 14.sp,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = dominantSubTextColor
+                    )
+                }
 
                 Text(
                     modifier = Modifier,
@@ -171,6 +182,7 @@ fun NearbyHotelItem(
                     color = dominantSubTextColor
                 )
             }
+
         }
     }
 }

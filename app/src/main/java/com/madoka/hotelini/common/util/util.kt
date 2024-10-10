@@ -3,21 +3,20 @@ package com.madoka.hotelini.common.util
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.*
 
 
-/*@RequiresApi(Build.VERSION_CODES.O)*/
 val currentDate: String = SimpleDateFormat("yyyy-MM-dd",
     Locale.getDefault()).format(Date())
 
 
 
-
-/*@RequiresApi(Build.VERSION_CODES.O)
-val currentDate : LocalDate = LocalDate.now()
-
-@RequiresApi(Build.VERSION_CODES.O)
-val formattedDate: String = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))*/
-
-
-/*Assigning Locale.getDefault() to a final static field is suspicious; this code will not work correctly if the user changes locale while the app is running More
-Inspection info: Assigning Locale.getDefault() to a constant is suspicious, because the locale can change while the app is running.*/
+fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+    val earthRadius = 6371.0 // Kilometers
+    val dLat = Math.toRadians(lat2 - lat1)
+    val dLon = Math.toRadians(lon2 - lon1)
+    val a = sin(dLat / 2) * sin(dLat / 2) +
+            cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) * sin(dLon / 2) * sin(dLon / 2)
+    val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    return earthRadius * c
+}
