@@ -46,51 +46,16 @@ import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
 import com.madoka.hotelini.home.data.network.hoteldto.HotelDetails
 import com.madoka.hotelini.home.domain.model.Hotel
 
-
-//@OptIn(ExperimentalLayoutApi::class)
-//@Composable
-//fun NearbyHotel(
-//    state: HomeUiState,
-//    onClickItem: () -> Unit,
-//    ImgUrl: String
-//) {
-//
-//      val resItems = state.restaurants
-//
-//    FlowRow(
-//        Modifier
-//            .fillMaxSize(),
-//        horizontalArrangement = Arrangement.Center,
-//        verticalArrangement = Arrangement.spacedBy(16.dp),
-//        maxItemsInEachRow = 2
-//    ) {
-//
-//        resItems.collectAsLazyPagingItems()
-//
-//items(items = resItems, key = {}){
-//
-//}
-//
-//        NearbyHotelItem(onClickItem = onClickItem, ImgUrl = resItems.)
-//
-//
-////        repeat(8) {
-//
-//        // }
-//    }
-//}z
-
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NearbyHotelItem(
     modifier: Modifier = Modifier,
     hotelDetails: Hotel,
+    distanceToHotel: String
 ) {
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     val dominantColor = MaterialTheme.colorScheme.surface
     val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
-    val widthDem = LocalConfiguration.current.screenWidthDp.dp / 2
 
     val selectedImageUrl = hotelDetails.cardPhotos
         .filter { it.sizes.urlTemplate.isNotBlank() }
@@ -98,7 +63,6 @@ fun NearbyHotelItem(
 
     Card(
         modifier = Modifier
-            //.width(widthDem)
             .width(180.dp)
             .height(200.dp)
             .padding(horizontal = 3.dp),
@@ -119,19 +83,6 @@ fun NearbyHotelItem(
                     .clip(shape = MaterialTheme.shapes.medium)
                     .background(color = Color.Gray)
                     .align(Alignment.Center)
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(210.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color.Transparent, dominantColor
-                            )
-                        )
-                    )
             )
             Column(
                 modifier = Modifier
@@ -173,7 +124,7 @@ fun NearbyHotelItem(
 
                 Text(
                     modifier = Modifier,
-                    text = "14 kiloMetres",
+                    text = distanceToHotel,
                     fontSize = 14.sp,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodySmall,
