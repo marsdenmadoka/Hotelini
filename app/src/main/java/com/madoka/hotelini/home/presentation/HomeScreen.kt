@@ -280,7 +280,7 @@ fun HomeScreenScaffold(
                         .height(carouselHeight)
                         .alpha(carouselAlpha)
                 ) {
-                    HotelCarousel()
+                    HotelCarousel(hotelCarousel = hotels)
                 }
                 LazyColumn(
                     state = lazyRowScrollState,
