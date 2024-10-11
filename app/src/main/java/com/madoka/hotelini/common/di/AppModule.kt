@@ -5,6 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.madoka.hotelini.BuildConfig
 import com.madoka.hotelini.common.data.network.HoteliniApi
 import com.madoka.hotelini.common.data.repository.PreferenceRepositoryImpl
 import com.madoka.hotelini.common.domain.repository.PreferenceRepository
@@ -69,5 +72,12 @@ object AppModule {
     @Singleton
     fun providePreferenceRepository(dataStore: DataStore<Preferences>): PreferenceRepository =
         PreferenceRepositoryImpl(dataStore)
+
+    @Provides
+    @Singleton
+    fun providePlacesClient(@ApplicationContext context: Context): PlacesClient {
+        Places.initialize(context, BuildConfig.MAPS_API_KEY)
+        return Places.createClient(context)
+    }
 
 }

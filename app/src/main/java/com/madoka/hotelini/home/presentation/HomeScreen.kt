@@ -402,7 +402,6 @@ fun <T : Any> PagedFlowRow(
             }
         }
 
-
         items.loadState.let { loadState ->
             when {
                 loadState.refresh is LoadState.Loading -> {
@@ -504,6 +503,17 @@ fun <T : Any> PagedFlowRow(
 
 }
 
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun <T : Any> PagedCarouselItems(
+    modifier: Modifier = Modifier,
+    items: LazyPagingItems<T>,
+    content: @Composable (T) -> Unit,
+) {
+
+
+}
 
 @Preview
 @Composable

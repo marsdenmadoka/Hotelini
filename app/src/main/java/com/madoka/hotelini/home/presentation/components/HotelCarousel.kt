@@ -62,6 +62,8 @@ import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.common.presentation.theme.Purple40
 import com.madoka.hotelini.common.presentation.theme.poppinsFamily
 import com.madoka.hotelini.common.presentation.theme.quicksand
+import com.madoka.hotelini.home.domain.model.Hotel
+import com.madoka.hotelini.home.presentation.HomeUiState
 //import com.madoka.hotelini.home.presentation.HomeScreenContent
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
@@ -69,7 +71,9 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HotelCarousel() {
+fun HotelCarousel(
+    hotelDetails: Hotel
+) {
     data class CarouselItem(
         val id: Int, @DrawableRes val imageResId: Int, val contentDescription: String
     )
@@ -216,6 +220,6 @@ fun AnimatedGradientText(text: String) {
 @Composable
 fun HomeScreenCarouselPreview() {
     HoteliniTheme {
-        HotelCarousel()
+       // HotelCarousel()
     }
 }
