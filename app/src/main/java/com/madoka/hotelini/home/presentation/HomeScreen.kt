@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
-import retrofit2.HttpException
-import java.io.IOException
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Green
-import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -57,6 +55,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -67,13 +66,9 @@ import com.madoka.hotelini.BuildConfig
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.Location.HandleRequest
 import com.madoka.hotelini.common.Location.PermissionDeniedContent
-import com.madoka.hotelini.common.domain.model.HotelInfo
-import com.madoka.hotelini.common.domain.model.RestaurantItem
 import com.madoka.hotelini.common.domain.model.toHotelInfo
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
-import com.madoka.hotelini.common.util.Resource
-import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantDetail
 import com.madoka.hotelini.home.presentation.components.HotelCarousel
 import com.madoka.hotelini.home.presentation.components.NearbyHotelItem
 import com.ramcosta.composedestinations.annotation.Destination
@@ -81,10 +76,11 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.HotelDetailsScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 import kotlin.math.max
 
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Destination<RootGraph>(start = true)
 @Composable
 fun HomeScreen(
@@ -95,10 +91,10 @@ fun HomeScreen(
     val homeUiState by viewModel.homeUiState.collectAsState()
 
     var latitude by remember {
-        mutableStateOf(0.0)
+        mutableDoubleStateOf(0.0)
     }
     var longitude by remember {
-        mutableStateOf(0.0)
+        mutableDoubleStateOf(0.0)
     }
 
     HomeScreenContent(
@@ -131,7 +127,7 @@ fun HomeScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
@@ -140,26 +136,26 @@ fun HomeScreenContent(
     onEvent: (HomeUiEvents) -> Unit,
     onLocationUpdated: (Double, Double) -> Unit
 ) {
-
     val context = LocalContext.current
 
+    // Initialize Google Places
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
     val placesClient = Places.createClient(context)
+
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
-    // To create an instance of the fused Location Provider Client
     val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
-    var showMap by remember {
-        mutableStateOf(false)
-    }
+    var getLatLong by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    LaunchedEffect(key1 = Any()) {
-        scope.launch {
 
 
+    // Check location permission and request if needed
+    LaunchedEffect(Unit) {
+        if (permissionState.status.isGranted.not()) {
+            permissionState.launchPermissionRequest()
         }
     }
 
@@ -195,12 +191,10 @@ fun HomeScreenContent(
                             if (location != null) {
                                 val lat = location.latitude
                                 val long = location.longitude
-                                showMap = true
-                                //viewModel.getNearestHotels(latitude, longitude)
-                                onLocationUpdated(lat, long)
-                                showMap = true
-                                viewModel.getNearestHotels(lat, long)
+                                getLatLong = true
 
+                                onLocationUpdated(lat, long)
+                                viewModel.getNearestHotels(lat, long)
                                 Toast.makeText(context, "$lat /n $long", Toast.LENGTH_LONG).show()
                             }
                         }
@@ -213,7 +207,7 @@ fun HomeScreenContent(
         }
 
 
-        if (showMap) {
+        if (getLatLong) {
             HomeScreenScaffold(state = state, onEvent = onEvent)
         } else {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -278,7 +272,6 @@ fun HomeScreenScaffold(
             }
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                // Adjust the height and opacity of the carousel based on scrollOffset
                 val carouselAlpha = max(1f, 1 - (scrollOffset / collapseRange))
                 val carouselHeight = max(0.dp, 200.dp - (scrollOffset / 5).dp)
                 Box(
@@ -292,7 +285,6 @@ fun HomeScreenScaffold(
                 LazyColumn(
                     state = lazyRowScrollState,
                     modifier = Modifier.onGloballyPositioned {
-                        // Capture the scroll offset of the LazyRow to collapse the carousel
                         scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
                 ) {
