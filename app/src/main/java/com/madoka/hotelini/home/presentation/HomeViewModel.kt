@@ -30,6 +30,7 @@ class HomeViewModel @Inject constructor(
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
 
+
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 
@@ -43,38 +44,44 @@ class HomeViewModel @Inject constructor(
         this.latitude = latitude
         this.longitude = longitude
 
-        val nearestHotels = hotelRepository
+
+        //for purpose of getting distance between
+        val nearestHotelsFlow = hotelRepository
             .getNearestHotels(latitude, longitude)
             .cachedIn(viewModelScope)
 
 
         viewModelScope.launch {
-            nearestHotels.collectLatest { pagingData ->
+            nearestHotelsFlow.collectLatest { pagingData ->
                 // Use PagingData.map to extract hotel titles
                 val hotelNames = mutableListOf<String>()
                 pagingData.map { hotel ->
                     hotel.title.let { hotelNames.add(it) } // Extract hotel titles into a list
                 }
-
                 // Now that you have a list of hotel names, fetch latitudes and longitudes
-                fetchNearestHotelsLatLngandCalculateDistance(latitude, longitude, hotelNames)
+                fetchNearestHotelsLatLngAndCalculateDistance(latitude, longitude, hotelNames)
             }
         }
 
+        _homeUiState.value = _homeUiState.value.copy(nearestHotels = nearestHotelsFlow)
 
-        _homeUiState.value = HomeUiState(
-            nearestHotels = hotelRepository.getNearestHotels(latitude, longitude)
-                .cachedIn(viewModelScope)
-        )
+
+        /* _homeUiState.value = HomeUiState(
+             nearestHotels = hotelRepository.getNearestHotels(latitude, longitude)
+                 .cachedIn(viewModelScope)
+         )*/
+
     }
 
 
-    private fun fetchNearestHotelsLatLngandCalculateDistance(
+    private fun fetchNearestHotelsLatLngAndCalculateDistance(
         userLat: Double,
         userLng: Double,
         hotelNames: List<String>
     ) {
         val placeFields = listOf(Place.Field.NAME, Place.Field.LAT_LNG)
+
+        val updatedDistances = mutableMapOf<String, String>()
 
         for (hotelName in hotelNames) {
             val request = FindAutocompletePredictionsRequest.builder()
@@ -100,6 +107,12 @@ class HomeViewModel @Inject constructor(
                                     hotelLatLng.longitude
                                 )
                                 println("${place.name} is $distance kilometers away")
+                                updatedDistances[place.name] = "$distance km"
+
+                                // Update the state with distances
+                                _homeUiState.value = _homeUiState.value.copy(
+                                    hotelDistances = updatedDistances.toMap()
+                                )
 
                             }
                         }

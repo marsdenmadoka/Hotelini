@@ -16,6 +16,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -96,21 +97,21 @@ fun HotelCarousel() {
 
     val animatedIndex by animateDpAsState(targetValue = currentItemIndex.toFloat().dp, label = "")
 
-    HorizontalUncontainedCarousel(
-        state = carouselState,
-        modifier = Modifier
+    Box(
+        Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
-        itemWidth = LocalConfiguration.current.screenWidthDp.dp,
-        itemSpacing = 8.dp,
-        flingBehavior = CarouselDefaults.singleAdvanceFlingBehavior(state =carouselState)
-    ) { i ->
-        val item = items[animatedIndex.value.roundToInt()]
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(205.dp)
-        ) {
+            .height(205.dp)
+    ) {
+
+        HorizontalUncontainedCarousel(
+            state = carouselState,
+            modifier = Modifier
+                .fillMaxSize(),
+            itemWidth = LocalConfiguration.current.screenWidthDp.dp,
+            itemSpacing = 8.dp,
+            flingBehavior = CarouselDefaults.singleAdvanceFlingBehavior(state = carouselState)
+        ) { i ->
+            val item = items[animatedIndex.value.roundToInt()]
             Image(
                 modifier = Modifier
                     .fillMaxSize()
@@ -129,14 +130,15 @@ fun HotelCarousel() {
                 contentScale = ContentScale.Crop
             )
 
-            Column(
-                modifier = Modifier.align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                AnimatedGradientText(text = "Get All The Hotels Near You!!")
+        }
 
-            }
-
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AnimatedGradientText(text = "Get All The Hotels Near You!!")
         }
 
     }

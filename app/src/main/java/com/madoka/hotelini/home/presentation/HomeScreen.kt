@@ -119,7 +119,7 @@ fun HomeScreen(
                 }
 
                 HomeUiEvents.OnPullToRefresh -> {
-                    viewModel.refreshAllData(latitude,longitude)
+                    viewModel.refreshAllData(latitude, longitude)
                 }
             }
         },
@@ -185,27 +185,29 @@ fun HomeScreenContent(
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             LaunchedEffect(Unit) {
-                try {
-                    val locationResult = fusedLocationClient.getCurrentLocation(
-                        Priority.PRIORITY_HIGH_ACCURACY,
-                        CancellationTokenSource().token
-                    )
-                    locationResult.addOnSuccessListener { location: Location? ->
-                        if (location != null) {
-                           val lat = location.latitude
-                            val long = location.longitude
-                            showMap = true
-                            //viewModel.getNearestHotels(latitude, longitude)
-                            onLocationUpdated(lat, long)
-                            showMap = true
-                            viewModel.getNearestHotels(lat, long)
+                scope.launch {
+                    try {
+                        val locationResult = fusedLocationClient.getCurrentLocation(
+                            Priority.PRIORITY_HIGH_ACCURACY,
+                            CancellationTokenSource().token
+                        )
+                        locationResult.addOnSuccessListener { location: Location? ->
+                            if (location != null) {
+                                val lat = location.latitude
+                                val long = location.longitude
+                                showMap = true
+                                //viewModel.getNearestHotels(latitude, longitude)
+                                onLocationUpdated(lat, long)
+                                showMap = true
+                                viewModel.getNearestHotels(lat, long)
 
-                            Toast.makeText(context, "$lat /n $long", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "$lat /n $long", Toast.LENGTH_LONG).show()
+                            }
                         }
-                    }
 
-                } catch (e: Exception) {
-                    Toast.makeText(context, "Error Fetching Location", Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Error Fetching Location", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -294,23 +296,28 @@ fun HomeScreenScaffold(
                         scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
                 ) {
-                    item {
-                        PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
-                            content = {
-                                NearbyHotelItem(
-                                    modifier = Modifier
-                                        .clickable {
-                                            onEvent(
-                                                HomeUiEvents.NavigateToHotelDetails(
-                                                    hotel = it.toHotelInfo()
+                    items(hotels.itemCount) { index ->
+                        hotels[index]?.let { hotel ->
+                            val distanceToHotel =
+                                state.hotelDistances[hotel.title] ?: "Unknown distance"
+                            PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
+                                content = {
+                                    NearbyHotelItem(
+                                        modifier = Modifier
+                                            .clickable {
+                                                onEvent(
+                                                    HomeUiEvents.NavigateToHotelDetails(
+                                                        hotel = it.toHotelInfo()
+                                                    )
                                                 )
-                                            )
-                                        },
-                                    hotelDetails = it,
-                                    distanceToHotel =
-                                )
-                            }
-                        )
+                                            },
+                                        hotelDetails = it,
+                                        distanceToHotel = distanceToHotel
+                                    )
+                                }
+                            )
+                        }
+
                     }
 
 //                    item {

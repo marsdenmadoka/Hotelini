@@ -8,8 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 data class HomeUiState(
-    val restaurants: Flow<PagingData<RestaurantDetail>> = emptyFlow(),
+   // val restaurants: Flow<PagingData<RestaurantDetail>> = emptyFlow(),
 
-    val nearestHotels: Flow<PagingData<Hotel>> = emptyFlow()
+    val nearestHotels: Flow<PagingData<Hotel>> = emptyFlow(),
+    val hotelDistances: Map<String, String> = emptyMap() // Store distances keyed by hotel title
 
 ) //using state to  manage VM
