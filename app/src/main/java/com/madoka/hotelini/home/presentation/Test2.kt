@@ -1,4 +1,4 @@
-package com.madoka.hotelini.home.presentation
+ package com.madoka.hotelini.home.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -1,5 +1,6 @@
 package com.madoka.hotelini.home.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,32 +13,35 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
 import com.gowtham.ratingbar.StepSize
-import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
+import com.madoka.hotelini.common.util.PaletteGenerator
 import com.madoka.hotelini.home.domain.model.Hotel
 
 @Composable
@@ -46,10 +50,10 @@ fun NearbyHotelItem(
     hotelDetails: Hotel,
     distanceToHotel: String
 ) {
-    val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
-    val dominantColor = MaterialTheme.colorScheme.surface
-    val dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
-    val dominantSubTextColor by remember { mutableStateOf(defaultDominantTextColor) }
+    var defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
+    var dominantColor = MaterialTheme.colorScheme.surface
+    var dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
+    val dominantSubTextColor by remember { mutableStateOf(dominantColor) }
 
     val selectedImageUrl = hotelDetails.cardPhotos
         .filter { it.sizes.urlTemplate.isNotBlank() }
@@ -63,21 +67,73 @@ fun NearbyHotelItem(
         elevation = CardDefaults.cardElevation(8.dp), shape = RoundedCornerShape(4.dp)
     ) {
         Box {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
+
+            val painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current)
                     .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(R.drawable.ic_load_placeholder),
-                error = painterResource(id = R.drawable.ic_load_error),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+                    .apply(block = fun ImageRequest.Builder.() {
+                        crossfade(true)
+                    }).build()
+            )
+
+            when (painter.state) {
+                is AsyncImagePainter.State.Loading -> {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(205.dp), contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is AsyncImagePainter.State.Success -> {
+                    LaunchedEffect(key1 = painter) {
+                        val imageDrawable = painter.imageLoader.execute(painter.request).drawable
+                        imageDrawable?.let {
+                            PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
+                                dominantColor = Color(color.rgb)
+                                dominantTextColor = Color(color.titleTextColor)
+                            }
+                        }
+                    }
+                }
+
+                AsyncImagePainter.State.Empty -> {
+                    Text(text = "Empty data")
+                }
+
+                is AsyncImagePainter.State.Error -> {
+                    Text(text = "Error Found")
+                }
+            }
+
+            Image(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(shape = MaterialTheme.shapes.medium)
                     .background(color = Color.Gray)
-                    .align(Alignment.Center)
+                    .align(Alignment.Center),
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
             )
+
+            /*  AsyncImage(
+                  model = ImageRequest.Builder(LocalContext.current)
+                      .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
+                      .crossfade(true)
+                      .build(),
+                  placeholder = painterResource(R.drawable.ic_load_placeholder),
+                  error = painterResource(id = R.drawable.ic_load_error),
+                  contentDescription = null,
+                  contentScale = ContentScale.Crop,
+                  modifier = Modifier
+                      .fillMaxSize()
+                      .clip(shape = MaterialTheme.shapes.medium)
+                      .background(color = Color.Gray)
+                      .align(Alignment.Center)
+              ) */
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -97,7 +153,15 @@ fun NearbyHotelItem(
                     color = dominantTextColor
                 )
 
-                if (hotelDetails.bubbleRating?.rating != null) {
+                if (hotelDetails.bubbleRating.rating.toFloat() <= 1) {
+                    Text(
+                        modifier = Modifier,
+                        text = "Not rated",
+                        fontSize = 14.sp,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = dominantSubTextColor
+                    )
+                } else {
                     RatingBar(modifier = Modifier,
                         value = hotelDetails.bubbleRating.rating.toFloat(),
                         config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
@@ -106,14 +170,6 @@ fun NearbyHotelItem(
                             .style(RatingBarStyle.HighLighted),
                         onValueChange = {},
                         onRatingChanged = {})
-                } else {
-                    Text(
-                        modifier = Modifier,
-                        text = "Not rated",
-                        fontSize = 14.sp,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = dominantSubTextColor
-                    )
                 }
 
                 Text(

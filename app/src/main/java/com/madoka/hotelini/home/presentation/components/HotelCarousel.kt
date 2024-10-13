@@ -1,6 +1,5 @@
 package com.madoka.hotelini.home.presentation.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,21 +40,20 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import com.madoka.hotelini.R
+import coil.request.ImageRequest
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.common.presentation.theme.poppinsFamily
+import com.madoka.hotelini.common.util.PaletteGenerator
 import com.madoka.hotelini.common.util.Resource
 import com.madoka.hotelini.home.domain.model.Hotel
-//import com.madoka.hotelini.home.presentation.HomeScreenContent
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -64,186 +61,127 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HotelCarousel(
-    hotelCarousel: LazyPagingItems<Hotel>
+    hotelCarousel: Resource<List<Hotel>>
     // hotelDetails: Hotel
 ) {
 
+    val defaultDominantColor = MaterialTheme.colorScheme.surface
+    val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
+    var dominantColor by remember { mutableStateOf(defaultDominantColor) }
+    var dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
 
-    when (hotelCarousel.loadState.refresh) {
 
-        is LoadState.Loading -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+
+    hotelCarousel.data?.let { hotels ->
+        val totalItems = hotels.size
+        var currentItemIndex by remember { mutableIntStateOf(0) }
+        val userScrolled by remember { mutableStateOf(false) }
+        val carouselState = rememberCarouselState(initialItem = 0) { totalItems }
+
+
+        LaunchedEffect(key1 = currentItemIndex, key2 = userScrolled) {
+            delay(10_000L)
+            currentItemIndex = (currentItemIndex + 1) % totalItems
+            carouselState.animateScrollBy(currentItemIndex.toFloat())
         }
 
-        is LoadState.Error -> { //when error show our natural carousel
-            data class CarouselItem(
-                val id: Int,
-                @DrawableRes val imageResId: Int,
-                val contentDescription: String
+        val animatedIndex by animateDpAsState(targetValue = currentItemIndex.toFloat().dp,label = "")
+
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(205.dp)
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(210.dp)
+                    .align(Alignment.TopCenter)
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color.Transparent,
+                                dominantColor
+                            )
+                        )
+                    )
             )
 
-            val items = remember {
-                listOf(
-                    CarouselItem(0, R.drawable.ic_load_error, "cupcake"),
-                    CarouselItem(1, R.drawable.ic_load_placeholder, "donut"),
-                    CarouselItem(2, R.drawable.video_call, "eclair"),
-                    CarouselItem(3, R.drawable.hotelini, "froyo"),
-                    CarouselItem(4, R.drawable.ic_1, "gingerbread"),
+            HorizontalUncontainedCarousel(
+                state = carouselState,
+                modifier = Modifier
+                    .fillMaxSize(),
+                itemWidth = LocalConfiguration.current.screenWidthDp.dp,
+                itemSpacing = 8.dp,
+                flingBehavior = CarouselDefaults.singleAdvanceFlingBehavior(state = carouselState)
+            ) { i ->
+                val hotel = hotels[animatedIndex.value.roundToInt()]
+                val photoUrl = hotel.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""
+
+
+                val painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current).data(data = photoUrl)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build()
+                )
+
+                when (painter.state) {
+                    is AsyncImagePainter.State.Loading -> {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(205.dp), contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+
+                    is AsyncImagePainter.State.Success -> {
+                        LaunchedEffect(key1 = painter) {
+                            val imageDrawable = painter.imageLoader.execute(painter.request).drawable
+                            imageDrawable?.let {
+                                PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
+                                    dominantColor = Color(color.rgb)
+                                    dominantTextColor = Color(color.titleTextColor)
+                                }
+                            }
+                        }
+                    }
+                    else -> Unit
+                }
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .maskClip(MaterialTheme.shapes.extraLarge)
+                        .animateContentSize()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    MaterialTheme.colorScheme.background,
+                                    MaterialTheme.colorScheme.surface
+                                )
+                            )
+                        ),
+                    painter = painter,
+                    contentDescription = hotel.title,
+                    contentScale = ContentScale.Crop
                 )
             }
-            val totalItems = items.size
-            var currentItemIndex by remember { mutableIntStateOf(0) }
-            var userScrolled by remember { mutableStateOf(false) }
-            val carouselState = rememberCarouselState(initialItem = 0) { totalItems }
-
-            LaunchedEffect(key1 = currentItemIndex, key2 = userScrolled) {
-                delay(10_000L)
-                currentItemIndex = (currentItemIndex + 1) % items.size
-                carouselState.animateScrollBy(currentItemIndex.toFloat())
-            }
-
-            val animatedIndex by animateDpAsState(
-                targetValue = currentItemIndex.toFloat().dp,
-                label = ""
-            )
-
-            Box(
-                Modifier
+            Column(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .height(205.dp)
+                    .align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                HorizontalUncontainedCarousel(
-                    state = carouselState,
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    itemWidth = LocalConfiguration.current.screenWidthDp.dp,
-                    itemSpacing = 8.dp,
-                    flingBehavior = CarouselDefaults.singleAdvanceFlingBehavior(state = carouselState)
-                ) { i ->
-                    val item = items[animatedIndex.value.roundToInt()]
-                    Image(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .maskClip(MaterialTheme.shapes.extraLarge)
-                            .animateContentSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    listOf(
-                                        MaterialTheme.colorScheme.background,
-                                        MaterialTheme.colorScheme.surface
-                                    )
-                                )
-                            ),
-                        painter = painterResource(id = item.imageResId),
-                        contentDescription = item.contentDescription,
-                        contentScale = ContentScale.Crop
-                    )
-
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    AnimatedGradientText(text = "Get All The Hotels Near You!!")
-                }
-            }
-        }
-
-        else -> {
-
-            val totalItems = hotelCarousel.itemCount
-            var currentItemIndex by remember { mutableIntStateOf(0) }
-            var userScrolled by remember { mutableStateOf(false) }
-            val carouselState = rememberCarouselState(initialItem = 0) { totalItems }
-
-            LaunchedEffect(key1 = currentItemIndex, key2 = userScrolled) {
-                while (true) {
-                    delay(10_000L)
-                    if (totalItems > 0) {
-                        currentItemIndex = (currentItemIndex + 1) % totalItems
-                        carouselState.animateScrollBy(currentItemIndex.toFloat())
-                    }
-                }
-            }
-
-            val animatedIndex by animateDpAsState(
-                targetValue = currentItemIndex.toFloat().dp,
-                label = ""
-            )
-
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(205.dp)
-            ) {
-                HorizontalUncontainedCarousel(
-                    state = carouselState,
-                    modifier = Modifier.fillMaxSize(),
-                    itemWidth = LocalConfiguration.current.screenWidthDp.dp,
-                    itemSpacing = 8.dp,
-                    flingBehavior = CarouselDefaults.singleAdvanceFlingBehavior(state = carouselState)
-                ) { i ->
-
-
-                    hotelCarousel[i]?.let { hotel ->
-                        val photoUrl = hotel.cardPhotos.firstOrNull()?.sizes?.urlTemplate
-                        Image(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .maskClip(MaterialTheme.shapes.extraLarge)
-                                .animateContentSize()
-                                .background(
-                                    Brush.verticalGradient(
-                                        listOf(
-                                            MaterialTheme.colorScheme.background,
-                                            MaterialTheme.colorScheme.surface
-                                        )
-                                    )
-                                ),
-                            painter = rememberAsyncImagePainter(model = photoUrl),
-                            contentDescription = hotel.title,
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    AnimatedGradientText(text = "Get All The Hotels Near You!!")
-                }
-            }
-
-
-            // Handle loading more items in the paging source
-            when (hotelCarousel.loadState.append) {
-                is LoadState.Loading -> {
-                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(modifier = Modifier.size(40.dp))
-                    }
-                }
-
-                is LoadState.Error -> {
-                    val appendError = hotelCarousel.loadState.append as LoadState.Error
-                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(text = "Error loading more: ${appendError.error.message}")
-                    }
-                }
-
-                else -> Unit // No additional state
+                AnimatedGradientText(text = "Get All The Hotels Near You!!")
             }
         }
     }
+
 }
+
 
 @Composable
 fun AnimatedGradientText(text: String) {
@@ -253,6 +191,7 @@ fun AnimatedGradientText(text: String) {
         animationSpec = tween(durationMillis = 1000),
         label = ""
     )
+
     val fontSize by animateFloatAsState(
         targetValue = if (bigText) 20f else 18f,
         animationSpec = tween(durationMillis = 1000),

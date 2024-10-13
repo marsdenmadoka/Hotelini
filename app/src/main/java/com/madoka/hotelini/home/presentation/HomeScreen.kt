@@ -69,6 +69,8 @@ import com.madoka.hotelini.common.Location.PermissionDeniedContent
 import com.madoka.hotelini.common.domain.model.toHotelInfo
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
+import com.madoka.hotelini.common.util.Resource
+import com.madoka.hotelini.home.domain.model.Hotel
 import com.madoka.hotelini.home.presentation.components.HotelCarousel
 import com.madoka.hotelini.home.presentation.components.NearbyHotelItem
 import com.ramcosta.composedestinations.annotation.Destination
@@ -232,6 +234,7 @@ fun HomeScreenScaffold(
 
     val context = LocalContext.current
     val hotels = state.nearestHotels.collectAsLazyPagingItems()
+    val carouselState = state.carousel.collectAsState(null).value ?: return
 
 
     val lazyRowScrollState = rememberLazyListState()
@@ -280,7 +283,8 @@ fun HomeScreenScaffold(
                         .height(carouselHeight)
                         .alpha(carouselAlpha)
                 ) {
-                    HotelCarousel(hotelCarousel = hotels)
+
+                    HotelCarousel(hotelCarousel = carouselState)
                 }
                 LazyColumn(
                     state = lazyRowScrollState,
@@ -309,70 +313,7 @@ fun HomeScreenScaffold(
                                 }
                             )
                         }
-
                     }
-
-//                    item {
-//                        FlowRow(
-//                            Modifier
-//                                .fillMaxSize(),
-//                            horizontalArrangement = Arrangement.Center,
-//                            verticalArrangement = Arrangement.spacedBy(16.dp),
-//                            maxItemsInEachRow = 2
-//                        ) {
-//                             hotels.itemSnapshotList.items.forEach { hotel ->
-//                                 NearbyHotelItem(
-//                                     //onClickItem = {},
-//                                     hotelDetails = hotel
-//                                     //restaurant = hotel
-//                                 )
-//
-//                               }
-//
-//                        }
-//
-//                    }
-
-                    /* repeat(20) {
-                         NearbyHotelItem()
-                   } */
-
-//                            hotels.itemSnapshotList.items.forEach { hotel ->
-//                                hotel.let {
-//                                    NearbyHotelItem(
-//                                        modifier = Modifier
-//                                            .clickable {
-//                                                onEvent(
-//                                                    HomeUiEvents.NavigateToHotelDetails(
-//                                                        hotel = it.toHotelInfo()
-//                                                    )
-//                                                )
-//                                            }
-//                                    )
-//                                }
-//
-//                            }
-
-                    /*  hotels.itemSnapshotList.items.forEach { hotel ->
-                          hotel.let {
-                              NearbyHotelItem(
-                                  onClickItem = {},
-                                  hotelDetails = hotel
-                                  //restaurant = hotel
-                              )
-                          }
-
-                      } */
-
-                    /*              restaurants.itemSnapshotList.items.forEach { hotel ->
-                                      hotel.let {
-                                          NearbyHotelItem(
-                                              onClickItem = {},
-                                              restaurant = hotel
-                                          )
-                                      }
-
-                                  }*/
                 }
             }
         }
@@ -447,15 +388,16 @@ fun <T : Any> PagedFlowRow(
                                 .fillMaxWidth(),
                             text = when ((loadState.refresh as LoadState.Error).error) {
                                 is HttpException -> {
-                                    "Oops, something went wrong!"
+                                    "Oops, something went wrong! restart application"
                                 }
 
                                 is IOException -> {
-                                    "Couldn't reach server, check your internet connection!"
+                                    "Couldn't reach server, check your internet connection! \n" +
+                                            "and restart application"
                                 }
 
                                 else -> {
-                                    "Unknown error occurred"
+                                    "Unknown error occurred restart application"
                                 }
                             },
                             style = MaterialTheme.typography.bodyMedium,
@@ -504,22 +446,11 @@ fun <T : Any> PagedFlowRow(
 }
 
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun <T : Any> PagedCarouselItems(
-    modifier: Modifier = Modifier,
-    items: LazyPagingItems<T>,
-    content: @Composable (T) -> Unit,
-) {
-
-
-}
-
 @Preview
 @Composable
 fun HomeScreenContentPreview() {
     HoteliniTheme {
-        // HomeScreenContent()
+        //HomeScreenContent()
     }
 }
 

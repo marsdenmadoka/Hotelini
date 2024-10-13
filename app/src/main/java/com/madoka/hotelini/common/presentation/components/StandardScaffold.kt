@@ -35,7 +35,6 @@ fun StandardScaffold(
     content: @Composable (paddingValues: PaddingValues) -> Unit,
 ) {
     Scaffold(
-
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
@@ -58,7 +57,7 @@ fun StandardScaffold(
                             label = {
                                 Text(
                                     text = item.title,
-                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             },
                             alwaysShowLabel = true,

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
@@ -18,12 +19,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val hotelRepository: HotelRepository,
-    private val placesClient: PlacesClient // Inject PlacesClient
+    private val placesClient: PlacesClient
 ) : ViewModel() {
 
 
@@ -56,7 +58,9 @@ class HomeViewModel @Inject constructor(
                 // Use PagingData.map to extract hotel titles
                 val hotelNames = mutableListOf<String>()
                 pagingData.map { hotel ->
-                    hotel.title.let { hotelNames.add(it) } // Extract hotel titles into a list
+                    hotel.title.substringAfter(". ").trim().let {
+                        hotelNames.add(it)
+                    } // Extract hotel titles into a list
                 }
                 // Now that you have a list of hotel names, fetch latitudes and longitudes
                 fetchNearestHotelsLatLngAndCalculateDistance(latitude, longitude, hotelNames)
@@ -64,6 +68,7 @@ class HomeViewModel @Inject constructor(
         }
 
         _homeUiState.value = _homeUiState.value.copy(nearestHotels = nearestHotelsFlow)
+
 
 
         /* _homeUiState.value = HomeUiState(
@@ -93,7 +98,9 @@ class HomeViewModel @Inject constructor(
                     val placeId = prediction.placeId
 
                     // Fetch place details including latitude and longitude
-                    val fetchPlaceRequest = FetchPlaceRequest.newInstance(placeId, placeFields)
+                    val fetchPlaceRequest = FetchPlaceRequest.builder(placeId, placeFields).build()
+
+                    //val fetchPlaceRequest = FetchPlaceRequest.newInstance(placeId, placeFields)
                     placesClient.fetchPlace(fetchPlaceRequest)
                         .addOnSuccessListener { placeResponse ->
                             val place = placeResponse.place
@@ -101,12 +108,16 @@ class HomeViewModel @Inject constructor(
 
                             if (hotelLatLng != null) {
                                 val distance = calculateDistance(
-                                    userLat,
-                                    userLng,
-                                    hotelLatLng.latitude,
-                                    hotelLatLng.longitude
+                                    LatLng(userLat, userLng),
+                                    LatLng(hotelLatLng.latitude, hotelLatLng.longitude)
+//                                    userLat,
+//                                    userLng,
+//                                    hotelLatLng.latitude,
+//                                    hotelLatLng.longitude
                                 )
                                 println("${place.name} is $distance kilometers away")
+                                Timber.d("${place.name} is $distance kilometers away")
+
                                 updatedDistances[place.name] = "$distance km"
 
                                 // Update the state with distances
@@ -116,8 +127,21 @@ class HomeViewModel @Inject constructor(
 
                             }
                         }
+                        .addOnFailureListener { exception ->
+                            Timber.d(
+                                "RETRIEVING PLACES FAILED",
+                                "Error fetching place details: ${exception.message}"
+                            )
+                        }
                 }
             }
+                .addOnFailureListener {exception ->
+                    Timber.d(
+                        "RETRIEVING PLACES FAILED",
+                        "Error fetching place details: ${exception.message}"
+                    )
+
+                }
         }
     }
 
