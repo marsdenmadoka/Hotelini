@@ -7,15 +7,15 @@ import com.madoka.hotelini.home.data.network.hoteldto.BubbleRating
 import com.madoka.hotelini.home.data.network.hoteldto.CardPhoto
 import com.madoka.hotelini.home.domain.model.Hotel
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class HotelInfo(  //this is what we pass to the Details Screen
     val id: String,
-//    val bubbleRating: BubbleRating,
-//    val cardPhotos: List<CardPhoto>,
-//    val priceDetails: Any,
-//    val priceForDisplay: Any,
-//    val priceSummary: Any,
+    val bubbleRating: @RawValue BubbleRating,
+    val priceDetails: @RawValue Any,
+    val priceForDisplay: @RawValue Any,
+    val priceSummary: @RawValue Any,
     val provider: String,
     val secondaryInfo: String,
     val title: String
@@ -24,13 +24,14 @@ data class HotelInfo(  //this is what we pass to the Details Screen
 fun Hotel.toHotelInfo(
 ) = HotelInfo(
     id = id,
-//    bubbleRating = bubbleRating,
-//    cardPhotos = cardPhotos,
-//    priceDetails = priceDetails,
-//    priceForDisplay = priceForDisplay,
-//    priceSummary = priceSummary,
-     provider = provider,
+    bubbleRating = bubbleRating,
+    priceDetails = priceDetails,
+    priceForDisplay = priceForDisplay,
+    priceSummary = priceSummary,
+    provider = provider,
     secondaryInfo = secondaryInfo,
     title = title
 )
+
+
 

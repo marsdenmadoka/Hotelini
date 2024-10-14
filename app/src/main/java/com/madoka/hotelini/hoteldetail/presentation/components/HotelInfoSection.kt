@@ -1,4 +1,4 @@
-package com.madoka.hotelini.hoteldetail.components
+package com.madoka.hotelini.hoteldetail.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,11 +29,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Star
 import com.madoka.hotelini.common.presentation.theme.Golden
+import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
 
 @Composable
 fun HotelInfoSection(
     modifier: Modifier = Modifier,
+    state: HotelDetailsUiState
 ) {
 
     Column(
@@ -47,12 +49,14 @@ fun HotelInfoSection(
             text = "View Location"
         )
 
-        Text(
-            text = "Wy" + "ndham Garden Washington",
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.background
-        )
+        state.hotelDetails?.let {
+            Text(
+                text = it.title,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.background
+            )
+        }
         Row {
             Icon(
                 imageVector = Icons.Default.Place,
@@ -60,11 +64,13 @@ fun HotelInfoSection(
                 tint = Color.LightGray,
                 modifier = Modifier.size(24.dp)
             )
-            Text(
-                text = "Annapolis Road, Washington",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.surfaceVariant
-            )
+            state.hotelDetails?.location?.let {
+                Text(
+                    text = it.address,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.surfaceVariant
+                )
+            }
 
         }
 
@@ -93,7 +99,7 @@ fun HotelInfoSection(
                 modifier = Modifier.size(24.dp)
             )
             Text(
-                text = "4.98",
+                text = "${state.hotelDetails?.rating?.toFloat()}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(end = 4.dp),
@@ -140,9 +146,9 @@ fun ViewLocationButton(
 }
 
 
-@Preview
+
 @Composable
-fun HotelDescriptionSection() {
+fun HotelDescriptionSection(state: HotelDetailsUiState) {
     Column(modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
@@ -150,11 +156,13 @@ fun HotelDescriptionSection() {
             color = MaterialTheme.colorScheme.surface
         )
         Spacer(modifier = Modifier.size(10.dp))
-        Text(
-            text = "This beautiful hotel offers a luxurious stay with modern amenities such as free WiFi, pool, and parking.",
-            fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.surface
-        )
+        state.hotelDetails?.about?.let {
+            Text(
+                text = it.title,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.surface
+            )
+        }
         Spacer(modifier = Modifier.size(20.dp))
     }
 }
@@ -174,6 +182,6 @@ fun PreviewViewLocationButton() {
 @Composable
 fun HotelInfoSectionPrev() {
     HoteliniTheme {
-        HotelInfoSection(Modifier)
+        //HotelInfoSection(Modifier)
     }
 }

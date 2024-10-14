@@ -1,4 +1,4 @@
-package com.madoka.hotelini.hoteldetail.components
+package com.madoka.hotelini.hoteldetail.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

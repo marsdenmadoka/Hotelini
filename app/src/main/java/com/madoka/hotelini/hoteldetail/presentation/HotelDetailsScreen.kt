@@ -1,6 +1,8 @@
 package com.madoka.hotelini.hoteldetail.presentation
 
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,21 +13,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.madoka.hotelini.common.domain.model.HotelInfo
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
-import com.madoka.hotelini.hoteldetail.components.AmenitiesSection
-import com.madoka.hotelini.hoteldetail.components.DetailsActions
-import com.madoka.hotelini.hoteldetail.components.HotelDescriptionSection
-import com.madoka.hotelini.hoteldetail.components.HotelImageBanner
-import com.madoka.hotelini.hoteldetail.components.HotelInfoSection
-import com.madoka.hotelini.hoteldetail.components.RoomInfoSection
-import com.madoka.hotelini.hoteldetail.components.SmallImagesRow
+import com.madoka.hotelini.hoteldetail.presentation.components.AmenitiesSection
+import com.madoka.hotelini.hoteldetail.presentation.components.DetailsActions
+import com.madoka.hotelini.hoteldetail.presentation.components.HotelDescriptionSection
+import com.madoka.hotelini.hoteldetail.presentation.components.HotelImageBanner
+import com.madoka.hotelini.hoteldetail.presentation.components.HotelInfoSection
+import com.madoka.hotelini.hoteldetail.presentation.components.RoomInfoSection
+import com.madoka.hotelini.hoteldetail.presentation.components.SmallImagesRow
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 
@@ -34,27 +40,48 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 @Destination<RootGraph>
 @Composable
 fun HotelDetailsScreen(
-    hotel:HotelInfo
+    hotelInfo: HotelInfo,
+    viewModel: HotelDetailsViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getHotelDetails(
+            hotelId = hotelInfo.id //coming from the homeScreen
+        )
+    }
+
+    val hotelDetailsUiState by viewModel.hotelDetailsUiState.collectAsState()
+
     HotelDetailScreenContent()
 }
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun HotelDetailScreenContent() {
+fun SharedTransitionScope.HotelDetailScreenContent(
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    hotelInfo: HotelInfo, //passed from our homeScreen,
+    onEvents: (HotelDetailsUiEvents) -> Unit,
+    detailstate: HotelDetailsUiState,
+) {
     Scaffold(
+        modifier = Modifier.sharedBounds(
+            sharedContentState = rememberSharedContentState(key = "${hotelInfo.id}"),
+            animatedVisibilityScope = animatedVisibilityScope,
+        ),
         topBar = {
             DetailsActions(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onEvents = onEvents
             )
         }
 
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             item {
-                ConstraintLayout(modifier = Modifier.fillMaxSize()
+                ConstraintLayout(
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     val (hotelImageBanner, hotelImageCarousel, hotelInfoSection) = createRefs()
                     HotelImageBanner(
@@ -67,6 +94,7 @@ fun HotelDetailScreenContent() {
                                 end.linkTo(parent.end)
                                 width = Dimension.fillToConstraints
                             },
+                        hotelImage = ""
                     )
 
                     SmallImagesRow(
@@ -81,6 +109,8 @@ fun HotelDetailScreenContent() {
                     )
 
                     HotelInfo(
+                        hotelInfo = hotelInfo,
+                        state = detailstate,
                         modifier = Modifier
                             .fillMaxSize()
                             .background(
@@ -104,7 +134,11 @@ fun HotelDetailScreenContent() {
 
 
 @Composable
-fun HotelInfo(modifier: Modifier = Modifier) {
+fun HotelInfo(
+    modifier: Modifier = Modifier,
+    hotelInfo: HotelInfo,
+    state: HotelDetailsUiState,
+) {
 
     Column(
         modifier
@@ -116,17 +150,20 @@ fun HotelInfo(modifier: Modifier = Modifier) {
 
 
         ) {
-       // item {
-            HotelInfoSection(modifier = Modifier)
-       // }
+        // item {
+        HotelInfoSection(
+            modifier = Modifier,
+            state = state
+        )
+        // }
         //item {
-            RoomInfoSection(modifier = Modifier)
+        RoomInfoSection(modifier = Modifier)
         //}
         //item {
-            AmenitiesSection()
-       // }
+        AmenitiesSection(state = state)
+        // }
         //item {
-            HotelDescriptionSection()
+        HotelDescriptionSection(secondaryInfo = hotelInfo.secondaryInfo)
         //}
     }
 }

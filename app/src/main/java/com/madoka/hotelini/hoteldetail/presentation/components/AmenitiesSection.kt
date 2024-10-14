@@ -1,4 +1,4 @@
-package com.madoka.hotelini.hoteldetail.components
+package com.madoka.hotelini.hoteldetail.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madoka.hotelini.R
+import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
 @Composable
-fun AmenitiesSection() {
+fun AmenitiesSection(
+    state: HotelDetailsUiState
+) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally

@@ -1,4 +1,4 @@
-package com.madoka.hotelini.hoteldetail.components
+package com.madoka.hotelini.hoteldetail.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -13,20 +13,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.components.CircleButton
-
+import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiEvents
 
 
 @Composable
 fun DetailsActions(
     modifier: Modifier,
-){
+    onEvents: (HotelDetailsUiEvents) -> Unit,
+    //isLiked: Boolean
+) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         CircleButton(
-            onClick = {},
+            onClick = {
+                onEvents(HotelDetailsUiEvents.NavigateBack)
+            },
             containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
         ) {
             Icon(
@@ -52,6 +56,6 @@ fun DetailsActions(
 
 @Preview
 @Composable
-fun DetailsActionsPrev(){
-    DetailsActions( Modifier )
+fun DetailsActionsPrev() {
+    //DetailsActions(Modifier)
 }
