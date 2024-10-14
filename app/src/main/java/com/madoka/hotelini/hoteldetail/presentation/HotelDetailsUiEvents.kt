@@ -12,5 +12,5 @@ sealed interface HotelDetailsUiEvents {
 
 //    data class RemoveFromFavorites(val favorite: Favorite) :
 //        HotelDetailsUiEvents
-   // data class NavigateToCastDetails(val cast: Cast) :  HotelDetailsUiEvents
+
 }

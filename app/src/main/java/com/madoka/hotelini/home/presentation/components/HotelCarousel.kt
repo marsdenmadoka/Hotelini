@@ -36,18 +36,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.common.presentation.theme.poppinsFamily
@@ -120,53 +124,70 @@ fun HotelCarousel(
                 val photoUrl = hotel.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""
 
 
-                val painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current).data(data = photoUrl)
-                        .apply(block = fun ImageRequest.Builder.() {
-                            crossfade(true)
-                        }).build()
-                )
+//                val painter = rememberAsyncImagePainter(
+//                    ImageRequest.Builder(LocalContext.current).data(data = photoUrl)
+//                        .apply(block = fun ImageRequest.Builder.() {
+//                            crossfade(true)
+//                        }).build()
+//                )
+//
+//                when (painter.state) {
+//                    is AsyncImagePainter.State.Loading -> {
+//                        Box(
+//                            Modifier
+//                                .fillMaxWidth()
+//                                .height(205.dp), contentAlignment = Alignment.Center
+//                        ) {
+//                            CircularProgressIndicator()
+//                        }
+//                    }
+//
+//                    is AsyncImagePainter.State.Success -> {
+//                        LaunchedEffect(key1 = painter) {
+//                            val imageDrawable = painter.imageLoader.execute(painter.request).drawable
+//                            imageDrawable?.let {
+//                                PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
+//                                    dominantColor = Color(color.rgb)
+//                                    dominantTextColor = Color(color.titleTextColor)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    else -> Unit
+//                }
+//                Image(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .maskClip(MaterialTheme.shapes.extraLarge)
+//                        .animateContentSize()
+//                        .background(
+//                            Brush.verticalGradient(
+//                                listOf(
+//                                    MaterialTheme.colorScheme.background,
+//                                    MaterialTheme.colorScheme.surface
+//                                )
+//                            )
+//                        ),
+//                    painter = painter,
+//                    contentDescription = hotel.title,
+//                    contentScale = ContentScale.Crop
+//                )
 
-                when (painter.state) {
-                    is AsyncImagePainter.State.Loading -> {
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(205.dp), contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
 
-                    is AsyncImagePainter.State.Success -> {
-                        LaunchedEffect(key1 = painter) {
-                            val imageDrawable = painter.imageLoader.execute(painter.request).drawable
-                            imageDrawable?.let {
-                                PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
-                                    dominantColor = Color(color.rgb)
-                                    dominantTextColor = Color(color.titleTextColor)
-                                }
-                            }
-                        }
-                    }
-                    else -> Unit
-                }
-                Image(
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(photoUrl.replace("{width}", "400").replace("{height}", "300"))
+                        .crossfade(true)
+                        .build(),
+                    placeholder = painterResource(R.drawable.ic_load_placeholder),
+                    error = painterResource(id = R.drawable.ic_load_error),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
-                        .maskClip(MaterialTheme.shapes.extraLarge)
-                        .animateContentSize()
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    MaterialTheme.colorScheme.background,
-                                    MaterialTheme.colorScheme.surface
-                                )
-                            )
-                        ),
-                    painter = painter,
-                    contentDescription = hotel.title,
-                    contentScale = ContentScale.Crop
+                        .clip(shape = MaterialTheme.shapes.medium)
+                        .background(color = Color.Gray)
+                        .align(Alignment.Center)
                 )
             }
             Column(

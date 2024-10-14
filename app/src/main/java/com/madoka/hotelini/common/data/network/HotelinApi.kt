@@ -6,7 +6,8 @@ import com.madoka.hotelini.common.util.Constants.STARTING_PAGE_INDEX
 import com.madoka.hotelini.common.util.currentDate
 import com.madoka.hotelini.home.data.network.Restaurantdto.RestaurantResponse
 import com.madoka.hotelini.home.data.network.hoteldto.HotelResponse
-import com.madoka.hotelini.hoteldetail.hoteldetailsdto.HotelDetailsResponses
+import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.HotelDetailsResponses
+import com.madoka.hotelini.hoteldetail.domain.model.HotelDetails
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -32,10 +33,8 @@ interface HoteliniApi {
         @Path("id") hotelId: String,
         @Query("checkIn") checkInDate: String = currentDate,
         @Query("checkOut") checkOutDate: String = currentDate,
-        @Query("currency") currency: String,
         @Header("x-rapidapi-key") apiKey: String = API_KEY,
         @Header("x-rapidapi-host") apiHost: String = API_HOST
-    ): HotelDetailsResponses
-
+    ): HotelDetails  //HotelDetailsResponses
 
 }

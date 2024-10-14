@@ -28,10 +28,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -39,6 +41,7 @@ import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
 import com.gowtham.ratingbar.StepSize
+import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.common.util.PaletteGenerator
@@ -68,58 +71,58 @@ fun NearbyHotelItem(
     ) {
         Box {
 
-            val painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current)
-                    .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
-                    .apply(block = fun ImageRequest.Builder.() {
-                        crossfade(true)
-                    }).build()
-            )
+//            val painter = rememberAsyncImagePainter(
+//                ImageRequest.Builder(LocalContext.current)
+//                    .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
+//                    .apply(block = fun ImageRequest.Builder.() {
+//                        crossfade(true)
+//                    }).build()
+//            )
+//
+//            when (painter.state) {
+//                is AsyncImagePainter.State.Loading -> {
+//                    Box(
+//                        Modifier
+//                            .fillMaxWidth()
+//                            .height(205.dp), contentAlignment = Alignment.Center
+//                    ) {
+//                        CircularProgressIndicator()
+//                    }
+//                }
+//
+//                is AsyncImagePainter.State.Success -> {
+//                    LaunchedEffect(key1 = painter) {
+//                        val imageDrawable = painter.imageLoader.execute(painter.request).drawable
+//                        imageDrawable?.let {
+//                            PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
+//                                dominantColor = Color(color.rgb)
+//                                dominantTextColor = Color(color.titleTextColor)
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                AsyncImagePainter.State.Empty -> {
+//                    Text(text = "Empty data")
+//                }
+//
+//                is AsyncImagePainter.State.Error -> {
+//                    Text(text = "Error Found")
+//                }
+//            }
+//
+//            Image(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .clip(shape = MaterialTheme.shapes.medium)
+//                    .background(color = Color.Gray)
+//                    .align(Alignment.Center),
+//                painter = painter,
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop
+//            )
 
-            when (painter.state) {
-                is AsyncImagePainter.State.Loading -> {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(205.dp), contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-
-                is AsyncImagePainter.State.Success -> {
-                    LaunchedEffect(key1 = painter) {
-                        val imageDrawable = painter.imageLoader.execute(painter.request).drawable
-                        imageDrawable?.let {
-                            PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
-                                dominantColor = Color(color.rgb)
-                                dominantTextColor = Color(color.titleTextColor)
-                            }
-                        }
-                    }
-                }
-
-                AsyncImagePainter.State.Empty -> {
-                    Text(text = "Empty data")
-                }
-
-                is AsyncImagePainter.State.Error -> {
-                    Text(text = "Error Found")
-                }
-            }
-
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(shape = MaterialTheme.shapes.medium)
-                    .background(color = Color.Gray)
-                    .align(Alignment.Center),
-                painter = painter,
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-
-            /*  AsyncImage(
+            AsyncImage(
                   model = ImageRequest.Builder(LocalContext.current)
                       .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
                       .crossfade(true)
@@ -133,7 +136,7 @@ fun NearbyHotelItem(
                       .clip(shape = MaterialTheme.shapes.medium)
                       .background(color = Color.Gray)
                       .align(Alignment.Center)
-              ) */
+              )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -155,11 +155,11 @@ fun HomeScreenContent(
 
 
     // Check location permission and request if needed
-    LaunchedEffect(Unit) {
-        if (permissionState.status.isGranted.not()) {
-            permissionState.launchPermissionRequest()
-        }
-    }
+//    LaunchedEffect(Unit) {
+//        if (permissionState.status.isGranted.not()) {
+//            permissionState.launchPermissionRequest()
+//        }
+//    }
 
     //making sure the location is on
     HandleRequest(
