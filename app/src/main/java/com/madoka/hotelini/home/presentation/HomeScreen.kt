@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -224,12 +226,12 @@ fun HomeScreenContent(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun HomeScreenScaffold(
+fun SharedTransitionScope.HomeScreenScaffold(
     state: HomeUiState,
     onEvent: (HomeUiEvents) -> Unit,
-    //animatedVisibilityScope: AnimatedVisibilityScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
 
     val context = LocalContext.current
@@ -308,7 +310,9 @@ fun HomeScreenScaffold(
                                                 )
                                             },
                                         hotelDetails = it,
-                                        distanceToHotel = distanceToHotel
+                                        distanceToHotel = distanceToHotel,
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        sharedTransitionKey = "${it.id}",
                                     )
                                 }
                             )

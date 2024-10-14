@@ -1,5 +1,8 @@
 package com.madoka.hotelini.home.presentation.components
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -47,11 +50,14 @@ import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.common.util.PaletteGenerator
 import com.madoka.hotelini.home.domain.model.Hotel
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun NearbyHotelItem(
+fun SharedTransitionScope.NearbyHotelItem(
     modifier: Modifier = Modifier,
     hotelDetails: Hotel,
-    distanceToHotel: String
+    distanceToHotel: String,
+    sharedTransitionKey: String,
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     var defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     var dominantColor = MaterialTheme.colorScheme.surface
@@ -123,20 +129,26 @@ fun NearbyHotelItem(
 //            )
 
             AsyncImage(
-                  model = ImageRequest.Builder(LocalContext.current)
-                      .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
-                      .crossfade(true)
-                      .build(),
-                  placeholder = painterResource(R.drawable.ic_load_placeholder),
-                  error = painterResource(id = R.drawable.ic_load_error),
-                  contentDescription = null,
-                  contentScale = ContentScale.Crop,
-                  modifier = Modifier
-                      .fillMaxSize()
-                      .clip(shape = MaterialTheme.shapes.medium)
-                      .background(color = Color.Gray)
-                      .align(Alignment.Center)
-              )
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(R.drawable.ic_load_placeholder),
+                error = painterResource(id = R.drawable.ic_load_error),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .sharedElement(
+                        state = rememberSharedContentState(
+                            key = sharedTransitionKey
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                    )
+                    .fillMaxSize()
+                    .clip(shape = MaterialTheme.shapes.medium)
+                    .background(color = Color.Gray)
+                    .align(Alignment.Center)
+            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

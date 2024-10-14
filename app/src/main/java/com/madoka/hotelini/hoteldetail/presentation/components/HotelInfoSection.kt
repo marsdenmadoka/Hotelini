@@ -148,8 +148,10 @@ fun ViewLocationButton(
 
 
 @Composable
-fun HotelDescriptionSection(state: HotelDetailsUiState) {
-    Column(modifier = Modifier.padding(16.dp),
+fun HotelDescriptionSection(
+    modifier: Modifier = Modifier,
+    state: HotelDetailsUiState) {
+    Column(modifier = modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "Description", fontWeight = FontWeight.Bold, fontSize = 16.sp,

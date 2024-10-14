@@ -150,21 +150,24 @@ fun HotelInfo(
 
 
         ) {
-        // item {
+
         HotelInfoSection(
             modifier = Modifier,
             state = state
         )
-        // }
-        //item {
+
         RoomInfoSection(modifier = Modifier)
-        //}
-        //item {
-        AmenitiesSection(state = state)
-        // }
-        //item {
-        HotelDescriptionSection(secondaryInfo = hotelInfo.secondaryInfo)
-        //}
+
+        AmenitiesSection(
+            modifier = Modifier,
+            state = state
+        )
+
+        HotelDescriptionSection(
+            modifier = Modifier,
+            state = state
+        )
+
     }
 }
 

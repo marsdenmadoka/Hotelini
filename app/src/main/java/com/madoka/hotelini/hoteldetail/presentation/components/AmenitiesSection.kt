@@ -23,10 +23,11 @@ import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
 @Composable
 fun AmenitiesSection(
+    modifier: Modifier = Modifier,
     state: HotelDetailsUiState
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = modifier.padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
