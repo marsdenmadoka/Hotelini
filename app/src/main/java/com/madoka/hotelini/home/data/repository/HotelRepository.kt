@@ -8,6 +8,7 @@ import com.madoka.hotelini.common.util.Constants
 import com.madoka.hotelini.home.data.paging.HotelSource
 import com.madoka.hotelini.home.domain.model.Hotel
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 import javax.inject.Inject
 
 class HotelRepository @Inject constructor(private val api: HoteliniApi) {
@@ -19,7 +20,6 @@ class HotelRepository @Inject constructor(private val api: HoteliniApi) {
             config = PagingConfig(enablePlaceholders = false, pageSize = Constants.PAGING_SIZE),
             pagingSourceFactory = {
                 HotelSource(api,latitude,longitude)
-
             }
         ).flow
     }

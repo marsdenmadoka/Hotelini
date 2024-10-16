@@ -31,8 +31,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.palette.graphics.Palette
 import com.google.android.gms.maps.model.LatLng
-import com.madoka.hotelini.R
-import com.madoka.hotelini.home.presentation.components.AnimatedGradientText
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -59,98 +60,120 @@ fun SharedTransitionScope.NearbyHotelItem(
     sharedTransitionKey: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
-    var defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
+    val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     var dominantColor = MaterialTheme.colorScheme.surface
     var dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
     val dominantSubTextColor by remember { mutableStateOf(dominantColor) }
 
-    val selectedImageUrl = hotelDetails.cardPhotos
-        .filter { it.sizes.urlTemplate.isNotBlank() }
-        .randomOrNull()?.sizes?.urlTemplate ?: ""
+    val selectedImageUrl =
+        hotelDetails.cardPhotos.firstOrNull { it.sizes.urlTemplate.isNotBlank() }?.sizes?.urlTemplate
+            ?: ""
+
+
+    /*
+    * hotelDetails.cardPhotos.filter { it.sizes.urlTemplate.isNotBlank() }
+            .firstOrNull { it.sizes.urlTemplate.isNotBlank() }?.sizes?.urlTemplate
+            ?: painterResource(id = R.drawable.photo5)
+    * */
+
+
+    //hotelDetails.cardPhotos.first { it.sizes.urlTemplate.isNotBlank() }
+    //.randomOrNull()?.sizes?.urlTemplate ?: ""
+
+    //hotelDetails.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""
+
+    /* hotelDetails.cardPhotos
+     .filter { it.sizes.urlTemplate.isNotBlank() }
+     .randomOrNull()?.sizes?.urlTemplate ?: "" */
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .width(180.dp)
             .height(200.dp)
-            .padding(horizontal = 3.dp),
+            .padding(horizontal = 4.dp),
         elevation = CardDefaults.cardElevation(8.dp), shape = RoundedCornerShape(4.dp)
     ) {
         Box {
-
-//            val painter = rememberAsyncImagePainter(
-//                ImageRequest.Builder(LocalContext.current)
-//                    .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
-//                    .apply(block = fun ImageRequest.Builder.() {
-//                        crossfade(true)
-//                    }).build()
-//            )
-//
-//            when (painter.state) {
-//                is AsyncImagePainter.State.Loading -> {
-//                    Box(
-//                        Modifier
-//                            .fillMaxWidth()
-//                            .height(205.dp), contentAlignment = Alignment.Center
-//                    ) {
-//                        CircularProgressIndicator()
-//                    }
-//                }
-//
-//                is AsyncImagePainter.State.Success -> {
-//                    LaunchedEffect(key1 = painter) {
-//                        val imageDrawable = painter.imageLoader.execute(painter.request).drawable
-//                        imageDrawable?.let {
-//                            PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
-//                                dominantColor = Color(color.rgb)
-//                                dominantTextColor = Color(color.titleTextColor)
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                AsyncImagePainter.State.Empty -> {
-//                    Text(text = "Empty data")
-//                }
-//
-//                is AsyncImagePainter.State.Error -> {
-//                    Text(text = "Error Found")
-//                }
-//            }
-//
-//            Image(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .clip(shape = MaterialTheme.shapes.medium)
-//                    .background(color = Color.Gray)
-//                    .align(Alignment.Center),
-//                painter = painter,
-//                contentDescription = null,
-//                contentScale = ContentScale.Crop
-//            )
-
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
+            val painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current)
                     .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(R.drawable.ic_load_placeholder),
-                error = painterResource(id = R.drawable.ic_load_error),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
+                    .apply(block = fun ImageRequest.Builder.() {
+                        crossfade(true)
+                    }).build()
+            )
+
+            when (painter.state) {
+                is AsyncImagePainter.State.Loading -> {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(205.dp), contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is AsyncImagePainter.State.Success -> {
+                    LaunchedEffect(key1 = painter) {
+                        val imageDrawable = painter.imageLoader.execute(painter.request).drawable
+                        imageDrawable?.let {
+                            PaletteGenerator.generateImagePalette(imageDrawable = it) { color ->
+                                dominantColor = Color(color.rgb)
+                                dominantTextColor = Color(color.titleTextColor)
+                            }
+                        }
+                    }
+                }
+
+                AsyncImagePainter.State.Empty -> {
+                    Text(text = "Empty data")
+                }
+
+                is AsyncImagePainter.State.Error -> {
+                    Text(text = "Error Found")
+                }
+            }
+
+            Image(
+                modifier = modifier
                     .sharedElement(
-                        state = rememberSharedContentState(
-                            key = sharedTransitionKey
-                        ),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                    )
+                        state = rememberSharedContentState( key = sharedTransitionKey),
+                        animatedVisibilityScope = animatedVisibilityScope)
                     .fillMaxSize()
                     .clip(shape = MaterialTheme.shapes.medium)
                     .background(color = Color.Gray)
-                    .align(Alignment.Center)
+                    .align(Alignment.Center),
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
             )
+
+//            AsyncImage(
+//                model = ImageRequest.Builder(LocalContext.current)
+//                    .data(""
+////                        selectedImageUrl.replace("{width}", "180")
+////                            .replace("{height}", "200")
+//                    )
+//                    .crossfade(true)
+//                    .build(),
+//                placeholder = painterResource(R.drawable.ic_load_placeholder),
+//                error = painterResource(id = R.drawable.ic_load_error),
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = modifier
+//                    .sharedElement(
+//                        state = rememberSharedContentState(
+//                            key = sharedTransitionKey
+//                        ),
+//                        animatedVisibilityScope = animatedVisibilityScope,
+//                    )
+//                    .fillMaxSize()
+//                    .clip(shape = MaterialTheme.shapes.medium)
+//                    .background(color = Color.Gray)
+//                    .align(Alignment.Center)
+//            )
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
                     .align(Alignment.BottomCenter),
@@ -158,26 +181,28 @@ fun SharedTransitionScope.NearbyHotelItem(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    modifier = Modifier,
+                    modifier = modifier,
                     text = hotelDetails.title.substringAfter(". ").trim(),
                     fontSize = 18.sp,
                     maxLines = 2,
+                    fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Start,
-                    color = dominantTextColor
+                    color = dominantSubTextColor
                 )
 
                 if (hotelDetails.bubbleRating.rating.toFloat() <= 1) {
                     Text(
-                        modifier = Modifier,
+                        modifier = modifier,
                         text = "Not rated",
                         fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.bodySmall,
                         color = dominantSubTextColor
                     )
                 } else {
-                    RatingBar(modifier = Modifier,
+                    RatingBar(modifier = modifier,
                         value = hotelDetails.bubbleRating.rating.toFloat(),
                         config = RatingBarConfig().activeColor(Golden).inactiveColor(DarkSurface)
                             .stepSize(StepSize.HALF).isIndicator(true).stepSize(StepSize.HALF)
@@ -188,7 +213,7 @@ fun SharedTransitionScope.NearbyHotelItem(
                 }
 
                 Text(
-                    modifier = Modifier,
+                    modifier = modifier,
                     text = distanceToHotel,
                     fontSize = 14.sp,
                     maxLines = 1,

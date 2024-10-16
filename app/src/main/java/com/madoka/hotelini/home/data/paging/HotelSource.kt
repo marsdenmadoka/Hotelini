@@ -12,8 +12,7 @@ class HotelSource(
     private val api: HoteliniApi,
     private val latitude: Double,
     private val longitude: Double
-) :
-    PagingSource<Int,Hotel>() {
+) : PagingSource<Int,Hotel>() {
     override fun getRefreshKey(state: PagingState<Int, Hotel>): Int? {
         return state.anchorPosition
     }

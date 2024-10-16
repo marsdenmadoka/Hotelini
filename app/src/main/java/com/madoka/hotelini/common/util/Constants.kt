@@ -11,5 +11,6 @@ object Constants {
     val THEME_OPTIONS = intPreferencesKey(name = "theme_option")
     const val STARTING_PAGE_INDEX = 0
     const val PAGING_SIZE = 20
+    const val TABLE_NAME = "favorites_table"
 
 }
