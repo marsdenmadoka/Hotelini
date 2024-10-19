@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Star
+import com.madoka.hotelini.common.domain.model.HotelInfo
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
@@ -35,28 +36,27 @@ import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 @Composable
 fun HotelInfoSection(
     modifier: Modifier = Modifier,
-    state: HotelDetailsUiState
+    state: HotelDetailsUiState,
+    hotelInfo: HotelInfo,
 ) {
-
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxSize()
     ) {
-
         ViewLocationButton(
             onClick = {},
             text = "View Location"
         )
 
-        state.hotelDetails?.let {
+
             Text(
-                text = it.title,
+                text =  hotelInfo.title,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.background
+                color = Color.Red
             )
-        }
+
         Row {
             Icon(
                 imageVector = Icons.Default.Place,
@@ -68,7 +68,7 @@ fun HotelInfoSection(
                 Text(
                     text = it.address,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.surfaceVariant
+                    color = Color.Red
                 )
             }
 
@@ -103,7 +103,7 @@ fun HotelInfoSection(
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(end = 4.dp),
-                color = MaterialTheme.colorScheme.surface
+                color = Color.Red
             )
 
         }

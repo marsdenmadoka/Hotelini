@@ -58,6 +58,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -72,6 +73,7 @@ import com.madoka.hotelini.common.domain.model.toHotelInfo
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.home.domain.model.Hotel
+import com.madoka.hotelini.home.domain.model.items
 import com.madoka.hotelini.home.presentation.components.HotelCarousel
 import com.madoka.hotelini.home.presentation.components.NearbyHotelItem
 import com.ramcosta.composedestinations.annotation.Destination
@@ -109,7 +111,7 @@ fun SharedTransitionScope.HomeScreen(
         animatedVisibilityScope = animatedVisibilityScope,
         onEvent = { event ->
             when (event) {
-                HomeUiEvents.NavigateBack -> {
+                is HomeUiEvents.NavigateBack -> {
                     navigator.navigateUp()
                 }
 
@@ -121,7 +123,7 @@ fun SharedTransitionScope.HomeScreen(
                     )
                 }
 
-                HomeUiEvents.OnPullToRefresh -> {
+                is HomeUiEvents.OnPullToRefresh -> {
                     viewModel.refreshAllData(latitude, longitude)
                 }
             }
@@ -145,9 +147,7 @@ fun SharedTransitionScope.HomeScreenContent(
 ) {
     val context = LocalContext.current
 
-    // Initialize Google Places
     Places.initialize(context, BuildConfig.MAPS_API_KEY)
-    val placesClient = Places.createClient(context)
 
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -158,13 +158,12 @@ fun SharedTransitionScope.HomeScreenContent(
 
     val scope = rememberCoroutineScope()
 
-
-    // Check location permission and request if needed
-//    LaunchedEffect(Unit) {
-//        if (permissionState.status.isGranted.not()) {
-//            permissionState.launchPermissionRequest()
-//        }
-//    }
+    //Check location permission and request if needed
+    LaunchedEffect(Unit) {
+        if (permissionState.status.isGranted.not()) {
+            permissionState.launchPermissionRequest()
+        }
+    }
 
     //making sure the location is on
     HandleRequest(
@@ -212,6 +211,7 @@ fun SharedTransitionScope.HomeScreenContent(
                 }
             }
         }
+
         if (getLatLong) {
             HomeScreenScaffold(
                 state = state,
@@ -220,16 +220,11 @@ fun SharedTransitionScope.HomeScreenContent(
             )
         } else {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                androidx.compose.material3.LinearProgressIndicator(color = Green) //loading
+                androidx.compose.material3.LinearProgressIndicator(color = Green)
             }
-
         }
-
     }
-
-
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -239,10 +234,7 @@ fun SharedTransitionScope.HomeScreenScaffold(
     animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
 
-    val context = LocalContext.current
     val hotels = state.nearestHotels.collectAsLazyPagingItems()
-   // val carouselState = state.carousel.collectAsState(null).value ?: return
-
 
     val lazyRowScrollState = rememberLazyListState()
     var scrollOffset by remember { mutableStateOf(0f) }
@@ -290,8 +282,7 @@ fun SharedTransitionScope.HomeScreenScaffold(
                         .height(carouselHeight)
                         .alpha(carouselAlpha)
                 ) {
-
-                  // HotelCarousel(hotelCarousel = carouselState)
+                    HotelCarousel(imagesCarouselItems = items)
                 }
                 LazyColumn(
                     state = lazyRowScrollState,
@@ -299,28 +290,28 @@ fun SharedTransitionScope.HomeScreenScaffold(
                         scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
                 ) {
-                    item{ //s(hotels.itemCount) { index ->
-                     //   hotels[index]?.let { hotel -> val distanceToHotel = state.hotelDistances[hotel.title] ?: "Unknown distance"
-                            PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
-                                content = {
-                                    NearbyHotelItem(
-                                        modifier = Modifier
-                                            .clickable {
-                                                onEvent(
-                                                    HomeUiEvents.NavigateToHotelDetails(
-                                                        hotel = it.toHotelInfo()
-                                                    )
+                    item { //s(hotels.itemCount) { index ->
+                        //   hotels[index]?.let { hotel -> val distanceToHotel = state.hotelDistances[hotel.title] ?: "Unknown distance"
+                        PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
+                            content = {
+                                NearbyHotelItem(
+                                    modifier = Modifier
+                                        .clickable {
+                                            onEvent(
+                                                HomeUiEvents.NavigateToHotelDetails(
+                                                    hotel = it.toHotelInfo()
                                                 )
-                                                //Timber.d("Clicked clicked")
-                                            },
-                                        hotelDetails = it,
-                                        distanceToHotel = "12",//distanceToHotel,
-                                        animatedVisibilityScope = animatedVisibilityScope,
-                                        sharedTransitionKey = it.id,
-                                    )
-                                }
-                            )
-                       // }
+                                            )
+                                            //Timber.d("Clicked clicked")
+                                        },
+                                    hotelDetails = it,
+                                    distanceToHotel = "",//"12",//distanceToHotel,
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    sharedTransitionKey = it.id,
+                                )
+                            }
+                        )
+                        // }
                     }
                 }
             }
@@ -454,7 +445,6 @@ fun <T : Any> PagedFlowRow(
 }
 
 
-
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
@@ -464,7 +454,7 @@ fun SharedTransitionScope.HomeScreenContentPreview() {
             onEvent = {},
             animatedVisibilityScope = this as AnimatedVisibilityScope,
             state = HomeUiState(),
-            onLocationUpdated =  { _, _ -> }
+            onLocationUpdated = { _, _ -> }
         )
     }
 }

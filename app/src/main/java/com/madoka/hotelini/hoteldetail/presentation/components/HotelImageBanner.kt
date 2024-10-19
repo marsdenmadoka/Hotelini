@@ -25,7 +25,7 @@ fun HotelImageBanner(
         contentDescription = "Image Banner",
         contentScale = ContentScale.Crop,
         modifier = modifier.fillMaxSize(),
-    )
+    )   
 
 
 

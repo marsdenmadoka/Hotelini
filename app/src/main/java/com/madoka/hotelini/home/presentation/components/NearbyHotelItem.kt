@@ -50,6 +50,7 @@ import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.common.util.PaletteGenerator
 import com.madoka.hotelini.home.domain.model.Hotel
+import com.madoka.hotelini.home.domain.model.items
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -67,9 +68,7 @@ fun SharedTransitionScope.NearbyHotelItem(
 
     val selectedImageUrl =
         hotelDetails.cardPhotos.firstOrNull { it.sizes.urlTemplate.isNotBlank() }?.sizes?.urlTemplate
-            ?: ""
-
-
+            ?:""
     /*
     * hotelDetails.cardPhotos.filter { it.sizes.urlTemplate.isNotBlank() }
             .firstOrNull { it.sizes.urlTemplate.isNotBlank() }?.sizes?.urlTemplate
@@ -88,7 +87,7 @@ fun SharedTransitionScope.NearbyHotelItem(
 
     Card(
         modifier = modifier
-            .width(180.dp)
+            .width(200.dp)
             .height(200.dp)
             .padding(horizontal = 4.dp),
         elevation = CardDefaults.cardElevation(8.dp), shape = RoundedCornerShape(4.dp)
@@ -96,7 +95,7 @@ fun SharedTransitionScope.NearbyHotelItem(
         Box {
             val painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
+                    .data(selectedImageUrl) //.replace("{width}", "400").replace("{height}", "300")
                     .apply(block = fun ImageRequest.Builder.() {
                         crossfade(true)
                     }).build()
@@ -147,31 +146,6 @@ fun SharedTransitionScope.NearbyHotelItem(
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
-
-//            AsyncImage(
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(""
-////                        selectedImageUrl.replace("{width}", "180")
-////                            .replace("{height}", "200")
-//                    )
-//                    .crossfade(true)
-//                    .build(),
-//                placeholder = painterResource(R.drawable.ic_load_placeholder),
-//                error = painterResource(id = R.drawable.ic_load_error),
-//                contentDescription = null,
-//                contentScale = ContentScale.Crop,
-//                modifier = modifier
-//                    .sharedElement(
-//                        state = rememberSharedContentState(
-//                            key = sharedTransitionKey
-//                        ),
-//                        animatedVisibilityScope = animatedVisibilityScope,
-//                    )
-//                    .fillMaxSize()
-//                    .clip(shape = MaterialTheme.shapes.medium)
-//                    .background(color = Color.Gray)
-//                    .align(Alignment.Center)
-//            )
             Column(
                 modifier = modifier
                     .fillMaxWidth()

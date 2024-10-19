@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +20,7 @@ class HotelDetailsViewModel @Inject constructor(
     val hotelDetailsUiState = _hotelDetailsUiState.asStateFlow()
 
     fun getHotelDetails(hotelId: String) {
+
         viewModelScope.launch {
             _hotelDetailsUiState.update {
                 it.copy(
@@ -34,6 +36,7 @@ class HotelDetailsViewModel @Inject constructor(
                             error = result.message
                         )
                     }
+                    Timber.d("error message: ${result.message}")
                 }
 
                 is Resource.Success -> {
@@ -43,10 +46,16 @@ class HotelDetailsViewModel @Inject constructor(
                             hotelDetails = result.data
                         )
                     }
+                    Timber.d("details screen data: ${result.message}")
+                    Timber.d("details screen data: ${result.data}")
                 }
 
-                else -> {
-                    hotelDetailsUiState
+                is Resource.Loading -> {
+                    _hotelDetailsUiState.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
                 }
             }
         }

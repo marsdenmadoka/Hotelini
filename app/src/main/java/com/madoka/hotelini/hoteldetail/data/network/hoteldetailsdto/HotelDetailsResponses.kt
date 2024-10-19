@@ -1,7 +1,7 @@
 package com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto
 
 data class HotelDetailsResponses(
-    val data: com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.Data,
+    val data: HotelDetailsResponseDetails,
     val message: String,
     val status: Boolean,
     val timestamp: Long

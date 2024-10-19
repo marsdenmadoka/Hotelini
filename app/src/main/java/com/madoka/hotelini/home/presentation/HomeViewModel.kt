@@ -44,13 +44,6 @@ class HomeViewModel @Inject constructor(
 
     fun getNearestHotels(latitude: Double, longitude: Double) {
 
-
-//        _homeUiState.value = HomeUiState(
-//            nearestHotels = hotelRepository.getNearestHotels(latitude, longitude)
-//                .cachedIn(viewModelScope)
-//        )
-
-
         _homeUiState.value = _homeUiState.value.copy(
             nearestHotels = hotelRepository
                 .getNearestHotels(latitude, longitude)
@@ -58,14 +51,6 @@ class HomeViewModel @Inject constructor(
         )
 
     }
-
-
-
-
-
-
-
-
 
     fun refreshAllData(latitude: Double, longitude: Double) {
         getNearestHotels(latitude, longitude)
@@ -128,10 +113,10 @@ class HomeViewModel @Inject constructor(
                 } else null
             }
         }.toMap()
-    } */
+    }
 
 
-        /*val updatedDistances = mutableMapOf<String, String>()
+        val updatedDistances = mutableMapOf<String, String>()
 
         for (hotelName in hotelNames) {
             val request = FindAutocompletePredictionsRequest.builder()

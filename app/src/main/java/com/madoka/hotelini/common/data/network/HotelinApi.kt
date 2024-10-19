@@ -28,13 +28,13 @@ interface HoteliniApi {
         @Query("pageNumber") pageNumber: Int = STARTING_PAGE_INDEX,
     ): HotelResponse
 
-    @GET("api/v1/hotels/getHotelDetails/{hotelId}")
+    @GET("hotels/getHotelDetails/{hotelId}")
     fun getHotelDetails(
         @Path("id") hotelId: String,
         @Query("checkIn") checkInDate: String = currentDate,
         @Query("checkOut") checkOutDate: String = currentDate,
         @Header("x-rapidapi-key") apiKey: String = API_KEY,
         @Header("x-rapidapi-host") apiHost: String = API_HOST
-    ): HotelDetails  //HotelDetailsResponses
+    ): HotelDetails
 
 }
