@@ -67,9 +67,10 @@ fun SmallImagesRow(
             ) {
 
             items(displayedItems) { index->
-                SmallImage(modifier=modifier, imageUrl = photos[index].urlTemplate.replace("{width}", "100").replace("{height}", "70"))
-            }
+                SmallImage(modifier=modifier, imageUrl =
 
+                photos[index].urlTemplate.replace("{width}", "100").replace("{height}", "70"))
+            }
 
             if (remainingItemCount > 0) {
                 item {

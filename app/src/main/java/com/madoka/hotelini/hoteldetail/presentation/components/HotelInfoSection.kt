@@ -50,12 +50,12 @@ fun HotelInfoSection(
         )
 
 
-            Text(
-                text =  hotelInfo.title,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.Red
-            )
+        Text(
+            text = hotelInfo.title.substringAfter(". ").trim(),
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
 
         Row {
             Icon(
@@ -64,20 +64,20 @@ fun HotelInfoSection(
                 tint = Color.LightGray,
                 modifier = Modifier.size(24.dp)
             )
-            state.hotelDetails?.location?.let {
-                Text(
-                    text = it.address,
-                    fontSize = 14.sp,
-                    color = Color.Red
-                )
-            }
+
+            Text(
+                text = state.hotelDetails?.location?.address ?: "No Address",
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.primary
+            )
+
 
         }
 
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxWidth()
         ) {
             Text(
                 text = "Rating",
@@ -99,7 +99,7 @@ fun HotelInfoSection(
                 modifier = Modifier.size(24.dp)
             )
             Text(
-                text = "${state.hotelDetails?.rating?.toFloat()}",
+                text = "${state.hotelDetails?.rating?.toFloat() ?: "Not Rated"}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(end = 4.dp),
@@ -146,25 +146,26 @@ fun ViewLocationButton(
 }
 
 
-
 @Composable
 fun HotelDescriptionSection(
     modifier: Modifier = Modifier,
-    state: HotelDetailsUiState) {
-    Column(modifier = modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    state: HotelDetailsUiState
+) {
+    Column(
+        modifier = modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = "Description", fontWeight = FontWeight.Bold, fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.size(10.dp))
-        state.hotelDetails?.about?.let {
-            Text(
-                text = it.title,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.surface
-            )
-        }
+        Text(
+            text = state.hotelDetails?.about?.title ?: "No About",
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
         Spacer(modifier = Modifier.size(20.dp))
     }
 }

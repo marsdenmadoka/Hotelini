@@ -37,10 +37,11 @@ fun AmenitiesSection(
             text = "What this place offers",
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.onSurface
         )
-        val amenities = state.hotelDetails?.amenitiesScreen
-        if (amenities.isNullOrEmpty()) {
+
+        val amenities = state.hotelDetails?.about?.content?.find { it.title == "Amenities" }
+        if (amenities?.content.isNullOrEmpty()) {
             Text(
                 text = "No offers available for now",
                 fontWeight = FontWeight.Light,
@@ -50,17 +51,18 @@ fun AmenitiesSection(
             )
         } else {
 
-            LazyColumn(
+            Column(
                 modifier = Modifier
-                    .padding(top = 8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(top = 8.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
-                items(amenities){ amenity->
-                    AmenitiesIcon(label = amenity.title , iconId = R.drawable.ic_star )
-
+                amenities?.content?.forEach { amenity ->
+                    AmenitiesIcon(label = amenity.title, iconId = R.drawable.ic_star)
                 }
+
             }
+
         }
         Row(
             horizontalArrangement = Arrangement.End,
@@ -86,8 +88,11 @@ fun AmenitiesIcon(label: String, iconId: Int) {
             painter = painterResource(id = iconId),
             contentDescription = label,
             modifier = Modifier.size(32.dp),
-            tint = MaterialTheme.colorScheme.surface
+            tint = MaterialTheme.colorScheme.onSurface
         )
-        Text(text = label, fontSize = 12.sp, color = MaterialTheme.colorScheme.surface)
+        Text(text = label, fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface)
     }
 }
+

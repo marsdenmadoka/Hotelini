@@ -124,88 +124,105 @@ fun SharedTransitionScope.HotelDetailScreenContent(
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
-                    Column(
+                   Column(
+                       modifier = Modifier.fillMaxWidth()//Modifier.fillMaxSize()
+                   ) {
+
+                       HotelImageBanner(
+                           modifier = Modifier
+                               .fillMaxWidth()
+                               .height(250.dp),
+                           hotelImage = detailState.hotelDetails?.photos?.firstOrNull {
+                               it.urlTemplate.isNotBlank()
+                           }?.urlTemplate?.replace("{width}", screenWidth.toString())
+                               ?.replace("{height}", "250") ?: " "
+                       )
+                       Spacer(modifier = Modifier.height((-50).dp))
+
+                       SmallImagesRow(
+                           modifier = Modifier
+                               .height(150.dp)
+                               .fillMaxWidth(),
+                           state = detailState
+                       )
+
+                       Spacer(modifier = Modifier.height((0).dp))
+
+                       HotelInfo(
+                           hotelInfo = hotelInfo, state = detailState, modifier = Modifier
+                               // .fillMaxSize()
+                               .fillMaxWidth()
+                               .background(
+                                   color = Color.White,
+                                   shape = RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp)
+                               )
+                       )
+                   }
+
+                    /*
+                    ConstraintLayout(
                         modifier = Modifier.fillMaxWidth()//Modifier.fillMaxSize()
                     ) {
 
+                        val (hotelImageBanner, hotelImageCarousel, hotelInfoSection) = createRefs()
                         HotelImageBanner(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(250.dp),
-                            hotelImage = detailState.hotelDetails?.photos?.firstOrNull()?.urlTemplate?.replace("{width}", screenWidth.toString())
-                                ?.replace("{height}", "250")
-                                ?: ""
+                                .height(250.dp)
+                                .constrainAs(hotelImageBanner) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                    width = Dimension.fillToConstraints
+                                },
+//                            hotelDetails.cardPhotos.firstOrNull { it.sizes.urlTemplate.isNotBlank() }?.sizes?.urlTemplate
+//                                ?:""
+                            hotelImage = detailState.hotelDetails?.photos?.firstOrNull {
+                                it.urlTemplate.isNotBlank()
+                            }?.urlTemplate?.replace("{width}", screenWidth.toString())
+                                ?.replace("{height}", "250") ?: " "
+
+//                            detailState.hotelDetails?.photos?.firstOrNull()?.urlTemplate?.replace(
+//                                "{width}", screenWidth.toString())?.replace("{height}", "250") ?: ""
                         )
-                        Spacer(modifier = Modifier.height((-50).dp))
 
                         SmallImagesRow(
                             modifier = Modifier
                                 .height(150.dp)
-                                .fillMaxWidth(),
+                                .constrainAs(hotelImageCarousel) {
+                                    top.linkTo(hotelImageBanner.bottom, margin = (-50).dp)
+                                    start.linkTo(hotelImageBanner.start)
+                                    end.linkTo(hotelImageBanner.end)
+                                    width = Dimension.fillToConstraints
+                                },
                             state = detailState
                         )
 
-                        Spacer(modifier = Modifier.height((-50).dp))
-
                         HotelInfo(
-                            hotelInfo = hotelInfo, state = detailState, modifier = Modifier
+                            hotelInfo = hotelInfo,
+                            state = detailState,
+                            modifier = Modifier
                                 // .fillMaxSize()
                                 .fillMaxWidth()
                                 .background(
                                     color = Color.White,
                                     shape = RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp)
                                 )
+                                .constrainAs(hotelInfoSection) {
+                                    top.linkTo(
+                                        hotelImageCarousel.bottom,
+                                        margin = (0).dp
+                                    ) //(-50).dp
+                                    start.linkTo(hotelImageCarousel.start)
+                                    end.linkTo(hotelImageCarousel.end)
+                                    width = Dimension.fillToConstraints
+
+                                }
+
                         )
                     }
-//                    ConstraintLayout(
-//                        modifier =  Modifier.fillMaxWidth()//Modifier.fillMaxSize()
-//                    ) {
-//
-//                        val (hotelImageBanner, hotelImageCarousel, hotelInfoSection) = createRefs()
-//                        HotelImageBanner(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .height(250.dp)
-//                                .constrainAs(hotelImageBanner) {
-//                                    top.linkTo(parent.top)
-//                                    start.linkTo(parent.start)
-//                                    end.linkTo(parent.end)
-//                                    width = Dimension.fillToConstraints
-//                                },
-//                            hotelImage = detailState.hotelDetails?.photos?.firstOrNull()?.urlTemplate
-//                                ?: ""
-//                        )
-//
-//                        SmallImagesRow(
-//                            modifier = Modifier
-//                                .height(150.dp)
-//                                .constrainAs(hotelImageCarousel) {
-//                                    top.linkTo(hotelImageBanner.bottom, margin = (-50).dp)
-//                                    start.linkTo(hotelImageBanner.start)
-//                                    end.linkTo(hotelImageBanner.end)
-//                                    width = Dimension.fillToConstraints
-//                                }
-//                        )
-//
-//                        HotelInfo(
-//                            hotelInfo = hotelInfo,
-//                            state = detailState,
-//                            modifier = Modifier
-//                                // .fillMaxSize()
-//                                .fillMaxWidth()
-//                                .background(
-//                                    color = Color.White,
-//                                    shape = RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp)
-//                                )
-//                                .constrainAs(hotelInfoSection) {
-//                                    top.linkTo(hotelImageCarousel.bottom, margin = (0).dp) //(-50).dp
-//                                    start.linkTo(hotelImageCarousel.start)
-//                                    end.linkTo(hotelImageCarousel.end)
-//                                    width = Dimension.fillToConstraints
-//
-//                                }
-//                        )
-//                    }
+*/
+
                 }
 
             }
@@ -243,7 +260,8 @@ fun HotelInfo(
         )
 
         RoomInfoSection(
-            modifier = Modifier
+            modifier = Modifier,
+            state = state
         )
 
         AmenitiesSection(

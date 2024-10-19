@@ -20,11 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
-
+import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
 
 @Composable
-fun RoomInfoSection( modifier: Modifier ) {
+fun RoomInfoSection(
+    modifier: Modifier,
+    state: HotelDetailsUiState
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,16 +35,31 @@ fun RoomInfoSection( modifier: Modifier ) {
         horizontalArrangement = Arrangement.Center,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            RoomInfoChip("2 guest")
-            Spacer(modifier = Modifier.width(4.dp))
-            RoomInfoChip("1 Bath")
-            Spacer(modifier = Modifier.width(4.dp))
-            RoomInfoChip("1 Bedroom")
+
+            val roomInfo = state.hotelDetails?.amenitiesScreen?.find { it.title == "Room features" }
+
+
+            if(roomInfo?.content.isNullOrEmpty()) {
+                Text(
+                    text = "No Room features",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+            }else {
+
+                roomInfo?.content?.forEach {feature ->
+                    RoomInfoChip(text = feature )
+                }
+            }
+
         }
-        Text(text = "$150.00",
+        Text(
+            text = "${state.hotelDetails?.price?.displayPrice ?: "No Price Indicated"} ", // "$150.00"
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -58,15 +76,17 @@ fun RoomInfoChip(text: String) {
         Text(
             text = text,
             fontSize = 12.sp,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
 
 @Preview
 @Composable
-fun RoomInfoSectionPrev(){
+fun RoomInfoSectionPrev() {
     HoteliniTheme {
-        RoomInfoSection(modifier = Modifier)
+        // RoomInfoSection(modifier = Modifier)
     }
 }
