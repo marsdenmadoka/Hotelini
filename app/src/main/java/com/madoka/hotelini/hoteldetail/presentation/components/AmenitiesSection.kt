@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,18 +39,28 @@ fun AmenitiesSection(
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.surface
         )
+        val amenities = state.hotelDetails?.amenitiesScreen
+        if (amenities.isNullOrEmpty()) {
+            Text(
+                text = "No offers available for now",
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        } else {
 
-        LazyRow(
-            modifier = Modifier
-                .padding(top = 8.dp)
-        ) {
-            item {
-                AmenitiesIcon("Wifi", R.drawable.ic_star)
-                AmenitiesIcon("Pool", R.drawable.ic_star)
-                AmenitiesIcon("Free parking", R.drawable.ic_star)
+            LazyColumn(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+            ) {
+
+                items(amenities){ amenity->
+                    AmenitiesIcon(label = amenity.title , iconId = R.drawable.ic_star )
+
+                }
             }
         }
-
         Row(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
@@ -65,7 +77,7 @@ fun AmenitiesSection(
 
 @Composable
 fun AmenitiesIcon(label: String, iconId: Int) {
-    Column(
+    Row(
         modifier = Modifier
             .size(64.dp)
     ) {

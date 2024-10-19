@@ -43,11 +43,11 @@ class HotelDetailsViewModel @Inject constructor(
                     _hotelDetailsUiState.update {
                         it.copy(
                             isLoading = false,
-                            hotelDetails = result.data
+                            hotelDetails = result.data?.data
                         )
                     }
                     Timber.d("details screen data: ${result.message}")
-                    Timber.d("details screen data: ${result.data}")
+                    Timber.d("details screen data: ${result.data?.data}")
                 }
 
                 is Resource.Loading -> {
@@ -56,6 +56,10 @@ class HotelDetailsViewModel @Inject constructor(
                             isLoading = true
                         )
                     }
+                }
+
+                else ->{
+                    hotelDetailsUiState
                 }
             }
         }

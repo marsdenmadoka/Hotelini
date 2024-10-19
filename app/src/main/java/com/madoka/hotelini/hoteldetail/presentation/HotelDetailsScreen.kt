@@ -57,15 +57,15 @@ fun SharedTransitionScope.HotelDetailsScreen(
 ) {
 
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getHotelDetails(
-            hotelId = hotelInfo.id
-        )
-    }
-
-//    LaunchedEffect(key1 = hotelInfo.id) {
-//        viewModel.getHotelDetails(hotelInfo.id)
+//    LaunchedEffect(key1 = Unit) {
+//        viewModel.getHotelDetails(
+//            hotelId = hotelInfo.id
+//        )
 //    }
+
+    LaunchedEffect(key1 = hotelInfo.id) {
+        viewModel.getHotelDetails(hotelInfo.id)
+    }
 
     val hotelDetailsUiState by viewModel.hotelDetailsUiState.collectAsState()
 

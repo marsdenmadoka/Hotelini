@@ -42,3 +42,50 @@ fun Hotel.toHotelInfo(
     secondaryInfo = secondaryInfo  ?: "No ptovider",
     title = title  ?: "No title"
 )
+
+data class HotelDetails(
+    val about: About,
+    val amenitiesScreen: List<AmenitiesScreen>,
+    val attractionsNearby: AttractionsNearby,
+    val geoPoint: GeoPoint,
+    val location: Location,
+    val numberReviews: Int,
+    val photos: List<Photo>,
+    val price: Price,
+    val qA: QA,
+    val rankingDetails: String,
+    val rating: Double,
+    val restaurantsNearby: RestaurantsNearby,
+    val reviews: Reviews,
+    val title: String
+)
+data class Hotel(
+    @SerializedName("accentedLabel")
+    val accentedLabel: Boolean,
+    @SerializedName("Badge")
+    val badge: Badge,
+    @SerializedName("bubbleRating")
+    val bubbleRating: BubbleRating,
+    @SerializedName("cardPhotos")
+    val cardPhotos: List<CardPhoto>,
+    @SerializedName("id")
+    val id: String,
+    @SerializedName("isSponsored")
+    val isSponsored: Boolean,
+    @SerializedName("priceDetails")
+    val priceDetails: Any,
+    @SerializedName("priceForDisplay")
+    val priceForDisplay: Any,
+    @SerializedName("priceSummary")
+    val priceSummary: Any,
+    @SerializedName("primaryInfo")
+    val primaryInfo: String,
+    @SerializedName("provider")
+    val provider: String,
+    @SerializedName("secondaryInfo")
+    val secondaryInfo: String,
+    @SerializedName("strikethroughPrice")
+    val strikethroughPrice: Any,
+    @SerializedName("title")
+    val title: String
+)

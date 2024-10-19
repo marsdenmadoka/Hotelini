@@ -15,15 +15,23 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class HotelDetailsRepository @Inject constructor(private val api: HoteliniApi) {
-    suspend fun getHotelDetails(hotelId: String): Resource<HotelDetails> {
+    suspend fun getHotelDetails(hotelId: String): Resource<HotelDetailsResponses> {
+
         val response = try {
             api.getHotelDetails(hotelId)
-        } catch (e: Exception) {
-            return Resource.Error("Unknown error occurred")
+        } catch (error: Exception) {
+            return Resource.Error("error for details $error")
         }
-       Timber.d("Hotel details: $response")
+        Timber.d("Hotel details: $response")
         return Resource.Success(response)
     }
 
 
 }
+
+//https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchHotelsByLocation?latitude=-3.4330033&longitude=38.356907&checkIn=2024-10-19&checkOut=2024-10-19&pageNumber=1
+//
+
+
+//.url("https://tripadvisor16.p.rapidapi.com/api/v1/hotels/getHotelDetails?id=112&checkIn=2024-10-17&checkOut=2024-10-16&currency=USD")
+//https://tripadvisor16.p.rapidapi.com/api/v1/hotels/getHotelDetails/754603?checkIn=2024-10-19&checkOut=2024-10-19

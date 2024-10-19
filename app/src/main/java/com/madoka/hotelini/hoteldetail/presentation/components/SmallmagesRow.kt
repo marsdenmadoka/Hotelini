@@ -19,14 +19,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.madoka.hotelini.R
+import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
 @Composable
-fun SmallImagesRow(modifier: Modifier = Modifier) {
+fun SmallImagesRow(
+    modifier: Modifier = Modifier,
+    state: HotelDetailsUiState
+) {
     Column(
         modifier
             .background(
@@ -35,17 +42,17 @@ fun SmallImagesRow(modifier: Modifier = Modifier) {
             ),
         verticalArrangement = Arrangement.Bottom,
     ) {
-        val imageItems: Int = 7
-        val visibleItemCount: Int = 4
+        val photos = state.hotelDetails?.photos?: emptyList()
+        val imageItems = photos.size
+        val visibleItemCount = 4
 
         val displayedItems = if (imageItems > visibleItemCount) {
-            visibleItemCount - 1 // Show all but the last one
+            visibleItemCount - 1
         } else {
-            imageItems // If items fit, display them all
+            imageItems
         }
 
-        val remainingItemCount = imageItems - displayedItems // Remaining items count
-
+        val remainingItemCount = imageItems - displayedItems
 
         LazyRow(
             modifier = Modifier
@@ -58,25 +65,12 @@ fun SmallImagesRow(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.Top,
 
             ) {
-            items(displayedItems) {// Simulating three hotel images
-                Card(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .width(100.dp)
-                        .height(70.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    elevation = CardDefaults.cardElevation(
-                        4.dp
-                    )
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_load_error), // Replace with your image resources
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+
+            items(displayedItems) { index->
+                SmallImage(modifier=modifier, imageUrl = photos[index].urlTemplate.replace() )
             }
+
+
             if (remainingItemCount > 0) {
                 item {
                     Card(
@@ -105,5 +99,34 @@ fun SmallImagesRow(modifier: Modifier = Modifier) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SmallImage(
+    modifier: Modifier = Modifier,
+    imageUrl: String
+) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(100.dp)
+            .height(70.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(
+            4.dp
+        )
+    ) {
+
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            placeholder = painterResource(R.drawable.ic_load_placeholder),
+            contentDescription = "Image Banner",
+            contentScale = ContentScale.Crop,
+            modifier = modifier.fillMaxSize(),
+        )
     }
 }

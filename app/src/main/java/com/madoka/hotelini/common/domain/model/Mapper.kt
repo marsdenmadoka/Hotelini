@@ -38,13 +38,13 @@ import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.Reviews
 //
 
 
-internal fun HotelDetailsResponseDetails.toHotel():HotelDetails{
-
-    return HotelDetails(
-        about = about,
-        amenitiesScreen = amenitiesScreen,
-    )
-}
+//internal fun HotelDetailsResponseDetails.toHotel():HotelDetails{
+//
+//    return HotelDetails(
+//        about = about,
+//        amenitiesScreen = amenitiesScreen,
+//    )
+//}
 
 data class HotelDetails(
     val about: About,
