@@ -52,7 +52,8 @@ fun AmenitiesSection(
 
             LazyColumn(
                 modifier = Modifier
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 items(amenities){ amenity->

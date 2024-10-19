@@ -95,7 +95,7 @@ fun SharedTransitionScope.NearbyHotelItem(
         Box {
             val painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data(selectedImageUrl) //.replace("{width}", "400").replace("{height}", "300")
+                    .data(selectedImageUrl.replace("{width}", "400").replace("{height}", "300"))
                     .apply(block = fun ImageRequest.Builder.() {
                         crossfade(true)
                     }).build()

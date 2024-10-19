@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -104,6 +105,10 @@ fun SharedTransitionScope.HotelDetailScreenContent(
     onEvents: (HotelDetailsUiEvents) -> Unit,
     detailState: HotelDetailsUiState,
 ) {
+
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
     Scaffold(modifier = Modifier.sharedBounds(
         sharedContentState = rememberSharedContentState(key = "${hotelInfo.id}"),
         animatedVisibilityScope = animatedVisibilityScope,
@@ -127,7 +132,8 @@ fun SharedTransitionScope.HotelDetailScreenContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(250.dp),
-                            hotelImage = detailState.hotelDetails?.photos?.firstOrNull()?.urlTemplate
+                            hotelImage = detailState.hotelDetails?.photos?.firstOrNull()?.urlTemplate?.replace("{width}", screenWidth.toString())
+                                ?.replace("{height}", "250")
                                 ?: ""
                         )
                         Spacer(modifier = Modifier.height((-50).dp))
@@ -135,7 +141,8 @@ fun SharedTransitionScope.HotelDetailScreenContent(
                         SmallImagesRow(
                             modifier = Modifier
                                 .height(150.dp)
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
+                            state = detailState
                         )
 
                         Spacer(modifier = Modifier.height((-50).dp))
