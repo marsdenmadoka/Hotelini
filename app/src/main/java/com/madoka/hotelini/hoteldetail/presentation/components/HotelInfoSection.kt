@@ -45,8 +45,7 @@ fun HotelInfoSection(
         modifier = modifier.fillMaxSize()
     ) {
         ViewLocationButton(
-            onClick = {},
-            text = "View Location"
+            onClick = {}, text = "View Location"
         )
 
 
@@ -57,7 +56,9 @@ fun HotelInfoSection(
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.Center, modifier = modifier.fillMaxWidth()
+        ) {
             Icon(
                 imageVector = Icons.Default.Place,
                 contentDescription = "icon location",
@@ -67,23 +68,11 @@ fun HotelInfoSection(
 
             Text(
                 text = state.hotelDetails?.location?.address ?: "No Address",
-                fontSize = 16.sp,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
 
 
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Rating",
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.surfaceBright
-            )
             Divider(
                 modifier = Modifier
                     .padding(horizontal = 4.dp)
@@ -113,8 +102,7 @@ fun HotelInfoSection(
 
 @Composable
 fun ViewLocationButton(
-    onClick: () -> Unit,
-    text: String
+    onClick: () -> Unit, text: String
 ) {
     Button(
         onClick = onClick,
@@ -136,10 +124,7 @@ fun ViewLocationButton(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = text,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                text = text, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp
             )
         }
     }
@@ -148,15 +133,15 @@ fun ViewLocationButton(
 
 @Composable
 fun HotelDescriptionSection(
-    modifier: Modifier = Modifier,
-    state: HotelDetailsUiState
+    modifier: Modifier = Modifier, state: HotelDetailsUiState
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Description", fontWeight = FontWeight.Bold, fontSize = 16.sp,
+            text = "Description",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.size(10.dp))
@@ -175,8 +160,7 @@ fun HotelDescriptionSection(
 fun PreviewViewLocationButton() {
     HoteliniTheme {
         ViewLocationButton(
-            onClick = {},
-            text = "location"
+            onClick = {}, text = "location"
         )
     }
 }

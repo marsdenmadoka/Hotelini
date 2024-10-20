@@ -124,40 +124,45 @@ fun SharedTransitionScope.HotelDetailScreenContent(
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
-                   Column(
-                       modifier = Modifier.fillMaxWidth()//Modifier.fillMaxSize()
-                   ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth()//Modifier.fillMaxSize()
+                    ) {
 
-                       HotelImageBanner(
-                           modifier = Modifier
-                               .fillMaxWidth()
-                               .height(250.dp),
-                           hotelImage = detailState.hotelDetails?.photos?.firstOrNull {
+                        HotelImageBanner(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(250.dp),
+                            hotelInfo=hotelInfo
+                            /*
+                            hotelImage = hotelInfo.cardPhotos.firstOrNull { it.sizes.urlTemplate.isNotBlank() }
+                                ?.sizes?.urlTemplate?: " "
+
+                           detailState.hotelDetails?.photos?.firstOrNull {
                                it.urlTemplate.isNotBlank()
                            }?.urlTemplate?.replace("{width}", screenWidth.toString())
-                               ?.replace("{height}", "250") ?: " "
-                       )
-                       Spacer(modifier = Modifier.height((-50).dp))
+                               ?.replace("{height}", "250") ?: " "*/
+                        )
+                        Spacer(modifier = Modifier.height((-50).dp))
 
-                       SmallImagesRow(
-                           modifier = Modifier
-                               .height(150.dp)
-                               .fillMaxWidth(),
-                           state = detailState
-                       )
+                        SmallImagesRow(
+                            modifier = Modifier
+                                .height(150.dp)
+                                .fillMaxWidth(),
+                            state = detailState
+                        )
 
-                       Spacer(modifier = Modifier.height((0).dp))
+                        Spacer(modifier = Modifier.height((0).dp))
 
-                       HotelInfo(
-                           hotelInfo = hotelInfo, state = detailState, modifier = Modifier
-                               // .fillMaxSize()
-                               .fillMaxWidth()
-                               .background(
-                                   color = Color.White,
-                                   shape = RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp)
-                               )
-                       )
-                   }
+                        HotelInfo(
+                            hotelInfo = hotelInfo, state = detailState, modifier = Modifier
+                                // .fillMaxSize()
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color.White,
+                                    shape = RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp)
+                                )
+                        )
+                    }
 
                     /*
                     ConstraintLayout(

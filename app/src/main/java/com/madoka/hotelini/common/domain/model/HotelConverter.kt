@@ -28,7 +28,8 @@ data class HotelInfo(  //this is what we pass to the Details Screen
     val priceSummary: @RawValue Any?,
     val provider: String,
     val secondaryInfo: String,
-    val title: String
+    val title: String,
+    val cardPhotos: @RawValue List<CardPhoto>
 ) : Parcelable
 
 fun Hotel.toHotelInfo(
@@ -40,7 +41,8 @@ fun Hotel.toHotelInfo(
     priceSummary = priceSummary ?: "No Summary",
     provider = provider ?: "no provider",
     secondaryInfo = secondaryInfo  ?: "No ptovider",
-    title = title  ?: "No title"
+    title = title  ?: "No title",
+    cardPhotos=cardPhotos,
 )
 
 data class HotelDetails(

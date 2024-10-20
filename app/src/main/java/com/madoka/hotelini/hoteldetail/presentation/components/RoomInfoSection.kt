@@ -1,6 +1,7 @@
 package com.madoka.hotelini.hoteldetail.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,11 +29,12 @@ fun RoomInfoSection(
     modifier: Modifier,
     state: HotelDetailsUiState
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center
+        //horizontalArrangement = Arrangement.Center,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -56,8 +58,8 @@ fun RoomInfoSection(
 
         }
         Text(
-            text = "${state.hotelDetails?.price?.displayPrice ?: "No Price Indicated"} ", // "$150.00"
-            fontSize = 20.sp,
+            text = "${state.hotelDetails?.price?.displayPrice ?: "No Price Indicated"} ",
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
