@@ -1,8 +1,7 @@
+<p align="center"><img src="screenshoots/hotelini.png" 
+alt="StarWars" height="50px"></p>
 
-<p align="center"><img src="screenshoots/hotelini.png" alt="StarWars" height="60px"></p>
-
-## HOTELINI APP 📱
-
+### HOTELINI APP 📱
 Hotelini App is a Android Application built with koltin and jetpack compose that gives the user the nearest hotels near them. The app scans your locations gets your location then finds all the hotels near you and there details.
 
 The app is also set to provide distance and directions from your location to the nearest hotel although this are features which are almost done and being added
@@ -10,10 +9,10 @@ The app is also set to provide distance and directions from your location to the
 The App consumes [Rapid API]("https://rapidapi.com/DataCrawler/api/tripadvisor16/playground/apiendpoint_6c187918-f989-4c63-bf1e-b2e38efe3152") to display the hotels 
 built with Jetpack Compose, MVVM ,MVI pattern as well as Architecture Components.
 
-## 💡 Note
+### 💡 Note
 if you happen to fork this project please make sure to keep your fork in syc since a lot of changes are always being added everyday
 
-## 🔑 Permissions Required
+### 🔑 Permissions Required
 The app requires the following permissions to run:
 
     ACCESS_COARSE_LOCATION
@@ -21,7 +20,7 @@ The app requires the following permissions to run:
     ACCESS_FINE_LOCATION
     CALL_PHONE
 
-## Screenshots
+### Screenshots
 These are the app's screenshots:
 
 <img src="screenshoots/Screenshot1.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
