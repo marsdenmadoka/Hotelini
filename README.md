@@ -1,9 +1,9 @@
 
-<p align="center"><img src="screenshoots/hotelini.png" alt="StarWars" height="80px"></p>
+<p align="center"><img src="screenshoots/hotelini.png" alt="StarWars" height="60px"></p>
 
-# HOTELINI APP 📱
+## HOTELINI APP 📱
 
-Hotelini App is a Android Application built with koltin and jet SafeCity App is a mobile application built with Kotlin and Jetpack Compose that gives the user the nearest hotels near them. The app scans your locations  gets your latitude and Longitudes the finds all the hotels near you and there deatils.
+Hotelini App is a Android Application built with koltin and jetpack compose that gives the user the nearest hotels near them. The app scans your locations gets your location then finds all the hotels near you and there details.
 
 The app is also set to provide distance and directions from your location to the nearest hotel although this are features which are almost done and being added
 
