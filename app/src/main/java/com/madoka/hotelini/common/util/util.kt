@@ -1,9 +1,13 @@
 package com.madoka.hotelini.common.util
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.location.Location
+import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
@@ -94,6 +98,24 @@ object PaletteGenerator {
         }
     }
 }
+
+
+fun openMap(context: Context, latitude: Double, longitude: Double) {
+    val gmmIntentUri = Uri.parse("google.navigation:q=$latitude,$longitude")
+    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+    mapIntent.setPackage("com.google.android.apps.maps")
+
+    // Check if Google Maps is available before starting the activity
+    if (mapIntent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(mapIntent)
+    } else {
+        Toast.makeText(context, "Google Maps is not installed.", Toast.LENGTH_SHORT).show()
+    }
+}
+
+
+
+
 
 /*
 data class CarouselItem(

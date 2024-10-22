@@ -73,13 +73,17 @@ fun HotelCarousel(
     imagesCarouselItems: List<CarouselItem>
 ) {
 
+    val shuffledImages = remember { imagesCarouselItems.shuffled() }
+
+    val totalItems = shuffledImages.size
+
+
     val defaultDominantColor = MaterialTheme.colorScheme.surface
     val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     var dominantColor by remember { mutableStateOf(defaultDominantColor) }
     var dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
 
 
-    val totalItems = imagesCarouselItems.size
     var currentItemIndex by remember { mutableIntStateOf(0) }
     var userScrolled by remember { mutableStateOf(false) }
     val carouselState = rememberCarouselState(initialItem = 0) { totalItems }
@@ -126,7 +130,7 @@ fun HotelCarousel(
         ) { i ->
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(imagesCarouselItems[i].image)
+                    .data(shuffledImages[i].image)
                     .crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.ic_load_placeholder),

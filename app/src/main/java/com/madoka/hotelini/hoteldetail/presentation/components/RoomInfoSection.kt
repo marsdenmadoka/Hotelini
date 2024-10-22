@@ -33,32 +33,27 @@ fun RoomInfoSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.Center
-        //horizontalArrangement = Arrangement.Center,
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
 
+        ) {
+        Row {
             val roomInfo = state.hotelDetails?.amenitiesScreen?.find { it.title == "Room features" }
-
-
-            if(roomInfo?.content.isNullOrEmpty()) {
+            if (roomInfo?.content.isNullOrEmpty()) {
                 Text(
                     text = "No Room features",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-
-            }else {
-
-                roomInfo?.content?.forEach {feature ->
-                    RoomInfoChip(text = feature )
+            } else {
+                roomInfo?.content?.forEach { feature ->
+                    RoomInfoChip(text = feature)
                 }
             }
-
         }
         Text(
-            text = "${state.hotelDetails?.price?.displayPrice ?: "No Price Indicated"} ",
+            text = "${state.hotelDetails?.price?.displayPrice ?: "No Price Indicated"} Per day",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface

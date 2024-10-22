@@ -37,7 +37,7 @@ fun AmenitiesSection(
     ) {
 
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -47,14 +47,7 @@ fun AmenitiesSection(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Text(
-                text = "More",
-                color = Color(0xFF6200EE),
-                fontSize = 14.sp,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
         }
-
 
         val amenities = state.hotelDetails?.about?.content?.find { it.title == "Amenities" }
         if (amenities?.content.isNullOrEmpty()) {

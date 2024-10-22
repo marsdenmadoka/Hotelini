@@ -7,10 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import com.madoka.hotelini.home.domain.model.items
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -132,35 +133,27 @@ fun SharedTransitionScope.HotelDetailScreenContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(250.dp),
-                            hotelInfo=hotelInfo
-                            /*
-                            hotelImage = hotelInfo.cardPhotos.firstOrNull { it.sizes.urlTemplate.isNotBlank() }
-                                ?.sizes?.urlTemplate?: " "
-
-                           detailState.hotelDetails?.photos?.firstOrNull {
-                               it.urlTemplate.isNotBlank()
-                           }?.urlTemplate?.replace("{width}", screenWidth.toString())
-                               ?.replace("{height}", "250") ?: " "*/
+                            hotelInfo = hotelInfo,
+                            hotelDetailsState = detailState
                         )
-                        Spacer(modifier = Modifier.height((-50).dp))
-
                         SmallImagesRow(
                             modifier = Modifier
-                                .height(150.dp)
-                                .fillMaxWidth(),
-                            state = detailState
+                                .height(130.dp)
+                                .fillMaxWidth()
+                                .offset(y = (-10).dp),
+                            state = detailState,
+                            imagesCarouselItems = items
                         )
 
-                        Spacer(modifier = Modifier.height((0).dp))
 
                         HotelInfo(
                             hotelInfo = hotelInfo, state = detailState, modifier = Modifier
-                                // .fillMaxSize()
                                 .fillMaxWidth()
                                 .background(
                                     color = Color.White,
                                     shape = RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp)
                                 )
+                                .offset(y = (-50).dp)
                         )
                     }
 

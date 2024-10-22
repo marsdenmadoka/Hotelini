@@ -1,6 +1,5 @@
 package com.madoka.hotelini.hoteldetail.presentation.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +14,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,13 +27,20 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.madoka.hotelini.R
+import com.madoka.hotelini.home.domain.model.CarouselItem
 import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
 @Composable
 fun SmallImagesRow(
     modifier: Modifier = Modifier,
-    state: HotelDetailsUiState
+    state: HotelDetailsUiState,
+    imagesCarouselItems: List<CarouselItem>
 ) {
+
+    val shuffledImages = remember { imagesCarouselItems.shuffled() }
+
+    val totalItems = shuffledImages.size
+
     Column(
         modifier
             .background(
@@ -53,7 +60,6 @@ fun SmallImagesRow(
         }
 
         val remainingItemCount = imageItems - displayedItems
-
         LazyRow(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,9 +73,35 @@ fun SmallImagesRow(
             ) {
 
             items(displayedItems) { index->
-                SmallImage(modifier=modifier, imageUrl =
+//                SmallImage(modifier=modifier, imageUrl = photos[index].urlTemplate.replace("{width}", "100").replace("{height}", "70"))
 
-                photos[index].urlTemplate.replace("{width}", "100").replace("{height}", "70"))
+
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(100.dp)
+                        .height(70.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(
+                        4.dp
+                    )
+                ) {
+
+
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(photos[index].urlTemplate.replace("{width}", "100").replace("{height}", "70"))
+                            //.data()
+                            .crossfade(true)
+                            .build(),
+                        placeholder = painterResource(R.drawable.ic_load_placeholder),
+                        error = painterResource(shuffledImages[index].image),
+                        contentDescription = "Image Banner",
+                        contentScale = ContentScale.Crop,
+                        modifier = modifier.fillMaxSize(),
+                    )
+                }
+
             }
 
             if (remainingItemCount > 0) {

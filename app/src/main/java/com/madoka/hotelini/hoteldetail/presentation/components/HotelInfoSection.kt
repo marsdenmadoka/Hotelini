@@ -57,7 +57,9 @@ fun HotelInfoSection(
         )
 
         Row(
-            horizontalArrangement = Arrangement.Center, modifier = modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = Icons.Default.Place,
@@ -78,7 +80,7 @@ fun HotelInfoSection(
                     .padding(horizontal = 4.dp)
                     .width(1.dp)
                     .height(13.dp),
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.onSurface,
             )
 
             Icon(
