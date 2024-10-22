@@ -163,7 +163,7 @@ fun SharedTransitionScope.NearbyHotelItem(
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Start,
-                    color = dominantSubTextColor
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 if (hotelDetails.bubbleRating.rating.toFloat() <= 1) {
@@ -173,7 +173,7 @@ fun SharedTransitionScope.NearbyHotelItem(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.bodySmall,
-                        color = dominantSubTextColor
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 } else {
                     RatingBar(modifier = modifier,
@@ -194,7 +194,7 @@ fun SharedTransitionScope.NearbyHotelItem(
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Start,
-                    color = dominantSubTextColor
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
