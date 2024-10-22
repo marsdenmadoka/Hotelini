@@ -1,5 +1,6 @@
 
-<p align="center"><img src="screenshoots/hotelini.png" alt="StarWars" height="150px"></p>
+<p align="center"><img src="screenshoots/hotelini.png" alt="StarWars" height="80px"></p>
+
 # HOTELINI APP 📱
 
 Hotelini App is a Android Application built with koltin and jet SafeCity App is a mobile application built with Kotlin and Jetpack Compose that gives the user the nearest hotels near them. The app scans your locations  gets your latitude and Longitudes the finds all the hotels near you and there deatils.
@@ -23,12 +24,9 @@ The app requires the following permissions to run:
 ## Screenshots
 These are the app's screenshots:
 
-<img src="screenshoots/Screenshot1.png" width=710 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshoots/Screenshot2.png" width=720 alt="">
-<img src="screenshoots/Screenshot3.png" width=720 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
+<img src="screenshoots/Screenshot1.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshoots/Screenshot2.png" width=300 alt="">
+<img src="screenshoots/Screenshot3.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 ### Structural design pattern
 The app is built with the Model-View-ViewModel (MVVM) is its structural design pattern that separates objects into three distinct groups:
