@@ -22,7 +22,7 @@ The app requires the following permissions to run:
 
 ### Screenshots
 These are the app's screenshots: 
-
+```
 <p align="center">
 <img src="screenshoots/Screenshot4.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <img src="screenshoots/Screenshot9.png" width=300 alt="">|
 </p>
@@ -35,7 +35,7 @@ These are the app's screenshots:
 <img src="screenshoots/Screenshot3.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="screenshoots/Screenshot8.png" width=300 alt="">|| 
 </p>
 
-
+```
 ### Structural design pattern
 The app is built with the Model-View-ViewModel (MVVM) is its structural design pattern that separates objects into three distinct groups:
 - Models hold application data. They’re usually structs or simple classes.
@@ -85,10 +85,6 @@ RAPID_KEY=ABCDEF1234567890
 - [Ramcosta Navigation Library](https://composedestinations.rafaelcosta.xyz/) - A KSP library that processes annotations and generates code that uses Official Jetpack Compose Navigation under the hood. It hides the complex, non-type-safe and boilerplate code you would have to write otherwise.
 - [Coil](https://coil-kt.github.io/coil/compose/)- An image loading library for Android backed by Kotlin Coroutines.
 - [Timber](https://github.com/JakeWharton/timber)- A logger with a small, extensible API which provides utility on top of Android's normal Log class.
-
-
-
-
 
 
 ## 📝 License
