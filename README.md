@@ -21,12 +21,20 @@ The app requires the following permissions to run:
     CALL_PHONE
 
 ### Screenshots
-These are the app's screenshots:
-<img src="screenshoots/Screenshot4.png" width=300 alt="">
-<img src="screenshoots/Screenshot1.png" width=300 alt="">
-<img src="screenshoots/Screenshot2.png" width=300 alt="">
-<img src="screenshoots/Screenshot3.png" width=300 alt="">
-<img src="screenshoots/Screenshot8.png" width=300 alt="">
+These are the app's screenshots: 
+
+<p align="center">
+<img src="screenshoots/Screenshot4.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <img src="screenshoots/Screenshot9.png" width=300 alt="">|
+</p>
+
+<p align="center">
+<img src="screenshoots/Screenshot1.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="screenshoots/Screenshot2.png" width=300 alt="">|
+</p>
+
+<p align="center">
+<img src="screenshoots/Screenshot3.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="screenshoots/Screenshot8.png" width=300 alt="">|| 
+</p>
+
 
 ### Structural design pattern
 The app is built with the Model-View-ViewModel (MVVM) is its structural design pattern that separates objects into three distinct groups:
