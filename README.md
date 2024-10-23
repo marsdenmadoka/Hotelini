@@ -22,8 +22,9 @@ The app requires the following permissions to run:
 
 ### Screenshots
 These are the app's screenshots:
+
 <img src="screenshoots/Screenshot4.png" width=300 alt="">
-<img src="screenshoots/Screenshot1.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;
+<img src="screenshoots/Screenshot1.png" width=300 alt="">
 <img src="screenshoots/Screenshot2.png" width=300 alt="">
 <img src="screenshoots/Screenshot3.png" width=300 alt="">
 <img src="screenshoots/Screenshot8.png" width=300 alt="">
@@ -38,7 +39,7 @@ The app is built with the Model-View-ViewModel (MVVM) is its structural design p
 **Built with**
 - [Kotlin](https://kotlinlang.org/)
 - [JetPack Compose](https://developer.android.com/jetpack/compose)
-- [Rapid API]("https://rapidapi.com/DataCrawler/api/tripadvisor16/playground/apiendpoint_6c187918-f989-4c63-bf1e-b2e38efe3152")
+- [Rapid API](https://rapidapi.com/DataCrawler/api/tripadvisor16/playground/apiendpoint_6c187918-f989-4c63-bf1e-b2e38efe3152)
 - [Google Maps API](https://developers.google.com/maps/documentation)
 
 ## 🛠 Installation & Set Up
