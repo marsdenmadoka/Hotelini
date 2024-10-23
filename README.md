@@ -22,7 +22,6 @@ The app requires the following permissions to run:
 
 ### Screenshots
 These are the app's screenshots:
-
 <img src="screenshoots/Screenshot4.png" width=300 alt="">
 <img src="screenshoots/Screenshot1.png" width=300 alt="">
 <img src="screenshoots/Screenshot2.png" width=300 alt="">
