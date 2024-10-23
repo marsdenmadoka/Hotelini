@@ -105,17 +105,21 @@ fun HotelImageBanner(
         contentScale = ContentScale.Crop
     )
 
-
-
-    /*AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(hotelImage.replace("{width}", screenWidth.toString()).replace("{height}", "250"))
-            .crossfade(true)
-            .build(),
-        placeholder = painterResource(R.drawable.ic_load_placeholder),
-        contentDescription = "Image Banner",
-        contentScale = ContentScale.Crop,
-        modifier = modifier.fillMaxSize(),
-    )   */
-
 }
+
+
+
+
+
+
+
+/*AsyncImage(
+    model = ImageRequest.Builder(LocalContext.current)
+        .data(hotelImage.replace("{width}", screenWidth.toString()).replace("{height}", "250"))
+        .crossfade(true)
+        .build(),
+    placeholder = painterResource(R.drawable.ic_load_placeholder),
+    contentDescription = "Image Banner",
+    contentScale = ContentScale.Crop,
+    modifier = modifier.fillMaxSize(),
+)   */

@@ -28,8 +28,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.ui.platform.LocalContext
 import com.madoka.hotelini.common.domain.model.HotelInfo
 import com.madoka.hotelini.common.presentation.theme.Golden
+import com.madoka.hotelini.common.util.openMap
 import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiState
 
 
@@ -39,15 +41,22 @@ fun HotelInfoSection(
     state: HotelDetailsUiState,
     hotelInfo: HotelInfo,
 ) {
+
+    val context = LocalContext.current
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxSize()
     ) {
         ViewLocationButton(
-            onClick = {}, text = "View Location"
+            onClick = {
+                state.hotelDetails?.geoPoint?.let { geoPoint ->
+                    openMap(context, geoPoint.latitude, geoPoint.longitude)
+                }
+            },
+            text = "View Location"
         )
-
 
         Text(
             text = hotelInfo.title.substringAfter(". ").trim(),

@@ -28,10 +28,3 @@ class HotelDetailsRepository @Inject constructor(private val api: HoteliniApi) {
 
 
 }
-
-//https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchHotelsByLocation?latitude=-3.4330033&longitude=38.356907&checkIn=2024-10-19&checkOut=2024-10-19&pageNumber=1
-//
-
-
-//.url("https://tripadvisor16.p.rapidapi.com/api/v1/hotels/getHotelDetails?id=112&checkIn=2024-10-17&checkOut=2024-10-16&currency=USD")
-//https://tripadvisor16.p.rapidapi.com/api/v1/hotels/getHotelDetails/754603?checkIn=2024-10-19&checkOut=2024-10-19

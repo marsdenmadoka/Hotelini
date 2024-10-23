@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -159,14 +160,12 @@ fun SharedTransitionScope.HomeScreenContent(
 
     val scope = rememberCoroutineScope()
 
-    //Check location permission and request if needed
     LaunchedEffect(Unit) {
         if (permissionState.status.isGranted.not()) {
             permissionState.launchPermissionRequest()
         }
     }
 
-    //making sure the location is on
     HandleRequest(
         permissionState = permissionState,
         deniedContent = { shouldShowRationale ->
@@ -177,7 +176,6 @@ fun SharedTransitionScope.HomeScreenContent(
             ) { permissionState.launchPermissionRequest() }
         }
     ) {
-        //check to see if permission is available
         if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -227,7 +225,7 @@ fun SharedTransitionScope.HomeScreenContent(
             ) {
                 ShimmeringText(
                     text = "FETCHING YOUR LOCATION",
-                    shimmerColor = Color.Black,
+                    shimmerColor = MaterialTheme.colorScheme.onSurface,
                     textStyle = LocalTextStyle.current.copy(
                         fontSize = 16.sp,
                         letterSpacing = 5.sp,
@@ -250,6 +248,7 @@ fun SharedTransitionScope.HomeScreenScaffold(
 ) {
 
     val hotels = state.nearestHotels.collectAsLazyPagingItems()
+    val distance = state.hotelDistances.values.toList()
 
     val lazyRowScrollState = rememberLazyListState()
     var scrollOffset by remember { mutableStateOf(0f) }
@@ -305,34 +304,30 @@ fun SharedTransitionScope.HomeScreenScaffold(
                         scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
                 ) {
-                    item { //s(hotels.itemCount) { index ->
-                        //   hotels[index]?.let { hotel -> val distanceToHotel = state.hotelDistances[hotel.title] ?: "Unknown distance"
-                        PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
-                            content = {
-                                NearbyHotelItem(
-                                    modifier = Modifier
-                                        .clickable {
-                                            onEvent(
-                                                HomeUiEvents.NavigateToHotelDetails(
-                                                    hotel = it.toHotelInfo()
+                    item{
+                            PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
+                                content = {
+                                    NearbyHotelItem(
+                                        modifier = Modifier
+                                            .clickable {
+                                                onEvent(
+                                                    HomeUiEvents.NavigateToHotelDetails( hotel = it.toHotelInfo() )
                                                 )
-                                            )
-                                            //Timber.d("Clicked clicked")
-                                        },
-                                    hotelDetails = it,
-                                    distanceToHotel = "",//"12",//distanceToHotel,
-                                    animatedVisibilityScope = animatedVisibilityScope,
-                                    sharedTransitionKey = it.id,
-                                )
-                            }
-                        )
-                        // }
+                                            },
+                                        hotelDetails = it,
+                                        distanceToHotel = distance.getOrNull(it.id.toInt() - 1) ?: "Unknown distance",
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        sharedTransitionKey = it.id,
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
         }
     }
-}
+
 
 
 @OptIn(ExperimentalLayoutApi::class)

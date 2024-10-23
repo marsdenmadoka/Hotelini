@@ -15,6 +15,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -79,10 +81,7 @@ fun HotelCarousel(
 
 
     val defaultDominantColor = MaterialTheme.colorScheme.surface
-    val defaultDominantTextColor = MaterialTheme.colorScheme.onSurface
     var dominantColor by remember { mutableStateOf(defaultDominantColor) }
-    var dominantTextColor by remember { mutableStateOf(defaultDominantTextColor) }
-
 
     var currentItemIndex by remember { mutableIntStateOf(0) }
     var userScrolled by remember { mutableStateOf(false) }
@@ -104,21 +103,18 @@ fun HotelCarousel(
         Modifier
             .fillMaxWidth()
             .height(205.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(210.dp)
-                .align(Alignment.TopCenter)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            MaterialTheme.colorScheme.background,
-                            dominantColor
-                        )
-                    )
+            .shadow(5.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .aspectRatio(1f)
+            .background (
+            Brush.verticalGradient(
+                listOf(
+                    dominantColor,
+                    defaultDominantColor
                 )
+            )
         )
+    ) {
 
         HorizontalUncontainedCarousel(
             state = carouselState,

@@ -100,9 +100,7 @@ fun Amenities(label: String, iconId: Int) {
 fun AmenitiesDisplay() {
     HoteliniTheme {
         Column {
-            Amenities(label = "Anythoing", iconId = R.drawable.ic_star)
-            Amenities(label = "Anythoing", iconId = R.drawable.ic_star)
-            Amenities(label = "Anythoing", iconId = R.drawable.ic_star)
+            Amenities(label = "Anything", iconId = R.drawable.ic_star)
         }
     }
 }

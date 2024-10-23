@@ -69,22 +69,6 @@ fun SharedTransitionScope.NearbyHotelItem(
     val selectedImageUrl =
         hotelDetails.cardPhotos.firstOrNull { it.sizes.urlTemplate.isNotBlank() }?.sizes?.urlTemplate
             ?:""
-    /*
-    * hotelDetails.cardPhotos.filter { it.sizes.urlTemplate.isNotBlank() }
-            .firstOrNull { it.sizes.urlTemplate.isNotBlank() }?.sizes?.urlTemplate
-            ?: painterResource(id = R.drawable.photo5)
-    * */
-
-
-    //hotelDetails.cardPhotos.first { it.sizes.urlTemplate.isNotBlank() }
-    //.randomOrNull()?.sizes?.urlTemplate ?: ""
-
-    //hotelDetails.cardPhotos.firstOrNull()?.sizes?.urlTemplate ?: ""
-
-    /* hotelDetails.cardPhotos
-     .filter { it.sizes.urlTemplate.isNotBlank() }
-     .randomOrNull()?.sizes?.urlTemplate ?: "" */
-
     Card(
         modifier = modifier
             .width(200.dp)
@@ -124,9 +108,7 @@ fun SharedTransitionScope.NearbyHotelItem(
                     }
                 }
 
-                AsyncImagePainter.State.Empty -> {
-                    Text(text = "Empty data")
-                }
+                AsyncImagePainter.State.Empty -> {}
 
                 is AsyncImagePainter.State.Error -> {
                     Text(text = "Error Found")
@@ -157,23 +139,22 @@ fun SharedTransitionScope.NearbyHotelItem(
                 Text(
                     modifier = modifier,
                     text = hotelDetails.title.substringAfter(". ").trim(),
-                    fontSize = 18.sp,
                     maxLines = 2,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 if (hotelDetails.bubbleRating.rating.toFloat() <= 1) {
                     Text(
                         modifier = modifier,
                         text = "Not rated",
+                        style = MaterialTheme.typography.titleMedium,
+
+                        /*
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface */
                     )
                 } else {
                     RatingBar(modifier = modifier,
