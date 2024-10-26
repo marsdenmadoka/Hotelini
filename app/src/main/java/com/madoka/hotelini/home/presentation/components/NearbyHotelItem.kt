@@ -31,13 +31,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -45,12 +42,10 @@ import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
 import com.gowtham.ratingbar.StepSize
-import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.theme.DarkSurface
 import com.madoka.hotelini.common.presentation.theme.Golden
 import com.madoka.hotelini.common.util.PaletteGenerator
 import com.madoka.hotelini.home.domain.model.Hotel
-import com.madoka.hotelini.home.domain.model.items
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -71,7 +66,7 @@ fun SharedTransitionScope.NearbyHotelItem(
             ?:""
     Card(
         modifier = modifier
-            .width(200.dp)
+            .width(180.dp)
             .height(200.dp)
             .padding(horizontal = 4.dp),
         elevation = CardDefaults.cardElevation(8.dp), shape = RoundedCornerShape(4.dp)
@@ -142,6 +137,7 @@ fun SharedTransitionScope.NearbyHotelItem(
                     maxLines = 2,
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 if (hotelDetails.bubbleRating.rating.toFloat() <= 1) {

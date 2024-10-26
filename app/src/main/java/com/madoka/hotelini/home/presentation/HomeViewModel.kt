@@ -40,6 +40,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         getNearestHotels(latitude = latitude, longitude = longitude)
+        Timber.d("viewModel was initialized ")
     }
 
     /* fun getNearestHotels(latitude: Double, longitude: Double) {
@@ -64,17 +65,28 @@ class HomeViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
         viewModelScope.launch {
+            try {
+                nearestHotelsFlow.collectLatest { pagingData ->
+                    val hotelNames = mutableListOf<String>()
+                    pagingData.map { hotel ->
+                        hotel.title.substringAfter(". ")
+                            .trim()
+                            .let { hotelNames.add(it) }
+                    }
+                    // Now calculate distances
+                    fetchHotelLatLngAndCalculateDistance(latitude, longitude, hotelNames)
 
-            nearestHotelsFlow.collectLatest { pagingData ->
-                val hotelNames = mutableListOf<String>()
-                pagingData.map { hotel ->
-                    hotel.title.substringAfter(". ")
-                        .trim()
-                        .let { hotelNames.add(it) }!!
+                    //  Timber.d("added names $hotelNames")
+
+                    hotelNames.forEach {
+                        Timber.d("the name is $it")
+                    }
                 }
-                // Now calculate distances
-                fetchHotelLatLngAndCalculateDistance(latitude, longitude, hotelNames)
+
+            } catch (message: Error) {
+                Timber.d("the error for not adding hotels $message")
             }
+
         }
 
         _homeUiState.value = _homeUiState.value.copy(nearestHotels = nearestHotelsFlow)
@@ -104,7 +116,6 @@ class HomeViewModel @Inject constructor(
                             .addOnSuccessListener { placeResponse ->
                                 val place = placeResponse.place
                                 val hotelLatLng = place.latLng
-
                                 if (hotelLatLng != null) {
                                     val distance = calculateDistance(
                                         LatLng(userLat, userLng),
@@ -112,20 +123,38 @@ class HomeViewModel @Inject constructor(
                                     )
                                     Timber.d("${place.name} is $distance kilometers away")
 
-                                    updatedDistances[place.name.toString()] = "$distance km"
+                                    updatedDistances[place.name] = "$distance km"
 
-                                    Timber.d("${place.name} is $distance kilometers away")
 
-                                    // Update the state with distances
-                                    _homeUiState.value = _homeUiState.value.copy(
-                                        hotelDistances = updatedDistances.toMap()
-                                    )
+//                                    // Update the state with distances
+//                                    _homeUiState.value = _homeUiState.value.copy(
+//                                        hotelDistances = updatedDistances.toMap()
+//                                    )
 
                                 }
+                                Timber.d(
+                                    "fetch places success: ${
+                                        placeResponse.let {
+                                            it.place.name
+                                        }
+                                    }"
+                                )
+
+                            }
+                            .addOnFailureListener {
+                                Timber.d("Error11 fetching place details: ${it.message}")
+
                             }
                     }
+                }.addOnFailureListener {
+                    Timber.d("Error22 for place details: ${it.message}")
                 }
         }
+
+        //Update the state with distances
+        _homeUiState.value = _homeUiState.value.copy(
+            hotelDistances = updatedDistances.toMap()
+        )
 
     }
 }
@@ -452,3 +481,4 @@ private suspend fun fetchNearestHotelsLatLngAndCalculateDistance(
              .cachedIn(viewModelScope)
      )
  } */
+

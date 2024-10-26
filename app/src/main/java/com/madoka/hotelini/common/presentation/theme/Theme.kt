@@ -104,7 +104,6 @@ fun HoteliniTheme(
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
 private fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
-// To be used to set the preferred theme inside settings
 enum class Theme(
     val themeValue: Int,
 ) {

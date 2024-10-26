@@ -19,7 +19,6 @@ class PreferenceRepositoryImpl(
             preferences[Constants.THEME_OPTIONS] = themeValue
         }
     }
-
     override fun getTheme(): Flow<Int> {
         return dataStore.data.map { preferences ->
             preferences[Constants.THEME_OPTIONS] ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM

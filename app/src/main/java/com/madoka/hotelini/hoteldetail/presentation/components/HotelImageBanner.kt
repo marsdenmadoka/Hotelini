@@ -43,9 +43,9 @@ fun HotelImageBanner(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-   //val hotelImage = hotelInfo.cardPhotos.first { it.sizes.urlTemplate.isNotBlank() } ?.sizes?.urlTemplate?: " "
     val selectedImageUrl = hotelDetailsState.hotelDetails?.photos?.firstOrNull {
-        !it.urlTemplate.isNullOrBlank() }?.urlTemplate ?: " "
+        it.urlTemplate.isNotBlank()
+    }?.urlTemplate ?: " "
 
     Timber.d("Loading image URL: $selectedImageUrl")
 

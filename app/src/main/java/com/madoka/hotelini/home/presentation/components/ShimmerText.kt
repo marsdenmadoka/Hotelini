@@ -27,7 +27,7 @@ fun ShimmeringText(
     shimmerColor: Color,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = LocalTextStyle.current,
-    animationSpec: DurationBasedAnimationSpec<Float> = tween(1000, 1000, LinearEasing)
+    animationSpec: DurationBasedAnimationSpec<Float> = tween(2000, 2000, LinearEasing)
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "ShimmeringTextTransition")
 

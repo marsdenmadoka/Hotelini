@@ -48,12 +48,10 @@ fun CustomDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // title
                 Text(
                     text = title!!,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        //  .padding(top = 5.dp)
                         .fillMaxWidth(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppinsFamily,
@@ -61,7 +59,7 @@ fun CustomDialog(
                     color = Color.DarkGray,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                // description
+
                 Text(
                     text = desc!!,
                     textAlign = TextAlign.Center,
@@ -72,10 +70,10 @@ fun CustomDialog(
                     fontSize = 13.sp,
                     color = Color.DarkGray,
                 )
-                // Spacer
+
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // OK button
+
                 val cornerRadius = 16.dp
                 val roundedCornerShape = RoundedCornerShape(topStart = 30.dp, bottomEnd = 30.dp)
 

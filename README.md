@@ -26,11 +26,11 @@ These are the app's screenshots:
 <div style="background-color: black; color: white; padding: 20px;">
 
 <p align="center">
-<img src="screenshoots/Screenshot4.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <img src="screenshoots/Screenshot9.png" width=300 alt="">|
+<img src="screenshoots/Screenshot9.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <img src="screenshoots/Screenshot4.png" width=300 alt="">|
 </p>
 
 <p align="center">
-<img src="screenshoots/Screenshot1.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="screenshoots/Screenshot2.png" width=300 alt="">|
+<img src="screenshoots/Screenshot12.png" width=300 alt=""> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="screenshoots/Screenshot10.png" width=300 alt="">|
 </p>
 
 <p align="center">

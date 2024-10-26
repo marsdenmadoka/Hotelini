@@ -20,7 +20,7 @@ import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.Reviews
 import kotlinx.parcelize.RawValue
 
 @Parcelize
-data class HotelInfo(  //this is what we pass to the Details Screen
+data class HotelInfo(
     val id: String,
     val bubbleRating: @RawValue BubbleRating,
     val priceDetails: @RawValue Any?,

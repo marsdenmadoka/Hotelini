@@ -39,8 +39,6 @@ fun SmallImagesRow(
 
     val shuffledImages = remember { imagesCarouselItems.shuffled() }
 
-    val totalItems = shuffledImages.size
-
     Column(
         modifier
             .background(
@@ -73,9 +71,6 @@ fun SmallImagesRow(
             ) {
 
             items(displayedItems) { index->
-//                SmallImage(modifier=modifier, imageUrl = photos[index].urlTemplate.replace("{width}", "100").replace("{height}", "70"))
-
-
                 Card(
                     modifier = Modifier
                         .padding(8.dp)
@@ -86,12 +81,9 @@ fun SmallImagesRow(
                         4.dp
                     )
                 ) {
-
-
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(photos[index].urlTemplate.replace("{width}", "100").replace("{height}", "70"))
-                            //.data()
                             .crossfade(true)
                             .build(),
                         placeholder = painterResource(R.drawable.ic_load_placeholder),
@@ -101,9 +93,7 @@ fun SmallImagesRow(
                         modifier = modifier.fillMaxSize(),
                     )
                 }
-
             }
-
             if (remainingItemCount > 0) {
                 item {
                     Card(
@@ -122,10 +112,10 @@ fun SmallImagesRow(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             Text(
-                                text = "+$remainingItemCount", // Show the number of remaining items
+                                text = "+$remainingItemCount",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 20.sp,
-                                color = androidx.compose.ui.graphics.Color.White
+                                color = Color.White
                             )
                         }
                     }

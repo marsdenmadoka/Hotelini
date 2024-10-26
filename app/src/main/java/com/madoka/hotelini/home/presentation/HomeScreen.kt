@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -87,6 +86,7 @@ import com.ramcosta.composedestinations.generated.destinations.HotelDetailsScree
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import kotlin.math.max
 
@@ -250,6 +250,11 @@ fun SharedTransitionScope.HomeScreenScaffold(
     val hotels = state.nearestHotels.collectAsLazyPagingItems()
     val distance = state.hotelDistances.values.toList()
 
+    Timber.d("hotels distances ${distance.size}")
+    distance.forEach {
+        Timber.d("distance $it")
+    }
+
     val lazyRowScrollState = rememberLazyListState()
     var scrollOffset by remember { mutableStateOf(0f) }
 
@@ -315,7 +320,11 @@ fun SharedTransitionScope.HomeScreenScaffold(
                                                 )
                                             },
                                         hotelDetails = it,
-                                        distanceToHotel = distance.getOrNull(it.id.toInt() - 1) ?: "Unknown distance",
+                                        distanceToHotel =   state.hotelDistances[it.title.substringAfter(". ").trim()] ?: " ",
+
+//                                        state.hotelDistances[hotel.title] ?: "Unknown distance"
+                                        //distance[hotels.itemSnapshotList.items.indexOf(it)],
+                                        // distance.getOrNull(it.id.toInt() - 1) ?: "",
                                         animatedVisibilityScope = animatedVisibilityScope,
                                         sharedTransitionKey = it.id,
                                     )
