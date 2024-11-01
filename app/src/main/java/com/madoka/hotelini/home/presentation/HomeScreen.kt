@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -303,59 +306,80 @@ fun SharedTransitionScope.HomeScreenScaffold(
                 ) {
                     HotelCarousel(imagesCarouselItems = items)
                 }
-                LazyColumn(
+             /*   LazyColumn( //replace with lazy grid
                     state = lazyRowScrollState,
                     modifier = Modifier.onGloballyPositioned {
                         scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
                 ) {
-                    item{
-                            PagedFlowRow(items = hotels, modifier = Modifier.fillMaxWidth(),
-                                content = {
-                                    NearbyHotelItem(
-                                        modifier = Modifier
-                                            .clickable {
-                                                onEvent(
-                                                    HomeUiEvents.NavigateToHotelDetails( hotel = it.toHotelInfo() )
-                                                )
-                                            },
-                                        hotelDetails = it,
-                                        distanceToHotel =   state.hotelDistances[it.title.substringAfter(". ").trim()] ?: " ",
+
+                    item {*/
+                        PagedFlowRow( items = hotels, modifier = Modifier.fillMaxWidth()
+                            .onGloballyPositioned { scrollOffset=lazyRowScrollState.firstVisibleItemScrollOffset.toFloat() },
+                            content = {
+                                NearbyHotelItem(
+                                    modifier = Modifier
+                                        .clickable {
+                                            onEvent(
+                                                HomeUiEvents.NavigateToHotelDetails(hotel = it.toHotelInfo())
+                                            )
+                                        },
+                                    hotelDetails = it,
+                                    distanceToHotel = state.hotelDistances[it.title.substringAfter(". ")
+                                        .trim()] ?: " ",
 
 //                                        state.hotelDistances[hotel.title] ?: "Unknown distance"
-                                        //distance[hotels.itemSnapshotList.items.indexOf(it)],
-                                        // distance.getOrNull(it.id.toInt() - 1) ?: "",
-                                        animatedVisibilityScope = animatedVisibilityScope,
-                                        sharedTransitionKey = it.id,
-                                    )
-                                }
-                            )
-                        }
+                                    //distance[hotels.itemSnapshotList.items.indexOf(it)],
+                                    // distance.getOrNull(it.id.toInt() - 1) ?: "",
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    sharedTransitionKey = it.id,
+                                )
+                            }
+                        )
                     }
-                }
-            }
+                //}
+            //}
         }
     }
-
+}
 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun <T : Any> PagedFlowRow(
+    state: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
     items: LazyPagingItems<T>,
     content: @Composable (T) -> Unit,
 ) {
 
-    FlowRow(
+
+    /*
+    FlowRow( ///replace with lazy grid
         Modifier
             .fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         maxItemsInEachRow = 2
+    ) { */
+
+
+    /*
+    items.itemSnapshotList.items.forEach { item ->
+        if (item != null) {
+            content(item)
+        }
+    }*/
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        items.itemSnapshotList.items.forEach { item ->
+        items(items.itemCount) { index ->
+            val item = items[index]
             if (item != null) {
                 content(item)
             }
@@ -364,94 +388,104 @@ fun <T : Any> PagedFlowRow(
         items.loadState.let { loadState ->
             when {
                 loadState.refresh is LoadState.Loading -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.CenterVertically),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        CircularProgressIndicator(
-                            strokeWidth = 2.dp,
-                        )
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                               // .align(Alignment.CenterVertically),
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            CircularProgressIndicator(
+                                strokeWidth = 2.dp,
+                            )
+                        }
                     }
+
                 }
 
 
                 loadState.refresh is LoadState.NotLoading && items.itemCount < 1 -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.CenterVertically),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
+                    item {
+                        Row(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            text = "No data available",
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                        )
+                                .fillMaxSize(),
+                              //  .align(Alignment.CenterVertically),
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                text = "No data available",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
                     }
                 }
 
                 loadState.refresh is LoadState.Error -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.CenterVertically),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
+                    item {
+                        Row(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            text = when ((loadState.refresh as LoadState.Error).error) {
-                                is HttpException -> {
-                                    "Oops, something went wrong! restart application"
-                                }
+                                .fillMaxSize(),
+                                //.align(Alignment.CenterVertically),
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                text = when ((loadState.refresh as LoadState.Error).error) {
+                                    is HttpException -> {
+                                        "Oops, something went wrong! restart application"
+                                    }
 
-                                is IOException -> {
-                                    "Couldn't reach server, check your internet connection! \n" +
-                                            "and restart application"
-                                }
+                                    is IOException -> {
+                                        "Couldn't reach server, check your internet connection! \n" +
+                                                "and restart application"
+                                    }
 
-                                else -> {
-                                    "Unknown error occurred restart application"
-                                }
-                            },
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
+                                    else -> {
+                                        "Unknown error occurred restart application"
+                                    }
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
                     }
                 }
 
 
                 loadState.append is LoadState.Loading -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .align(Alignment.Center),
-                            strokeWidth = 2.dp,
-                        )
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .align(Alignment.Center),
+                                strokeWidth = 2.dp,
+                            )
+                        }
                     }
-
                 }
 
                 loadState.append is LoadState.Error -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "An error occurred",
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                        )
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = "An error occurred",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
                     }
 
                 }
