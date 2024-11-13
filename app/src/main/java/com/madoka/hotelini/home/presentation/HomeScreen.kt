@@ -312,6 +312,7 @@ fun SharedTransitionScope.HomeScreenScaffold(
                         scrollOffset = lazyRowScrollState.firstVisibleItemScrollOffset.toFloat()
                     }
                 ) {
+                
 
                     item {*/
                         PagedFlowRow( items = hotels, modifier = Modifier.fillMaxWidth()
