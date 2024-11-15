@@ -284,7 +284,7 @@ fun SharedTransitionScope.HomeScreenScaffold(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Transparent)
-            ) /
+            )
         }
     ) { innerPadding ->
         PullToRefreshBox(
