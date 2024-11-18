@@ -114,7 +114,7 @@ fun SharedTransitionScope.HotelDetailScreenContent(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
                     Column(
-                        modifier = Modifier.fillMaxWidth()//Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxWidth()
                     ) {
 
                         HotelImageBanner(

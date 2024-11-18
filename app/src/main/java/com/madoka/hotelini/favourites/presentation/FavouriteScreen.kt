@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,21 +48,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.room.PrimaryKey
 import coil.compose.rememberImagePainter
 import com.madoka.hotelini.R
-import com.madoka.hotelini.home.data.network.hoteldto.BubbleRating
-import com.madoka.hotelini.home.data.network.hoteldto.CardPhoto
-import com.madoka.hotelini.common.domain.model.HotelInfo
-import com.madoka.hotelini.common.domain.model.HotelInfoFavorite
 import com.madoka.hotelini.common.domain.model.toHotelInfo
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.madoka.hotelini.favourites.data.local.Favorite
-import com.madoka.hotelini.home.domain.model.Hotel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.HotelDetailsScreenDestination
@@ -158,16 +153,17 @@ private fun FavoritesScreenContent(
                 }
             ) { favourite ->
                 SwipeToDeleteContainer(
-                    item =  favourite,
-                    onDelete =onDeleteOneFavorite,
+                    item = favourite,
+                    onDelete = onDeleteOneFavorite,
                     content = {
-                        FilmItem(
+                        HotelItem(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(230.dp),
                             onClick = {
                                 onClickAFavorite(favourite)
-                            }
+                            },
+                            hotelItem = favourite
                         )
                     }
                 )
@@ -175,21 +171,21 @@ private fun FavoritesScreenContent(
         }
 
 
-//        if (favoriteFilms.isEmpty()) {
+        if (favouritesHotels.isEmpty()) {
 
-//            Column(
-//                Modifier.fillMaxSize(),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Image(
-//                    modifier = Modifier
-//                        .size(250.dp),
-//                    painter = painterResource(id = R.drawable.ic_empty_cuate),
-//                    contentDescription = null
-//                )
-//            }
-//        }
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(250.dp),
+                    painter = painterResource(id = R.drawable.ic_empty_caute),
+                    contentDescription = null
+                )
+            }
+        }
 
 
         if (showDeleteConsentDialog) {
@@ -202,23 +198,23 @@ private fun FavoritesScreenContent(
                     onDismissDeleteConsentDialog()
                 },
                 title = {
-                    Text(text = "deleteAll") //stringResource(R.string.delete_all_favorites))
+                    Text(text = "deleteAll")
                 },
                 text = {
-                    Text(text = "are you sure to delete all")//stringResource(R.string.are_you_want_to_delete_all))
+                    Text(text = "are you sure to delete all")
                 },
                 confirmButton = {
                     Button(
                         onClick = onConfirmDeleteAllFavorites,
                     ) {
-                        Text(text = "Yes")//stringResource(R.string.yes))
+                        Text(text = "Yes")
                     }
                 },
                 dismissButton = {
                     Button(
                         onClick = onDismissDeleteConsentDialog,
                     ) {
-                        Text(text = "No") //stringResource(R.string.no))
+                        Text(text = "No")
                     }
                 },
                 shape = RoundedCornerShape(10.dp)
@@ -228,7 +224,8 @@ private fun FavoritesScreenContent(
 }
 
 @Composable
-fun FilmItem(
+fun HotelItem(
+    hotelItem: Favorite,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -239,7 +236,7 @@ fun FilmItem(
         Box {
             Image(
                 painter = rememberImagePainter(
-                    data = {},
+                    data = {},//hotelItem.image
                     builder = {
                         placeholder(R.drawable.ic_load_placeholder)
                         crossfade(true)
@@ -247,7 +244,7 @@ fun FilmItem(
                 ),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-                contentDescription = "Movie Banner"
+                contentDescription = ""
             )
             Box(
                 modifier = Modifier
@@ -264,8 +261,8 @@ fun FilmItem(
                     )
             )
 
-            FilmDetails(
-                title = "detail",
+            Hoteldetails(
+                title = hotelItem.title,
                 releaseDate = "2/2/3",
             )
         }
@@ -273,7 +270,7 @@ fun FilmItem(
 }
 
 @Composable
-fun FilmDetails(
+fun Hoteldetails(
     modifier: Modifier = Modifier,
     title: String,
     releaseDate: String,

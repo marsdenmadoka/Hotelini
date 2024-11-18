@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.madoka.hotelini.R
+import com.madoka.hotelini.common.domain.model.HotelInfo
 import com.madoka.hotelini.common.presentation.components.CircleButton
+import com.madoka.hotelini.favourites.data.local.Favorite
 import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiEvents
 
 
@@ -20,7 +22,8 @@ import com.madoka.hotelini.hoteldetail.presentation.HotelDetailsUiEvents
 fun DetailsActions(
     modifier: Modifier,
     onEvents: (HotelDetailsUiEvents) -> Unit,
-    //isLiked: Boolean
+    isLiked: Boolean,
+    hotelInfo: HotelInfo
 ) {
     Row(
         modifier = modifier,
@@ -41,7 +44,18 @@ fun DetailsActions(
         }
 
         CircleButton(
-            onClick = {},
+            onClick = {
+                if (isLiked) {
+                    onEvents(
+                      HotelDetailsUiEvents.RemoveFromFavorites(
+                          Favorite(
+
+
+                          )
+                      )
+                    )
+                }
+            },
             containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
         ) {
             Icon(
