@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -125,7 +126,7 @@ private fun FavoritesScreenContent(
                 onBackArrowClicked = onNavigateBack,
                 title = {
                     Text(
-                        text = "Favorites",//stringResource(R.string.favorites),
+                        text = "Favorites",
                         style = MaterialTheme.typography.titleLarge,
                     )
                 },
@@ -150,19 +151,22 @@ private fun FavoritesScreenContent(
             contentPadding = PaddingValues(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item(
-                key = { }
-            ) {
+            items(
+                items = favouritesHotels,
+                key = { favoriteMovie: Favorite ->
+                    favoriteMovie.hotelId
+                }
+            ) { favourite ->
                 SwipeToDeleteContainer(
-                    item = { },
-                    onDelete = {},
+                    item =  favourite,
+                    onDelete =onDeleteOneFavorite,
                     content = {
                         FilmItem(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(230.dp),
                             onClick = {
-                                onClickAFavorite()
+                                onClickAFavorite(favourite)
                             }
                         )
                     }
