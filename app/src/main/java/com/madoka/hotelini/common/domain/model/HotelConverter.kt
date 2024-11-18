@@ -2,6 +2,7 @@ package com.madoka.hotelini.common.domain.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.madoka.hotelini.favourites.data.local.Favorite
 import com.madoka.hotelini.home.data.network.hoteldto.Badge
 import kotlinx.parcelize.Parcelize
 import com.madoka.hotelini.home.data.network.hoteldto.BubbleRating
@@ -32,6 +33,7 @@ data class HotelInfo(
     val cardPhotos: @RawValue List<CardPhoto>
 ) : Parcelable
 
+
 fun Hotel.toHotelInfo(
 ) = HotelInfo(
     id = id,
@@ -45,22 +47,25 @@ fun Hotel.toHotelInfo(
     cardPhotos=cardPhotos,
 )
 
-data class HotelDetails(
-    val about: About,
-    val amenitiesScreen: List<AmenitiesScreen>,
-    val attractionsNearby: AttractionsNearby,
-    val geoPoint: GeoPoint,
-    val location: Location,
-    val numberReviews: Int,
-    val photos: List<Photo>,
-    val price: Price,
-    val qA: QA,
-    val rankingDetails: String,
-    val rating: Double,
-    val restaurantsNearby: RestaurantsNearby,
-    val reviews: Reviews,
-    val title: String
+
+fun Favorite.toHotelInfo(
+) = HotelInfo(
+    id = hotelId.toString(),
+    bubbleRating = bubbleRating,
+    priceDetails = priceDetails ?: "Unknown",
+    priceForDisplay = priceForDisplay ?: "N/A",
+    priceSummary = priceSummary ?: "No Summary",
+    provider = provider ?: "no provider",
+    secondaryInfo = secondaryInfo  ?: "No ptovider",
+    title = title  ?: "No title",
+    cardPhotos=cardPhotos,
 )
+
+
+
+
+
+
 data class Hotel(
     @SerializedName("accentedLabel")
     val accentedLabel: Boolean,

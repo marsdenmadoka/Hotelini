@@ -50,14 +50,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.room.PrimaryKey
 import coil.compose.rememberImagePainter
 import com.madoka.hotelini.R
+import com.madoka.hotelini.home.data.network.hoteldto.BubbleRating
+import com.madoka.hotelini.home.data.network.hoteldto.CardPhoto
+import com.madoka.hotelini.common.domain.model.HotelInfo
+import com.madoka.hotelini.common.domain.model.HotelInfoFavorite
+import com.madoka.hotelini.common.domain.model.toHotelInfo
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
+import com.madoka.hotelini.favourites.data.local.Favorite
+import com.madoka.hotelini.home.domain.model.Hotel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.HotelDetailsScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
-
 
 
 @Destination<RootGraph>
@@ -67,7 +75,7 @@ fun FavoritesScreen(
     viewModel: FavouritesViewModel = hiltViewModel()
 ) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
-     val favouritesHotels by viewModel.favorites.collectAsState()
+    val favouritesHotels by viewModel.favorites.collectAsState()
 
     FavoritesScreenContent(
         favouritesHotels = favouritesHotels,
@@ -82,25 +90,33 @@ fun FavoritesScreen(
             openDialog = false
         },
         onDeleteOneFavorite = { favourite ->
-                 viewModel.deleteOneFavorite(favourite)
-
+            viewModel.deleteOneFavorite(favourite)
         },
         onClickAFavorite = { favourite ->
+            navigator.navigate(
+                HotelDetailsScreenDestination(
+                    hotelInfo = favourite.toHotelInfo()
+                )
+            )
 
         },
-        onConfirmDeleteAllFavorites = { }
+        onConfirmDeleteAllFavorites = {
+            viewModel.deleteAllFavorites()
+            openDialog = false
+        }
     )
 }
 
 @Composable
 private fun FavoritesScreenContent(
+    favouritesHotels: List<Favorite>, //from local DB
     showDeleteConsentDialog: Boolean,
     onDismissDeleteConsentDialog: () -> Unit,
     onConfirmDeleteAllFavorites: () -> Unit,
     onNavigateBack: () -> Unit,
     onClickDeleteAllFavorites: () -> Unit,
-    onDeleteOneFavorite: () -> Unit,
-    onClickAFavorite: () -> Unit,
+    onDeleteOneFavorite: (Favorite) -> Unit,
+    onClickAFavorite: (Favorite) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -182,7 +198,7 @@ private fun FavoritesScreenContent(
                     onDismissDeleteConsentDialog()
                 },
                 title = {
-                    Text(text ="deleteAll") //stringResource(R.string.delete_all_favorites))
+                    Text(text = "deleteAll") //stringResource(R.string.delete_all_favorites))
                 },
                 text = {
                     Text(text = "are you sure to delete all")//stringResource(R.string.are_you_want_to_delete_all))
@@ -198,7 +214,7 @@ private fun FavoritesScreenContent(
                     Button(
                         onClick = onDismissDeleteConsentDialog,
                     ) {
-                        Text(text ="No") //stringResource(R.string.no))
+                        Text(text = "No") //stringResource(R.string.no))
                     }
                 },
                 shape = RoundedCornerShape(10.dp)
@@ -258,7 +274,7 @@ fun FilmDetails(
     title: String,
     releaseDate: String,
 
-) {
+    ) {
     Row(
         modifier = modifier
             .fillMaxSize(),
@@ -360,3 +376,5 @@ fun DeleteBackground(
         )
     }
 }
+
+
