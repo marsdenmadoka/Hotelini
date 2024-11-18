@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,27 +49,31 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.madoka.hotelini.R
 import com.madoka.hotelini.common.presentation.components.StandardToolbar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
 
 
-@Preview
+
 @Destination<RootGraph>
 @Composable
 fun FavoritesScreen(
-  //  navigator: DestinationsNavigator,
+    navigator: DestinationsNavigator,
+    viewModel: FavouritesViewModel = hiltViewModel()
 ) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
-
+     val favouritesHotels by viewModel.favorites.collectAsState()
 
     FavoritesScreenContent(
+        favouritesHotels = favouritesHotels,
         showDeleteConsentDialog = openDialog,
         onNavigateBack = {
-           // navigator.popBackStack()
+            navigator.popBackStack()
         },
         onClickDeleteAllFavorites = {
             openDialog = true
@@ -76,8 +81,13 @@ fun FavoritesScreen(
         onDismissDeleteConsentDialog = {
             openDialog = false
         },
-        onDeleteOneFavorite = { },
-        onClickAFavorite = { },
+        onDeleteOneFavorite = { favourite ->
+                 viewModel.deleteOneFavorite(favourite)
+
+        },
+        onClickAFavorite = { favourite ->
+
+        },
         onConfirmDeleteAllFavorites = { }
     )
 }
