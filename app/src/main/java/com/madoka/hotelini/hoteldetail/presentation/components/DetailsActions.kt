@@ -47,12 +47,39 @@ fun DetailsActions(
             onClick = {
                 if (isLiked) {
                     onEvents(
-                      HotelDetailsUiEvents.RemoveFromFavorites(
-                          Favorite(
+                        HotelDetailsUiEvents.RemoveFromFavorites(
+                            Favorite(
+                                favorite = false,
+                                hotelId = hotelInfo.id.toInt(),
+                                bubbleRating = hotelInfo.bubbleRating,
+                                priceDetails = hotelInfo.priceDetails,
+                                priceForDisplay = hotelInfo.priceForDisplay,
+                                priceSummary = hotelInfo.priceSummary,
+                                provider = hotelInfo.provider,
+                                secondaryInfo = hotelInfo.secondaryInfo,
+                                title = hotelInfo.title,
+                                cardPhotos = hotelInfo.cardPhotos,
 
+                                )
+                        )
+                    )
+                } else {
+                    onEvents(
+                        HotelDetailsUiEvents.AddToFavorites(
+                            Favorite(
+                                favorite = true,
+                                hotelId = hotelInfo.id.toInt(),
+                                bubbleRating = hotelInfo.bubbleRating,
+                                priceDetails = hotelInfo.priceDetails,
+                                priceForDisplay = hotelInfo.priceForDisplay,
+                                priceSummary = hotelInfo.priceSummary,
+                                provider = hotelInfo.provider,
+                                secondaryInfo = hotelInfo.secondaryInfo,
+                                title = hotelInfo.title,
+                                cardPhotos = hotelInfo.cardPhotos,
 
-                          )
-                      )
+                                )
+                        )
                     )
                 }
             },
@@ -60,16 +87,17 @@ fun DetailsActions(
         ) {
             Icon(
                 imageVector = Icons.Filled.Favorite,
-                tint = MaterialTheme.colorScheme.primary,
-                contentDescription = ""
-
+                tint = if (isLiked) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.background
+                },
+                contentDescription = if (isLiked) {
+                    "unlike"
+                } else {
+                    "like"
+                }
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun DetailsActionsPrev() {
-    //DetailsActions(Modifier)
 }
