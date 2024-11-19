@@ -27,6 +27,7 @@ import com.madoka.hotelini.common.presentation.theme.HoteliniTheme
 import com.madoka.hotelini.common.presentation.theme.Theme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.generated.NavGraphs
+import com.ramcosta.composedestinations.generated.destinations.FavoritesScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.HomeScreenDestination
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.rememberNavHostEngine
@@ -57,7 +58,7 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     showBottomBar = route in listOf(
                         HomeScreenDestination.route,
-//                        FavoritesScreenDestination.route,
+                        FavoritesScreenDestination.route,
 //                        SearchScreenDestination.route,
                     )
 

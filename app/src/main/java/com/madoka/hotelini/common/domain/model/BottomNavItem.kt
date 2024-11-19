@@ -1,6 +1,7 @@
 package com.madoka.hotelini.common.domain.model
 
 import com.madoka.hotelini.R
+import com.ramcosta.composedestinations.generated.destinations.FavoritesScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.HomeScreenDestination
 
 
@@ -22,6 +23,6 @@ sealed class BottomNavItem(
     data object Favorites: BottomNavItem(
         title = "Favorites",
         icon = R.drawable.ic_star,
-        route =  ""// FavoritesScreenDestination.route
+        route =   FavoritesScreenDestination.route
     )
 }
