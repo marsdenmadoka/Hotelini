@@ -58,6 +58,7 @@ fun SharedTransitionScope.HotelDetailsScreen(
         viewModel.getHotelDetails(hotelInfo.id)
     }
 
+    val isFilmFavorite = viewModel.isAFavorite(hotelInfo.id).collectAsState(initial = false).value
     val hotelDetailsUiState by viewModel.hotelDetailsUiState.collectAsState()
 
     if (hotelDetailsUiState.isLoading) {
@@ -69,6 +70,7 @@ fun SharedTransitionScope.HotelDetailsScreen(
     } else if (hotelDetailsUiState.hotelDetails != null) {
         HotelDetailScreenContent(animatedVisibilityScope = animatedVisibilityScope,
             detailState = hotelDetailsUiState,
+            isLiked = isFilmFavorite,
             hotelInfo = hotelInfo,
             onEvents = { hotelDetailsEvents ->
                 when (hotelDetailsEvents) {
@@ -76,7 +78,17 @@ fun SharedTransitionScope.HotelDetailsScreen(
                         navigator.navigateUp()
                     }
 
-                    else -> {}
+                    is HotelDetailsUiEvents.AddToFavorites -> {
+                        viewModel.insertFavorite(
+                            hotelDetailsEvents.favorite
+                        )
+                    }
+
+                    is HotelDetailsUiEvents.RemoveFromFavorites -> {
+                        viewModel.deleteFavorite(
+                            hotelDetailsEvents.favorite
+                        )
+                    }
                 }
             })
     } else {
@@ -90,10 +102,11 @@ fun SharedTransitionScope.HotelDetailsScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.HotelDetailScreenContent(
-    animatedVisibilityScope: AnimatedVisibilityScope,
     hotelInfo: HotelInfo,
-    onEvents: (HotelDetailsUiEvents) -> Unit,
     detailState: HotelDetailsUiState,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onEvents: (HotelDetailsUiEvents) -> Unit,
+    isLiked: Boolean
 ) {
 
     val configuration = LocalConfiguration.current
@@ -106,7 +119,10 @@ fun SharedTransitionScope.HotelDetailScreenContent(
         DetailsActions(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth(), onEvents = onEvents
+                .fillMaxWidth(),
+            onEvents = onEvents,
+            isLiked = isLiked,
+            hotelInfo = hotelInfo
         )
     }
     ) { innerPadding ->

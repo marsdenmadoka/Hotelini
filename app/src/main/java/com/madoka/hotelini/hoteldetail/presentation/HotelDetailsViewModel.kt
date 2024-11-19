@@ -3,8 +3,11 @@ package com.madoka.hotelini.hoteldetail.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.madoka.hotelini.common.util.Resource
+import com.madoka.hotelini.favourites.data.local.Favorite
+import com.madoka.hotelini.favourites.domain.repository.FavouriteRepository
 import com.madoka.hotelini.hoteldetail.data.repository.HotelDetailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HotelDetailsViewModel @Inject constructor(
-    private val repository: HotelDetailsRepository
+    private val repository: HotelDetailsRepository,
+    private val favoritesRepository: FavouriteRepository,
 ) : ViewModel() {
     private val _hotelDetailsUiState = MutableStateFlow(HotelDetailsUiState())
     val hotelDetailsUiState = _hotelDetailsUiState.asStateFlow()
@@ -58,10 +62,24 @@ class HotelDetailsViewModel @Inject constructor(
                     }
                 }
 
-                else ->{
+                else -> {
                     hotelDetailsUiState
                 }
             }
+        }
+    }
+
+    fun isAFavorite(hotelId: String): Flow<Boolean> {
+        return favoritesRepository.isFavorites(hotelId)
+    }
+    fun insertFavorite(favorite: Favorite) {
+        viewModelScope.launch {
+            favoritesRepository.insertFavorite(favorite)
+        }
+    }
+    fun deleteFavorite(favorite: Favorite) {
+        viewModelScope.launch {
+            favoritesRepository.deleteOneFavorite(favorite)
         }
     }
 }

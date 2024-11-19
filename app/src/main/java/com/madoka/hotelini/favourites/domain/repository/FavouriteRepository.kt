@@ -7,6 +7,8 @@ interface FavouriteRepository {
     suspend fun insertFavorite(favorite: Favorite)
 
     fun getFavorites(): Flow<List<Favorite>>
+
+    fun isFavorites(hoteldId: String):Flow<Boolean>
     fun getSingleFavorites(): Flow<List<Favorite>>
     suspend fun deleteOneFavorite(favorite: Favorite)
     suspend fun deleteAllFavorites()
