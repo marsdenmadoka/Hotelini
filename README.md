@@ -7,10 +7,7 @@ Hotelini App is a Android Application built with kotlin and jetpack compose that
 The app is also set to provide distance and directions from your location to the nearest hotel.
 
 The App consumes [Rapid API]("https://rapidapi.com/DataCrawler/api/tripadvisor16/playground/apiendpoint_6c187918-f989-4c63-bf1e-b2e38efe3152") to display the hotels 
-built with Jetpack Compose, MVVM ,MVI pattern as well as Architecture Components.
-
-### 💡 Note
-if you happen to fork this project please make sure to keep your fork in syc since a lot of changes are always being added everyday
+built with Jetpack Compose, MVVM ,MVI pattern as well as Architecture Components. 
 
 ### 🔑 Permissions Required
 The app requires the following permissions to run:
