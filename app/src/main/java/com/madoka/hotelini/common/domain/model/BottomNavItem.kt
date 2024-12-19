@@ -15,14 +15,16 @@ sealed class BottomNavItem(
         icon = R.drawable.ic_home,
         route = HomeScreenDestination.route
     )
-    data object Search: BottomNavItem(
-        title = "Search",
-        icon = R.drawable.ic_search,
-       route = ""// SearchScreenDestination.route,
-    )
+
     data object Favorites: BottomNavItem(
         title = "Favorites",
         icon = R.drawable.ic_star,
         route =   FavoritesScreenDestination.route
+    )
+
+    data object Search: BottomNavItem(
+        title = "Account",
+        icon = R.drawable.ic_account_profile,
+        route = ""// SearchScreenDestination.route,
     )
 }

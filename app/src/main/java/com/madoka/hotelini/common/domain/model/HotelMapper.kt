@@ -8,29 +8,19 @@ import kotlinx.parcelize.Parcelize
 import com.madoka.hotelini.home.data.network.hoteldto.BubbleRating
 import com.madoka.hotelini.home.data.network.hoteldto.CardPhoto
 import com.madoka.hotelini.home.domain.model.Hotel
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.About
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.AmenitiesScreen
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.AttractionsNearby
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.GeoPoint
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.Location
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.Photo
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.Price
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.QA
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.RestaurantsNearby
-import com.madoka.hotelini.hoteldetail.data.network.hoteldetailsdto.Reviews
 import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class HotelInfo(
     val id: String,
-    val bubbleRating: @RawValue BubbleRating,
+    val bubbleRating: @RawValue BubbleRating?,
     val priceDetails: @RawValue Any?,
     val priceForDisplay: @RawValue Any?,
     val priceSummary: @RawValue Any?,
     val provider: String,
     val secondaryInfo: String,
     val title: String,
-    val cardPhotos: @RawValue List<CardPhoto>
+    val cardPhotos: @RawValue List<CardPhoto?>
 ) : Parcelable
 
 
@@ -56,7 +46,7 @@ fun Favorite.toHotelInfo(
     priceForDisplay = priceForDisplay ?: "N/A",
     priceSummary = priceSummary ?: "No Summary",
     provider = provider ?: "no provider",
-    secondaryInfo = secondaryInfo  ?: "No ptovider",
+    secondaryInfo = secondaryInfo  ?: "No provider",
     title = title  ?: "No title",
     cardPhotos=cardPhotos,
 )

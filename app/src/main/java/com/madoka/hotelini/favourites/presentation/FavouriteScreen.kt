@@ -190,7 +190,7 @@ private fun FavoritesScreenContent(
 
         if (showDeleteConsentDialog) {
             AlertDialog(
-                modifier = Modifier
+                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
                 tonalElevation = 0.dp,

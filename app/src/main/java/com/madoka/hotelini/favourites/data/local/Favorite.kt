@@ -2,6 +2,7 @@ package com.madoka.hotelini.favourites.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.madoka.hotelini.common.util.Constants.TABLE_NAME
 import com.madoka.hotelini.home.data.network.hoteldto.BubbleRating
 import com.madoka.hotelini.home.data.network.hoteldto.CardPhoto
@@ -9,6 +10,7 @@ import kotlinx.parcelize.RawValue
 
 
 @Entity(tableName = TABLE_NAME)
+@TypeConverters(FavoriteTypeConverters::class)
 data class Favorite(
     val favorite: Boolean,
     @PrimaryKey val hotelId: Int,
