@@ -228,7 +228,7 @@ fun HotelItem(
     hotelItem: Favorite,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-) {
+) {//
     Card(
         modifier = modifier,
         onClick = onClick
